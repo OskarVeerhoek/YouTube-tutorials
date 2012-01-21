@@ -55,14 +55,14 @@ public class VertexBufferObjectDemo {
             glClear(GL_COLOR_BUFFER_BIT);
 
             glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-            glVertexPointer(3, GL_FLOAT, 0, 0L);
+            glVertexPointer(vertexSize, GL_FLOAT, 0, 0L);
             
             glBindBuffer(GL_ARRAY_BUFFER, vboColorHandle);
-            glColorPointer(3, GL_FLOAT, 0, 0L);
+            glColorPointer(colorSize, GL_FLOAT, 0, 0L);
             
             glEnableClientState(GL_VERTEX_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+            glDrawArrays(GL_TRIANGLES, 0, amountOfVertices);
             glDisableClientState(GL_COLOR_ARRAY);
             glDisableClientState(GL_VERTEX_ARRAY);
 
@@ -71,6 +71,7 @@ public class VertexBufferObjectDemo {
         }
 
         glDeleteBuffers(vboVertexHandle);
+        glDeleteBuffers(vboColorHandle);
 
         Display.destroy();
         System.exit(0);

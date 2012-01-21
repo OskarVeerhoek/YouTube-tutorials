@@ -28,7 +28,7 @@ public class VertexArraysDemo {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        final int amountOfVertices = 6;
+        final int amountOfVertices = 3;
         final int vertexSize = 2;
         final int colorSize = 3;
         
@@ -45,9 +45,12 @@ public class VertexArraysDemo {
 
             glEnableClientState(GL_VERTEX_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
-            glVertexPointer(2, 0, vertexData);
-            glColorPointer(3, 0, colorData);
+            
+            glVertexPointer(vertexSize, 0, vertexData);
+            glColorPointer(colorSize, 0, colorData);
+            
             glDrawArrays(GL_TRIANGLES, 0, amountOfVertices);
+            
             glDisableClientState(GL_COLOR_ARRAY);
             glDisableClientState(GL_VERTEX_ARRAY);
 
