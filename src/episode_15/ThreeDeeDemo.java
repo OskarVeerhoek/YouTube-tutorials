@@ -40,7 +40,7 @@ public class ThreeDeeDemo {
         glEnable(GL_DEPTH_TEST);
 
         // Initialization code random points
-        Point[] points = new Point[10000];
+        Point[] points = new Point[10000000];
         Random random = new Random();
         // Iterate of every array index
         for (int i = 0; i < points.length; i++) {
