@@ -26,16 +26,28 @@ public class EntityDemo {
         return delta;
     }
 
+//    private static class Box extends AbstractMoveableEntity {
+//
+//        public Box(double x, double y, double width, double height) {
+//            super(x, y, width, height);
+//        }
+//
+//        @Override
+//        public void draw() {
+//            glRectd(x, y, x + width, y + height);
+//        }
+//    }
+    
     private static class Box extends AbstractMoveableEntity {
-
         public Box(double x, double y, double width, double height) {
             super(x, y, width, height);
         }
 
         @Override
         public void draw() {
-            glRectd(x, y, x + width, y + height);
+            glRectd(x, y, width, height);
         }
+        
     }
 
     private static class Point extends AbstractEntity {
