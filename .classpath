@@ -10,5 +10,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/lwjgl_util.jar"/>
 	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/slick-util.jar"/>
+	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/jinput.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
