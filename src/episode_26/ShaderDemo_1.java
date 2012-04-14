@@ -1,4 +1,4 @@
-package episode_23;
+package episode_26;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,7 +13,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Oskar
  */
-public class ShaderDemo {
+public class ShaderDemo_1 {
     public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
