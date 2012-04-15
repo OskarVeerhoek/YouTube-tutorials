@@ -72,6 +72,7 @@ public class Camera {
     }
     
     public void processMouse(float mouseSpeed, float maxLookUp, float maxLookDown) {
+    	if (!Mouse.isGrabbed()) return;
     	float mouseDX = Mouse.getDX() * mouseSpeed * 0.16f;
 		float mouseDY = Mouse.getDY() * mouseSpeed * 0.16f;
 		if (yaw + mouseDX >= 360) {

@@ -1,8 +1,5 @@
 package episode_24;
 
-import episode_25.Face;
-import episode_25.OBJLoader;
-import episode_25.Model;
 import episode_19.*;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
