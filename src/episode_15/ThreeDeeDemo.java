@@ -62,7 +62,7 @@ public class ThreeDeeDemo {
 
             // Push the screen inwards at the amount of speed
             glTranslatef(0, 0, speed);
-
+            
             // Begin drawing points
             glBegin(GL_POINTS);
             // Iterate of every point
