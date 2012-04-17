@@ -1,5 +1,5 @@
 /dist/
 .DS_Store
-
+/bin/
 /nbproject/private/
 /build/
