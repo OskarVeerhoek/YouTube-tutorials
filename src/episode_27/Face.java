@@ -1,4 +1,4 @@
-package examples.models;
+package episode_27;
 
 import org.lwjgl.util.vector.Vector3f;
 

@@ -52,6 +52,7 @@ public class ShaderDemo {
 			cam.applyModelviewMatrix(true);
 			
 			glUseProgram(shaderProgram);
+			glUniform1f(diffuseModifierUniform, 1.5f);
 			glCallList(bunny);
 			glUseProgram(0);
 
@@ -67,6 +68,7 @@ public class ShaderDemo {
 			Display.sync(60);
 		}
 		glDeleteProgram(shaderProgram);
+		glDeleteLists(bunny, 1);
 		Display.destroy();
 		System.exit(0);
 	}
