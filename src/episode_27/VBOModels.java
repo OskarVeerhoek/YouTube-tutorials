@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
-public class TexturedModels {
+public class VBOModels {
 
 	private static Camera cam;
 	private static int texture;
