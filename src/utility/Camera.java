@@ -264,5 +264,13 @@ public class Camera {
 		this.zFar = zFar;
 	}
 
+	@Override
+	public String toString() {
+		return "Camera [x=" + x + ", y=" + y + ", z=" + z + ", pitch=" + pitch
+				+ ", yaw=" + yaw + ", roll=" + roll + ", fov=" + fov
+				+ ", aspectRatio=" + aspectRatio + ", zNear=" + zNear
+				+ ", zFar=" + zFar + "]";
+	}
+
    
 }

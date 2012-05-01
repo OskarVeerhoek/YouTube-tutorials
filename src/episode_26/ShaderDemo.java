@@ -1,9 +1,10 @@
 package episode_26;
 
-import java.io.BufferedReader;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 
@@ -15,15 +16,22 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 
 import utility.Camera;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL11.*;
+import utility.Face;
+import utility.Model;
+import utility.OBJLoader;
+import utility.ShaderLoader;
 
 /**
  * Uses the Phong lighting model to display a tasty chocolate bunny.
  * @author Oskar Veerhoek
  */
 public class ShaderDemo {
-	private static int shaderProgram, vertexShader, fragmentShader, bunny, diffuseModifierUniform;
+	
+	private static int shaderProgram, bunny, diffuseModifierUniform;
+	
+	public static final String MODEL_LOCATION = "res/bunny.obj";
+	public static final String VERTEX_SHADER_LOCATION = "res/specular_lighting.vert";
+	public static final String FRAGMENT_SHADER_LOCATION = "res/specular_lighting.frag";
 
 	public static void main(String[] args) {
 		try {
@@ -79,7 +87,7 @@ public class ShaderDemo {
 		{
 			Model m = null;
 			try {
-				m = OBJLoader.loadModel(new File("src/episode_26/bunny.obj"));
+				m = OBJLoader.loadModel(new File(MODEL_LOCATION));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 				Display.destroy();
@@ -136,55 +144,7 @@ public class ShaderDemo {
 	}
 
 	private static void setUpShaders() {
-		shaderProgram = glCreateProgram();
-		vertexShader = glCreateShader(GL_VERTEX_SHADER);
-		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-		StringBuilder vertexShaderSource = new StringBuilder();
-		StringBuilder fragmentShaderSource = new StringBuilder();
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(
-					"src/episode_26/specular.vert"));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				vertexShaderSource.append(line).append('\n');
-			}
-			reader.close();
-		} catch (IOException e) {
-			System.err.println("Vertex shader wasn't loaded properly.");
-			Display.destroy();
-			System.exit(1);
-		}
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(
-					"src/episode_26/specular.frag"));
-			String line;
-			while ((line = reader.readLine()) != null) {
-				fragmentShaderSource.append(line).append('\n');
-			}
-			reader.close();
-		} catch (IOException e) {
-			System.err.println("Fragment shader wasn't loaded properly.");
-			Display.destroy();
-			System.exit(1);
-		}
-		glShaderSource(vertexShader, vertexShaderSource);
-		glCompileShader(vertexShader);
-		if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
-			System.err
-					.println("Vertex shader wasn't able to be compiled correctly.");
-		}
-		glShaderSource(fragmentShader, fragmentShaderSource);
-		glCompileShader(fragmentShader);
-		if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
-			System.err
-					.println("Fragment shader wasn't able to be compiled correctly.");
-		}
-		glAttachShader(shaderProgram, vertexShader);
-		glAttachShader(shaderProgram, fragmentShader);
-		glLinkProgram(shaderProgram);
-		glValidateProgram(shaderProgram);
+		shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
 		diffuseModifierUniform = glGetUniformLocation(shaderProgram, "diffuseIntensityModifier");
-		glDeleteShader(vertexShader);
-		glDeleteShader(fragmentShader);
 	}
 }

@@ -1,5 +1,9 @@
 package episode_27;
 
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,10 +17,10 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 
 import utility.Camera;
+import utility.Face;
+import utility.Model;
+import utility.OBJLoader;
 import utility.ShaderLoader;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 
 public class VBOModels {
 
@@ -28,10 +32,11 @@ public class VBOModels {
 	private static int bunnyDisplayList;
 	private static int diffuseLocation;
 
-	private static Model m;
+	private static Model model;
 	
-	public static final String VERTEX_SHADER_LOCATION = "src/episode_27/light.vert";
-	public static final String FRAGMENT_SHADER_LOCATION = "src/episode_27/light.frag";
+	public static final String MODEL_LOCATION = "res/bunny.obj";
+	public static final String VERTEX_SHADER_LOCATION = "res/specular_lighting.vert";
+	public static final String FRAGMENT_SHADER_LOCATION = "res/specular_lighting.frag";
 
 	public static void main(String[] args) {
 		setUpDisplay();
@@ -49,9 +54,6 @@ public class VBOModels {
 		System.exit(0);
 	}
 
-	/**
-	 * Roughly the same as in episode 26.
-	 */
 	private static void checkInput() {
 		cam.processMouse(1, 80, -80);
 		cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
@@ -84,16 +86,13 @@ public class VBOModels {
 		glEnableClientState(GL_NORMAL_ARRAY);
 		glColor3f(0.4f, 0.27f, 0.17f);
 		glMaterialf(GL_FRONT, GL_SHININESS, 10f);
-		glDrawArrays(GL_TRIANGLES, 0, m.faces.size() * 3);
+		glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
 		glDisableClientState(GL_VERTEX_ARRAY);
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glUseProgram(0);
 	}
 
-	/**
-	 * Roughly the same as in episode 26.
-	 */
 	private static void setUpLighting() {
 		glShadeModel(GL_SMOOTH);
 		glEnable(GL_DEPTH_TEST);
@@ -112,9 +111,9 @@ public class VBOModels {
 	private static void setUpVBOs() {
 		vboVertexHandle = glGenBuffers();
 		vboNormalHandle = glGenBuffers();
-		m = null;
+		model = null;
 		try {
-			m = OBJLoader.loadModel(new File("src/episode_27/bunny.obj"));
+			model = OBJLoader.loadModel(new File(MODEL_LOCATION));
 		} catch (FileNotFoundException e){
 			e.printStackTrace();
 			cleanUp();
@@ -124,15 +123,15 @@ public class VBOModels {
 			cleanUp();
 			System.exit(1);
 		}
-		FloatBuffer vertices = reserveData(m.faces.size() * 9);
-		FloatBuffer normals = reserveData(m.faces.size() * 9);
-		for (Face face : m.faces) {
-			vertices.put(asFloats(m.vertices.get((int) face.vertex.x - 1)));
-			vertices.put(asFloats(m.vertices.get((int) face.vertex.y - 1)));
-			vertices.put(asFloats(m.vertices.get((int) face.vertex.z - 1)));
-			normals.put(asFloats(m.normals.get((int) face.normal.x - 1)));
-			normals.put(asFloats(m.normals.get((int) face.normal.y - 1)));
-			normals.put(asFloats(m.normals.get((int) face.normal.z - 1)));
+		FloatBuffer vertices = reserveData(model.faces.size() * 9);
+		FloatBuffer normals = reserveData(model.faces.size() * 9);
+		for (Face face : model.faces) {
+			vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
+			vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
+			vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
+			normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
+			normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
+			normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
 		}
 		vertices.flip();
 		normals.flip();
@@ -152,18 +151,12 @@ public class VBOModels {
 		return data;
 	}
 
-	/**
-	 * Roughly the same as in episode 26.
-	 */
 	private static void setUpShaders() {
 		shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
 		diffuseLocation = glGetUniformLocation(shaderProgram,
 				"diffuseIntensityModifier");
 	}
 
-	/**
-	 * Roughly the same as in episode 26.
-	 */
 	private static void setUpCamera() {
 		cam = new Camera((float) Display.getWidth()
 				/ (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
@@ -171,9 +164,6 @@ public class VBOModels {
 		cam.applyProjectionMatrix();
 	}
 
-	/**
-	 * Roughly the same as in episode 26.
-	 */
 	private static void setUpDisplay() {
 		try {
 			Display.setDisplayMode(new DisplayMode(640, 480));
