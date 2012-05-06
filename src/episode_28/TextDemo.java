@@ -238,5 +238,6 @@ public class TextDemo {
 		glDeleteBuffers(vboVertexHandle);
 		glDeleteBuffers(vboNormalHandle);
 		Display.destroy();
+		System.exit(0);
 	}
 }
