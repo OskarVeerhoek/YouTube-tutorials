@@ -1,5 +1,9 @@
 package episode_1;
 
+/** 
+ * All the files in this repository may be compiled, ran, modified, and distributed only if you clearly declare that Oskar Veerhoek is the authour of the source files in question.
+**/
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
