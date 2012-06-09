@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="lib/jars/jdom-1.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/jars/jinput.jar"/>
-	<classpathentry kind="lib" path="lib/jars/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="lib/jars/lwjgl.jar">
+	<classpathentry kind="lib" path="lib/jars/jdom-1.1.2.jar" sourcepath="lib/src/generated"/>
+	<classpathentry kind="lib" path="lib/jars/jinput.jar" sourcepath="lib/src/generated"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl_util.jar" sourcepath="lib/src/generated"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl.jar" sourcepath="lib/src/generated">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="JavaGameDevelopment/lib/natives-mac"/>
 		</attributes>

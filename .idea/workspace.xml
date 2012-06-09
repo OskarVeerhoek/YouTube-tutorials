@@ -63,13 +63,38 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ModernOpenGLDemo.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="ModernOpenGLDemo.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/episode_29/ModernOpenGLDemo.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="31" column="21" selection-start="1001" selection-end="1001" vertical-scroll-proportion="0.7914339">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="141" column="56" selection-start="5587" selection-end="5587" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LICENCE_LWJGL.txt" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LICENCE_LWJGL.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LICENCE_CODE" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/LICENCE_CODE">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="25" column="25" selection-start="1486" selection-end="1486" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LICENCE_JDOM" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/LICENCE_JDOM">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="53" column="0" selection-start="2489" selection-end="2489" vertical-scroll-proportion="1.7360308">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -77,16 +102,7 @@
       <file leaf-file-name="core_basic_shader.vert" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/res/core_basic_shader.vert">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="5" column="6" selection-start="95" selection-end="101" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="core_basic_shader.frag" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/res/core_basic_shader.frag">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="2" column="6" selection-start="19" selection-end="25" vertical-scroll-proportion="0.0">
+            <state line="13" column="38" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -112,22 +128,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/episode_29/SpriteSheetsDemo.java" />
-        <option value="$PROJECT_DIR$/src/utility/ImagingTools.java" />
-        <option value="$PROJECT_DIR$/src/utility/Terrain.java" />
-        <option value="$PROJECT_DIR$/src/episode_29/PBODemo.java" />
-        <option value="$PROJECT_DIR$/src/utility/Camera.java" />
-        <option value="$PROJECT_DIR$/src/utility/Timer.java" />
-        <option value="$PROJECT_DIR$/src/utility/LWJGLTimer.java" />
-        <option value="$PROJECT_DIR$/src/episode_29/SkyboxDemo.java" />
-        <option value="$PROJECT_DIR$/src/episode_29/MatricesDemo.java" />
-        <option value="$PROJECT_DIR$/src/episode_29/FrameBufferDemo.java" />
-        <option value="$PROJECT_DIR$/src/examples/pacman/Pacman.java" />
-        <option value="$PROJECT_DIR$/res/core_basic_shader_frag" />
         <option value="$PROJECT_DIR$/src/utility/ShaderLoader.java" />
+        <option value="$PROJECT_DIR$/src/Main.java" />
+        <option value="$PROJECT_DIR$/src/LWJGLTimer.java" />
+        <option value="$PROJECT_DIR$/src/utility/BufferTools.java" />
+        <option value="$PROJECT_DIR$/res/circle_shader.vert" />
+        <option value="$PROJECT_DIR$/src/episode_29/DrawingCircles.java" />
+        <option value="$PROJECT_DIR$/src/episode_29/SoundUtil.java" />
+        <option value="$PROJECT_DIR$/src/episode_29/nooes.java" />
+        <option value="$PROJECT_DIR$/src/episode_29/Noo.java" />
+        <option value="$PROJECT_DIR$/src/episode_29/sdfs.java" />
+        <option value="$PROJECT_DIR$/lib/src/java/org/lwjgl/test/applet/OpenGL.java" />
         <option value="$PROJECT_DIR$/res/core_basic_shader.vert" />
-        <option value="$PROJECT_DIR$/res/core_basic_shader.frag" />
         <option value="$PROJECT_DIR$/src/episode_29/ModernOpenGLDemo.java" />
+        <option value="$PROJECT_DIR$/res/core_basic_shader.frag" />
+        <option value="$PROJECT_DIR$/LICENCE_CODE" />
+        <option value="$PROJECT_DIR$/LICENCE_JDOM" />
       </list>
     </option>
   </component>
@@ -135,7 +151,6 @@
     <option name="jreName" value="#JAVA_INTERNAL" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="960" />
     <option name="width" value="960" />
     <option name="height" value="1040" />
   </component>
@@ -169,7 +184,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectReloadState">
-    <option name="STATE" value="0" />
+    <option name="STATE" value="2" />
   </component>
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
@@ -184,6 +199,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -194,16 +219,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="JavaGameDevelopment" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewModuleNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -226,20 +241,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JavaGameDevelopment" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="JavaGameDevelopment" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="res" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
     </panes>
@@ -251,20 +252,26 @@
     <property name="options.splitter.main.proportions" value="0.3" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="recentsLimit" value="5" />
-    <property name="options.lastSelected" value="project.propVCSSupport.VCSs.Git" />
+    <property name="options.lastSelected" value="fileTemplates" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="GoToClass.includeJavaFiles" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="FullScreen" value="false" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
-    <property name="options.searchVisible" value="true" />
-    <property name="options.splitter.details.proportions" value="0.2" />
     <property name="dynamic.classpath" value="false" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="" />
+    </key>
   </component>
   <component name="RunManager" selected="Application.ModernOpenGLDemo">
-    <configuration default="false" name="SkyboxDemo" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="episode_29.SkyboxDemo" />
+    <configuration default="false" name="ModernOpenGLDemo" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="episode_29.ModernOpenGLDemo" />
       <option name="VM_PARAMETERS" value="-Djava.library.path=&quot;lib/natives-win/&quot;" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -279,8 +286,8 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="MatricesDemo" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="episode_29.MatricesDemo" />
+    <configuration default="false" name="DrawingCircles" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="episode_29.DrawingCircles" />
       <option name="VM_PARAMETERS" value="-Djava.library.path=&quot;lib/natives-win/&quot;" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -301,40 +308,8 @@
       <ConfigurationWrapper RunnerId="Run" />
       <method />
     </configuration>
-    <configuration default="false" name="Pacman" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="examples.pacman.Pacman" />
-      <option name="VM_PARAMETERS" value="-Djava.library.path=&quot;lib/natives-win/&quot;" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="JavaGameDevelopment" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="VersionTest" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="utility.VersionTest" />
-      <option name="VM_PARAMETERS" value="-Djava.library.path=&quot;lib/natives-win/&quot;" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" value="" />
-      <option name="ENABLE_SWING_INSPECTOR" value="false" />
-      <option name="ENV_VARIABLES" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <module name="JavaGameDevelopment" />
-      <envs />
-      <RunnerSettings RunnerId="Run" />
-      <ConfigurationWrapper RunnerId="Run" />
-      <method />
-    </configuration>
-    <configuration default="false" name="ModernOpenGLDemo" type="Application" factoryName="Application" temporary="true">
-      <option name="MAIN_CLASS_NAME" value="episode_29.ModernOpenGLDemo" />
+    <configuration default="false" name="sdfs" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="episode_29.sdfs" />
       <option name="VM_PARAMETERS" value="-Djava.library.path=&quot;lib/natives-win/&quot;" />
       <option name="PROGRAM_PARAMETERS" value="" />
       <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$" />
@@ -360,6 +335,28 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
+    <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Tests">
+      <module name="" />
+      <option name="TESTING_TYPE" value="0" />
+      <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="CLASS_NAME" value="" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TARGET_SELECTION_MODE" value="EMULATOR" />
+      <option name="PREFERRED_AVD" value="" />
+      <option name="COMMAND_LINE" value="" />
+      <option name="WIPE_USER_DATA" value="false" />
+      <option name="DISABLE_BOOT_ANIMATION" value="false" />
+      <option name="NETWORK_SPEED" value="full" />
+      <option name="NETWORK_LATENCY" value="none" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -369,24 +366,6 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -415,6 +394,24 @@
       <envs />
       <properties />
       <listeners />
+      <method>
+        <option name="AntTarget" enabled="false" />
+        <option name="BuildArtifacts" enabled="false" />
+        <option name="Make" enabled="true" />
+        <option name="Maven.BeforeRunTask" enabled="false" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
@@ -486,12 +483,10 @@
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
-    <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Application.SkyboxDemo" />
-      <item index="1" class="java.lang.String" itemvalue="Application.MatricesDemo" />
-      <item index="2" class="java.lang.String" itemvalue="Application.Pacman" />
-      <item index="3" class="java.lang.String" itemvalue="Application.VersionTest" />
-      <item index="4" class="java.lang.String" itemvalue="Application.ModernOpenGLDemo" />
+    <list size="3">
+      <item index="0" class="java.lang.String" itemvalue="Application.ModernOpenGLDemo" />
+      <item index="1" class="java.lang.String" itemvalue="Application.DrawingCircles" />
+      <item index="2" class="java.lang.String" itemvalue="Application.sdfs" />
     </list>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
       <Host>localhost</Host>
@@ -526,27 +521,27 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="960" y="0" width="960" height="1040" extended-state="0" />
+    <frame x="0" y="0" width="960" height="1040" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3295082" sideWeight="0.6004756" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284091" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39886364" sideWeight="0.99830365" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3284091" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32818073" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.6004756" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27821228" sideWeight="0.6556818" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.34431818" sideWeight="0.94017094" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31843576" sideWeight="0.6454545" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.35454544" sideWeight="0.99868596" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3272727" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -605,100 +600,110 @@
   <component name="XDebuggerManager">
     <breakpoint-manager />
   </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <PATH>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="JavaGameDevelopment" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+      </PATH_ELEMENT>
+      <PATH_ELEMENT>
+        <option name="myItemId" value="JavaGameDevelopment" />
+        <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+      </PATH_ELEMENT>
+    </PATH>
+  </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/utility/Camera.java">
+    <entry file="file://$PROJECT_DIR$/lib/src/java/org/lwjgl/input/Keyboard.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="131" column="12" selection-start="4491" selection-end="4491" vertical-scroll-proportion="0.0" />
+        <state line="549" column="34" selection-start="20832" selection-end="20832" vertical-scroll-proportion="0.36363637" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/episode_29/SkyboxDemo.java">
+    <entry file="file://$PROJECT_DIR$/src/episode_29/Background2D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="52" selection-start="773" selection-end="773" vertical-scroll-proportion="0.0" />
+        <state line="24" column="13" selection-start="661" selection-end="661" vertical-scroll-proportion="0.24242425" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/episode_29/PBODemo.java">
+    <entry file="file://$PROJECT_DIR$/src/episode_29/Collision2D.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="61" column="26" selection-start="1781" selection-end="1781" vertical-scroll-proportion="1.7825242" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/episode_27/VBOModels.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="25" selection-start="1425" selection-end="1425" vertical-scroll-proportion="1.1080074" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/episode_28/TextDemo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="13" selection-start="1197" selection-end="1197" vertical-scroll-proportion="-1.2029796" />
+        <state line="45" column="33" selection-start="1415" selection-end="1415" vertical-scroll-proportion="0.77554744" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/episode_29/MatricesDemo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="35" selection-start="509" selection-end="509" vertical-scroll-proportion="0.06640625" />
+        <state line="25" column="13" selection-start="605" selection-end="605" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/examples/pacman/player.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/examples/pacman/Pacman.java">
+    <entry file="file://$PROJECT_DIR$/src/utility/BufferTools.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="35" selection-start="1083" selection-end="1083" vertical-scroll-proportion="0.6331471" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utility/VersionTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="190" selection-end="190" vertical-scroll-proportion="0.25325885" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/episode_29/FrameBufferDemo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="2" selection-start="89" selection-end="89" vertical-scroll-proportion="0.0" />
+        <state line="24" column="22" selection-start="844" selection-end="844" vertical-scroll-proportion="0.5614679" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/utility/SampleProgram.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="57" selection-start="250" selection-end="250" vertical-scroll-proportion="0.0" />
+        <state line="81" column="16" selection-start="18" selection-end="1982" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utility/ShaderLoader.java">
+    <entry file="file://$PROJECT_DIR$/src/episode_29/DrawingCircles.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="0" selection-start="1162" selection-end="1162" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="17" column="55" selection-start="495" selection-end="495" vertical-scroll-proportion="0.3030303" />
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/jars/lwjgl.jar!/org/lwjgl/opengl/GL20.class">
+    <entry file="file://$PROJECT_DIR$/lib/src/native/common/CL/cl.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="356" column="23" selection-start="17880" selection-end="17880" vertical-scroll-proportion="0.34960938">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/java/org/lwjgl/test/applet/OpenGL.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="23" selection-start="1799" selection-end="1799" vertical-scroll-proportion="0.32386363" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lib/src/java/org/lwjgl/test/applet/AppletLoaderTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.754159" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/core_basic_shader.frag">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="2" column="6" selection-start="19" selection-end="25" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="19" column="16" selection-start="588" selection-end="588" vertical-scroll-proportion="0.5970425" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/res/core_basic_shader.vert">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="6" selection-start="95" selection-end="101" vertical-scroll-proportion="0.0">
+        <state line="13" column="38" selection-start="261" selection-end="261" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/episode_29/ModernOpenGLDemo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="21" selection-start="1001" selection-end="1001" vertical-scroll-proportion="0.7914339">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state line="141" column="56" selection-start="5587" selection-end="5587" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENCE_LWJGL.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENCE_CODE">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="25" selection-start="1486" selection-end="1486" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENCE_JDOM">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="53" column="0" selection-start="2489" selection-end="2489" vertical-scroll-proportion="1.7360308">
+          <folding />
         </state>
       </provider>
     </entry>
@@ -731,6 +736,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
+          <last-edited>LWJGL 2.8.3</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -777,6 +783,17 @@
         </settings>
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ScopeChooserConfigurable.UI">
         <settings>
           <splitter-proportions>
             <option name="proportions">
