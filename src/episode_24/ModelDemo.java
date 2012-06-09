@@ -105,7 +105,7 @@ public class ModelDemo {
 		cam.setPitch(-1.12f);
 		cam.setYaw(0.16f);
 		cam.setFov(70);
-		cam.applyProjectionMatrix();
+		cam.applyPerspectiveMatrix();
 	}
 
 	private static void setUpDisplay() {

@@ -1,8 +1,6 @@
 package episode_21;
 
 import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -48,7 +46,8 @@ public class JInputDemo {
             System.out.println(c.getName());
         }
         
-        float dx = 0;
+        @SuppressWarnings("unused")
+		float dx = 0;
         
         while (running) {
             joystick.poll();

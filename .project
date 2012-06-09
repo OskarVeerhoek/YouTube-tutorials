@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/VersionTest.java</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/VersionTest.java</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

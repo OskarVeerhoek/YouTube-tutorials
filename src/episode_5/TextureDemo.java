@@ -45,16 +45,35 @@ public class TextureDemo {
 
             wood.bind();
 
-            glBegin(GL_QUADS);
-            glTexCoord2f(0, 0);
-            glVertex2i(400, 400); // Upper-left
+            glBegin(GL_TRIANGLES);
+            
             glTexCoord2f(1, 0);
-            glVertex2i(450, 400); // Upper-right
-            glTexCoord2f(1, 1);
-            glVertex2i(450, 450); // Bottom-right
+            glVertex2i(450, 10);
+            glTexCoord2f(0, 0);
+            glVertex2i(10, 10);
             glTexCoord2f(0, 1);
-            glVertex2i(400, 450); // Bottom-left
+            glVertex2i(10, 450);
+            
+            glTexCoord2f(0, 1);
+            glVertex2i(10, 450);
+            glTexCoord2f(1, 1);
+            glVertex2i(450, 450);
+            glTexCoord2f(1, 0);
+            glVertex2i(450, 10);
+            
             glEnd();
+            
+            
+//            glBegin(GL_QUADS);
+//            glTexCoord2f(0, 0);
+//            glVertex2i(400, 400); // Upper-left
+//            glTexCoord2f(1, 0);
+//            glVertex2i(450, 400); // Upper-right
+//            glTexCoord2f(1, 1);
+//            glVertex2i(450, 450); // Bottom-right
+//            glTexCoord2f(0, 1);
+//            glVertex2i(400, 450); // Bottom-left
+//            glEnd();
 
             Display.update();
             Display.sync(60);

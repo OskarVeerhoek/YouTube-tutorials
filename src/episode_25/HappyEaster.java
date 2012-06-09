@@ -123,12 +123,12 @@ public class HappyEaster {
 		cam = new Camera((float) Display.getWidth()
 				/ (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
 		cam.setFov(70);
-		cam.applyProjectionMatrix();
+		cam.applyPerspectiveMatrix();
 	}
 
 	private static void setUpDisplay() {
 		try {
-			Display.setDisplayMode(new DisplayMode(640, 480));
+			Display.setDisplayMode(new DisplayMode(800, 800));
 			Display.setVSyncEnabled(true);
 			Display.setTitle("Happy Easter!");
 			Display.create();

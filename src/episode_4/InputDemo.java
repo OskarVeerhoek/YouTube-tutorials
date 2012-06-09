@@ -18,7 +18,8 @@ public class InputDemo {
 
     private List<Box> shapes = new ArrayList<Box>(16);
     private boolean somethingIsSelected = false;
-    private volatile boolean randomColorCooldown = false;
+    @SuppressWarnings("unused") // For some reason Eclipse doesn't recognize this as used.
+	private volatile boolean randomColorCooldown = false;
 
     public InputDemo() {
         try {

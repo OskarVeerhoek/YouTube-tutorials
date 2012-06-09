@@ -1,35 +1,45 @@
 package utility;
 
-import java.nio.FloatBuffer;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Code is for educational purposes only. Please do not redistribute this code.
+ * A camera set in 3D perspective.
  * @author Oskar Veerhoek, author of TheCodingUniverse (www.youtube.com/thecodinguniverse)
  */
-public class Camera {
+public final class Camera {
 
-    protected float x = 0;
-    protected float y = 0;
-    protected float z = 0;
-    protected float pitch = 0;
-    protected float yaw = 0;
-    protected float roll = 0;
-    protected float fov = 90;
-    protected float aspectRatio;
-    protected float zNear = 0.3f;
-    protected float zFar = 100f;
+    private float x = 0;
+    private float y = 0;
+    private float z = 0;
+    private float pitch = 0;
+    private float yaw = 0;
+    private float roll = 0;
+    private float fov = 90;
+    private float aspectRatio;
+    private float zNear = 0.3f;
+    private float zFar = 100f;
 
+    /**
+     * Creates a new camera with the given aspect ratio. 
+     * It's located at [0 0 0] with the orientation [0 0 0]. It has a zNear of 0.3, a zFar of 100.0, and an fov of 90.
+     * @param aspectRatio the aspect ratio (width/height) of the camera
+     */
     public Camera(float aspectRatio) {
         this.aspectRatio = aspectRatio;
     }
 
+    /**
+     * Creates a new camera with the given aspect ratio and location.
+     * @param aspectRatio the aspect ratio (width/height) of the camera
+     * @param x the first location coordinate
+     * @param y the second location coordinate
+     * @param z the third location coordinate
+     */
     public Camera(float aspectRatio, double x, double y, double z) {
         this.aspectRatio = aspectRatio;
         this.x = (float) x;
@@ -37,6 +47,13 @@ public class Camera {
         this.z = (float) z;
     }
 
+    /**
+     * Creates a new camera with the given aspect ratio and location.
+     * @param aspectRatio the aspect ratio (width/height) of the camera
+     * @param x the first location coordinate
+     * @param y the second location coordinate
+     * @param z the third location coordinate
+     */
     public Camera(float aspectRatio, float x, float y, float z) {
         this.aspectRatio = aspectRatio;
         this.x = x;
@@ -44,6 +61,16 @@ public class Camera {
         this.z = z;
     }
 
+    /**
+     * Creates a new camera with the given aspect ratio, location, and orientation.
+     * @param aspectRatio the aspect ratio (width/height) of the camera
+     * @param x the first location coordinate
+     * @param y the second location coordinate
+     * @param z the third location coordinate
+     * @param pitch the pitch (rotation on the x-axis)
+     * @param yaw the yaw (rotation on the y-axis)
+     * @param roll the roll (rotation on the z-axis)
+     */
     public Camera(float aspectRatio, double x, double y, double z, double pitch, double yaw, double roll) {
         this.aspectRatio = aspectRatio;
         this.x = (float) x;
@@ -54,6 +81,16 @@ public class Camera {
         this.roll = (float) roll;
     }
 
+    /**
+     * Creates a new camera with the given aspect ratio, location, and orientation.
+     * @param aspectRatio the aspect ratio (width/height) of the camera
+     * @param x the first location coordinate
+     * @param y the second location coordinate
+     * @param z the third location coordinate
+     * @param pitch the pitch (rotation on the x-axis)
+     * @param yaw the yaw (rotation on the y-axis)
+     * @param roll the roll (rotation on the z-axis)
+     */
     public Camera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll) {
         this.aspectRatio = aspectRatio;
         this.x = x;
@@ -63,14 +100,13 @@ public class Camera {
         this.yaw = yaw;
         this.roll = roll;
     }
-
-    private static FloatBuffer asFloatBuffer(float[] values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
     
+    /**
+     * Processes mouse input and converts it in to camera movement using the mouseSpeed value.
+     * @param mouseSpeed the speed (sensitity) of the mouse
+     * @param maxLookUp the maximum angle at which you can look up 
+     * @param maxLookDown the maximum angle at which you can look down
+     */
     public void processMouse(float mouseSpeed, float maxLookUp, float maxLookDown) {
     	if (!Mouse.isGrabbed()) return;
     	float mouseDX = Mouse.getDX() * mouseSpeed * 0.16f;
@@ -92,7 +128,13 @@ public class Camera {
 		}
     }
     
-    public void processKeyboard(int delta, float speedX, float speedY, float speedZ) {
+    /**
+     * @param delta the elapsed time since the last frame update in seconds
+     * @param speedX the speed of the movement on the x-axis (normal = 0.003)
+     * @param speedY the speed of the movement on the y-axis (normal = 0.003)
+     * @param speedZ the speed of the movement on the z-axis (normal = 0.003)
+     */
+    public void processKeyboard(float delta, float speedX, float speedY, float speedZ) {
     	boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_W);
         boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || Keyboard.isKeyDown(Keyboard.KEY_S);
         boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_A);
@@ -169,7 +211,14 @@ public class Camera {
     	this.z = z;
     }
 
-    public void applyProjectionMatrix() {
+    public void applyOrthographicMatrix() {
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-Display.getWidth() / 50f, Display.getWidth() / 50f, -Display.getHeight() / 50f, Display.getHeight() / 50f, 0, 10000);
+        glMatrixMode(GL_MODELVIEW);
+    }
+
+    public void applyPerspectiveMatrix() {
     	glMatrixMode(GL_PROJECTION);
     	glLoadIdentity();
     	GLU.gluPerspective(fov, aspectRatio, zNear, zFar);

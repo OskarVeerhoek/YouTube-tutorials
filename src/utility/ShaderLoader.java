@@ -39,6 +39,7 @@ public class ShaderLoader {
 			}
 			reader.close();
 		} catch (IOException e) {
+            e.printStackTrace();
 			System.err.println("Fragment shader wasn't loaded properly.");
 			Display.destroy();
 			System.exit(1);

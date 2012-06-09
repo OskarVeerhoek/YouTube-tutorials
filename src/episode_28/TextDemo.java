@@ -192,7 +192,7 @@ public class TextDemo {
 		cam = new Camera((float) Display.getWidth()
 				/ (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
 		cam.setFov(70);
-		cam.applyProjectionMatrix();
+		cam.applyPerspectiveMatrix();
 		glGetFloat(GL_PROJECTION_MATRIX, perspectiveProjectionMatrix);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();

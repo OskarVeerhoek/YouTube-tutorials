@@ -60,7 +60,7 @@ public class MineFront {
     /**
 * The minimal distance from the camera where objects are rendered.
 */
-    public static float zNear = 0.001f;
+    public static float zNear = 0.3f;
     /**
 * The width and length of the floor and ceiling. Don't put anything above
 * 1000, or OpenGL will start to freak out, though.

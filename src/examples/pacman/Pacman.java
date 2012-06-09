@@ -33,7 +33,6 @@ public class Pacman {
     private static Random random = new Random();
 
     private static enum Direction {
-
         UP, DOWN, LEFT, RIGHT, IDLE
     };
 
@@ -202,7 +201,8 @@ public class Pacman {
                         moving = false;
                     }
                 }
-                List<Orb> newOrbs = new ArrayList<Orb>();
+                @SuppressWarnings("unused")
+				List<Orb> newOrbs = new ArrayList<Orb>();
                 for (Orb orb : orbs) {
                     if (pacmanX == orb.x && pacmanY == orb.y) {
                         if (lastX < orb.x && lastY == orb.y) {
@@ -234,7 +234,7 @@ public class Pacman {
                         orbs.add(new Orb(5, 5));
                     }
                     pacmanX = pacmanY = 0;
-                    pacmanDirection = pacmanDirection.IDLE;
+                    pacmanDirection = Direction.IDLE;
                     moving = false;
                     countdown = (int) ((width + height) * 0.75);
                 }

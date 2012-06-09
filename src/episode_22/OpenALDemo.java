@@ -2,9 +2,6 @@ package episode_22;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.math.BigDecimal;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.lwjgl.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.*;
@@ -24,7 +21,6 @@ public class OpenALDemo {
             e.printStackTrace();
             System.exit(1);
         }
-        BigDecimal var = new BigDecimal(0.00000000001);
         WaveData data = WaveData.create(new FileInputStream("res/thump.wav"));
         int buffer = alGenBuffers();
         alBufferData(buffer, data.format, data.data, data.samplerate);

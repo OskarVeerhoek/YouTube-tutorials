@@ -133,8 +133,6 @@ public class MineFront {
      */
     public static int fov = 80;
     private static int fps;
-    private static float controllerKeyZ = 0;
-    private static float controllerKeyX = 0;
     private static long lastFPS;
     private static long lastFrame;
 

@@ -17,7 +17,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 
 import utility.Camera;
-import utility.Face;
 import utility.Model;
 import utility.OBJLoader;
 import utility.ShaderLoader;
@@ -109,12 +108,13 @@ public class VBOModels {
 	}
 
 	private static void setUpVBOs() {
-		vboVertexHandle = glGenBuffers();
-		vboNormalHandle = glGenBuffers();
-		model = null;
+		int[] vbos;
 		try {
 			model = OBJLoader.loadModel(new File(MODEL_LOCATION));
-		} catch (FileNotFoundException e){
+			vbos = OBJLoader.createVBO(model);
+			vboVertexHandle = vbos[0];
+			vboNormalHandle = vbos[1];
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			cleanUp();
 			System.exit(1);
@@ -123,29 +123,45 @@ public class VBOModels {
 			cleanUp();
 			System.exit(1);
 		}
-		FloatBuffer vertices = reserveData(model.faces.size() * 9);
-		FloatBuffer normals = reserveData(model.faces.size() * 9);
-		for (Face face : model.faces) {
-			vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
-			vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
-			vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
-			normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
-			normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
-			normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
-		}
-		vertices.flip();
-		normals.flip();
-		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-		glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+//		vboVertexHandle = glGenBuffers();
+//		vboNormalHandle = glGenBuffers();
+//		model = null;
+//		try {
+//			model = OBJLoader.loadModel(new File(MODEL_LOCATION));
+//		} catch (FileNotFoundException e){
+//			e.printStackTrace();
+//			cleanUp();
+//			System.exit(1);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			cleanUp();
+//			System.exit(1);
+//		}
+//		FloatBuffer vertices = reserveData(model.faces.size() * 9);
+//		FloatBuffer normals = reserveData(model.faces.size() * 9);
+//		for (Face face : model.faces) {
+//			vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
+//			vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
+//			vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
+//			normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
+//			normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
+//			normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
+//		}
+//		vertices.flip();
+//		normals.flip();
+//		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+//		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+//		glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+//		glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
+//		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	@SuppressWarnings("unused")
 	private static float[] asFloats(Vector3f v) {
 		return new float[]{v.x, v.y, v.z};
 	}
 
+	@SuppressWarnings("unused")
 	private static FloatBuffer reserveData(int size) {
 		FloatBuffer data = BufferUtils.createFloatBuffer(size);
 		return data;
@@ -161,7 +177,7 @@ public class VBOModels {
 		cam = new Camera((float) Display.getWidth()
 				/ (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
 		cam.setFov(70);
-		cam.applyProjectionMatrix();
+		cam.applyPerspectiveMatrix();
 	}
 
 	private static void setUpDisplay() {

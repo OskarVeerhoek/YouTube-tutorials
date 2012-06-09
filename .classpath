@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.launching.macosx.MacOSXType/Java SE 6 (MacOS X Default)"/>
-	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/jdom-1.1.2.jar"/>
-	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/lwjgl.jar">
+	<classpathentry kind="lib" path="lib/jars/jdom-1.1.2.jar"/>
+	<classpathentry kind="lib" path="lib/jars/jinput.jar"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="lib/jars/lwjgl.jar">
 		<attributes>
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="JavaGameDevelopment/lib/natives-mac"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/slick-util.jar"/>
-	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/PNGDecoder.jar"/>
-	<classpathentry kind="lib" path="/Users/TheCodingUniverse/Documents/workspace/JavaGameDevelopment/lib/jars/jinput.jar"/>
+	<classpathentry kind="lib" path="lib/jars/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="lib/jars/slick.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
