@@ -1,6 +1,7 @@
 package episode_29;
 
 public final class Sprite {
+
     private final String name;
     private final int x;
     private final int y;
