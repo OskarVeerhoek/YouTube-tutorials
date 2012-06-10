@@ -1,2 +1,4 @@
-bin/
-dist/
+bin
+dist
+out
+.gitignore
