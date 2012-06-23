@@ -27,7 +27,7 @@ public class ModernOpenGLDemo {
 
     private static final String WINDOW_TITLE = "Modern OpenGL!";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
-    private static final String  VERTEX_SHADER_LOCATION= "res/core_basic_shader.vert";
+    private static final String VERTEX_SHADER_LOCATION = "res/core_basic_shader.vert";
     private static final String FRAGMENT_SHADER_LOCATION = "res/core_basic_shader.frag";
 
     private static int vbo;
@@ -165,43 +165,43 @@ public class ModernOpenGLDemo {
         }
     }
 
-    private static void computePerspective(Matrix4f projectionMatrix, float fov, float aspectRatio, float zNear, float zFar) {
-        float ymax = (float) (zNear * Math.tan(Math.toRadians(fov)));
-        float ymin = -ymax;
-        float xmax = ymax * aspectRatio;
-        float xmin = ymin * aspectRatio;
-
-        float width = xmax * xmin;
-        float height = ymax * ymin;
-
-        float depth = zFar - zNear;
-        float q = (-zFar + zNear) / depth;
-        float qn = -2 * (zFar * zNear) / depth;
-
-        float w = 2 * zNear / width;
-        w = w / aspectRatio;
-        float h = 2 * zNear / height;
-
-        projectionMatrix.m00 = w;
-        projectionMatrix.m01 = 0;
-        projectionMatrix.m02 = 0;
-        projectionMatrix.m03 = 0;
-
-        projectionMatrix.m10 = 0;
-        projectionMatrix.m11 = h;
-        projectionMatrix.m12 = 0;
-        projectionMatrix.m13 = 0;
-
-        projectionMatrix.m20 = 0;
-        projectionMatrix.m21 = 0;
-        projectionMatrix.m22 = q;
-        projectionMatrix.m23 = -1;
-
-        projectionMatrix.m30 = 0;
-        projectionMatrix.m31 = 0;
-        projectionMatrix.m32 = qn;
-        projectionMatrix.m33 = 0;
-    }
+//    private static void computePerspective(Matrix4f projectionMatrix, float fov, float aspectRatio, float zNear, float zFar) {
+//        float ymax = (float) (zNear * Math.tan(Math.toRadians(fov)));
+//        float ymin = -ymax;
+//        float xmax = ymax * aspectRatio;
+//        float xmin = ymin * aspectRatio;
+//
+//        float width = xmax * xmin;
+//        float height = ymax * ymin;
+//
+//        float depth = zFar - zNear;
+//        float q = (-zFar + zNear) / depth;
+//        float qn = -2 * (zFar * zNear) / depth;
+//
+//        float w = 2 * zNear / width;
+//        w = w / aspectRatio;
+//        float h = 2 * zNear / height;
+//
+//        projectionMatrix.m00 = w;
+//        projectionMatrix.m01 = 0;
+//        projectionMatrix.m02 = 0;
+//        projectionMatrix.m03 = 0;
+//
+//        projectionMatrix.m10 = 0;
+//        projectionMatrix.m11 = h;
+//        projectionMatrix.m12 = 0;
+//        projectionMatrix.m13 = 0;
+//
+//        projectionMatrix.m20 = 0;
+//        projectionMatrix.m21 = 0;
+//        projectionMatrix.m22 = q;
+//        projectionMatrix.m23 = -1;
+//
+//        projectionMatrix.m30 = 0;
+//        projectionMatrix.m31 = 0;
+//        projectionMatrix.m32 = qn;
+//        projectionMatrix.m33 = 0;
+//    }
 
     public static void main(String[] args) {
         setUpDisplay();

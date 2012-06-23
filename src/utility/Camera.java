@@ -214,7 +214,8 @@ public final class Camera {
     public void applyOrthographicMatrix() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(-Display.getWidth() / 50f, Display.getWidth() / 50f, -Display.getHeight() / 50f, Display.getHeight() / 50f, 0, 10000);
+//        glOrtho(-Display.getWidth() / 50f, Display.getWidth() / 50f, -Display.getHeight() / 50f, Display.getHeight() / 50f, 0, 10000);
+        glOrtho(-1, 1, -1, 1, 0, 10000);
         glMatrixMode(GL_MODELVIEW);
     }
 

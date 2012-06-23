@@ -1,4 +1,4 @@
-package future;
+package episode_30;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -15,7 +15,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.vector.Vector3f;
 
 import utility.*;
 
@@ -26,11 +25,9 @@ import utility.*;
 public class MatricesDemo {
 
     private static Camera cam;
-    private static int texture;
     private static int shaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
-    private static int bunnyDisplayList;
     private static int diffuseLocation;
 
     private static LWJGLTimer timer = new LWJGLTimer();
@@ -80,9 +77,7 @@ public class MatricesDemo {
     }
 
     private static void cleanUp() {
-        glDeleteTextures(texture);
         glDeleteProgram(shaderProgram);
-        glDeleteLists(bunnyDisplayList, 1);
         glDeleteBuffers(vboVertexHandle);
         glDeleteBuffers(vboNormalHandle);
         Display.destroy();
@@ -157,7 +152,7 @@ public class MatricesDemo {
 
     private static void setUpDisplay() {
         try {
-            Display.setDisplayMode(new DisplayMode(640, 480));
+            Display.setDisplayMode(new DisplayMode(1280, 720));
             Display.setVSyncEnabled(true);
             Display.setTitle("Matrices Demo");
             Display.create();
