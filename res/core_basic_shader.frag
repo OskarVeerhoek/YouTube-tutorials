@@ -14,11 +14,11 @@ void main() {
     //outputColor.g = float(int(outputColor.g * smoothness)) / smoothness;
     //outputColor.b = float(int(outputColor.b * smoothness)) / smoothness;
 
-    float distanceToMouse = distance(gl_FragCoord.xy, mousePosition) ;
+   // float distanceToMouse = distance(gl_FragCoord.xy, mousePosition) ;
 
-    if (distanceToMouse > 100) {
-        discard;
-    }
+   // if (distanceToMouse > 100) {
+   //     discard;
+   // }
 
     //vec3 brightnessModifier = outputColor.rgb + 0.5;
     //brightnessModifier *= 1;

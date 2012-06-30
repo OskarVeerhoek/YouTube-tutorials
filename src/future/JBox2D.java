@@ -16,7 +16,7 @@ import java.util.List;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * 30 pixels = 1 metre
+ * 20 pixels = 1 metre
  * @author Oskar Veerhoek
  */
 public class JBox2D {
@@ -31,12 +31,24 @@ public class JBox2D {
         return worldCoordinate.mul(20);
     }
 
+    private static float worldToProjection(float worldCoordinate) {
+        return worldCoordinate * 20;
+    }
+
     private static Vec2 projectionToWorld(Vec2 projectionCoordinate) {
         return projectionCoordinate.mul(0.05f);
     }
 
+    private static float projectionToWorld(float projectionCoordinate) {
+        return projectionCoordinate * 0.05f;
+    }
+
     private static Vec2 windowToProjection(Vec2 windowCoordinate) {
         return windowCoordinate.mul(WINDOW_DIMENSIONS[0] / 320);
+    }
+
+    private static float windowToProjection(float windowCoordinate) {
+        return windowCoordinate *WINDOW_DIMENSIONS[0] / 320;
     }
 
     private static void render() {
@@ -47,7 +59,7 @@ public class JBox2D {
             {
                 if (body.getType() == BodyType.DYNAMIC) {
                     glPushMatrix();
-                    glTranslatef(worldToProjection(body.getPosition()).x, worldToProjection(body.getPosition()).y, 0);
+                    glTranslatef(worldToProjection(body.getPosition().x), worldToProjection(body.getPosition().y), 0);
                     glRotatef((float) Math.toDegrees(body.getAngle()), 0, 0, 1);
                     glRectf(-15, -15, 15, 15);
                     glPopMatrix();
@@ -117,14 +129,7 @@ public class JBox2D {
         glMatrixMode(GL_MODELVIEW);
     }
 
-    private static void setUpStates() {
-
-        glEnable(GL_LINE_SMOOTH);
-        glEnable(GL_POLYGON_SMOOTH);
-        glEnable(GL_POINT_SMOOTH);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    private static void setUpObjects() {
         // Create box
 
         PolygonShape boxShape = new PolygonShape();
@@ -213,9 +218,17 @@ public class JBox2D {
         topWallBody.createFixture(topWallFixtureDef);
     }
 
+    private static void setUpStates() {
+        glEnable(GL_LINE_SMOOTH);
+        glEnable(GL_POLYGON_SMOOTH);
+        glEnable(GL_POINT_SMOOTH);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glLineWidth(3);
+    }
+
     private static void update() {
         Display.update();
-        Display.sync(60);
     }
 
     private static void enterGameLoop() {
@@ -230,6 +243,7 @@ public class JBox2D {
     private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
+            Display.setVSyncEnabled(true);
             Display.setTitle(WINDOW_TITLE);
             Display.create();
         } catch (LWJGLException e) {
@@ -241,6 +255,7 @@ public class JBox2D {
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
+        setUpObjects();
         setUpMatrices();
         enterGameLoop();
         cleanUp(false);
