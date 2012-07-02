@@ -199,7 +199,7 @@ public class TextDemo {
 		glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 1, -1);
 		glGetFloat(GL_PROJECTION_MATRIX, orthographicProjectionMatrix);
 		glLoadMatrix(perspectiveProjectionMatrix);
-		glMatrixMode(GL_MODELVIEW_MATRIX);
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	private static void setUpDisplay() {
