@@ -1,4 +1,4 @@
-package future;
+package episode_32;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
