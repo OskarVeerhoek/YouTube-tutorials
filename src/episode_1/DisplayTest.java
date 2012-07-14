@@ -1,9 +1,5 @@
 package episode_1;
 
-/**
- * All the files in this repository may be compiled, ran, modified, and distributed only if you clearly declare that Oskar Veerhoek is the authour of the source files in question.
- **/
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -24,7 +20,6 @@ public class DisplayTest {
             System.err.println("The display couldn't be initialized.");
             System.exit(1);
         }
-
         while (!Display.isCloseRequested()) {
             Display.update();
             Display.sync(60);
