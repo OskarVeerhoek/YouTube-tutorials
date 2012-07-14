@@ -14,20 +14,20 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class TimerDemo {
 
-    private long lastFrame;
+    private static long lastFrame;
 
-    private long getTime() {
+    private static long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
-    private double getDelta() {
+    private static double getDelta() {
         long currentTime = getTime();
         double delta = (double) (currentTime - lastFrame);
         lastFrame = getTime();
         return delta;
     }
 
-    public TimerDemo() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Timer Demo");
@@ -41,7 +41,6 @@ public class TimerDemo {
         int dx = 1;
         int dy = 1;
 
-        // Initialization code OpenGL
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, 640, 480, 0, 1, -1);
@@ -50,8 +49,6 @@ public class TimerDemo {
         lastFrame = getTime();
 
         while (!Display.isCloseRequested()) {
-            // Render
-
             glClear(GL_COLOR_BUFFER_BIT);
 
             double delta = getDelta();
@@ -66,13 +63,6 @@ public class TimerDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new TimerDemo();
     }
 }
 
