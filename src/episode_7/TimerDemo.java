@@ -7,7 +7,7 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Shows framerate-independant movement
+ * Shows framerate-independent movement
  * @author Oskar
  */
 public class TimerDemo {
@@ -18,9 +18,9 @@ public class TimerDemo {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
-    private int getDelta() {
+    private double getDelta() {
         long currentTime = getTime();
-        int delta = (int) (currentTime - lastFrame);
+        double delta = (double) (currentTime - lastFrame);
         lastFrame = getTime();
         return delta;
     }
@@ -52,7 +52,7 @@ public class TimerDemo {
 
             glClear(GL_COLOR_BUFFER_BIT);
 
-            int delta = getDelta();
+            double delta = getDelta();
             x += delta * dx * 0.1;
             y += delta * dy * 0.1;
 

@@ -45,7 +45,7 @@ public class EntityDemo {
 
         @Override
         public void draw() {
-            glRectd(x, y, width, height);
+            glRectd(x, y, x + width, y + height);
         }
         
     }
