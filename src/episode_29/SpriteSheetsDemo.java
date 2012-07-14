@@ -15,11 +15,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Shows how to use sprite sheets.
+ *
  * @author Oskar Veerhoek
  */
 public class SpriteSheetsDemo {

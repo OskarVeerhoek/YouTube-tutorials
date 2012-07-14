@@ -2,6 +2,7 @@ package utility;
 
 /**
  * For frame-rate independent movement
+ *
  * @author Oskar Veerhoek
  */
 public class LWJGLTimer {
@@ -19,6 +20,7 @@ public class LWJGLTimer {
 
     /**
      * Creates a timer.
+     *
      * @param printTime if the timer prints out the elapsed time every second
      */
     public LWJGLTimer(boolean printTime) {
@@ -41,6 +43,7 @@ public class LWJGLTimer {
 
     /**
      * Updates the timer. Call this once every iteration of the game loop.
+     *
      * @return the elapsed time in milliseconds
      */
     public double update() {

@@ -1,15 +1,18 @@
 package episode_18;
 
-import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.nio.FloatBuffer;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
 /**
  * Renders a colored triangle using Vertex Buffer Objects
+ *
  * @author Oskar
  */
 public class VertexBufferObjectDemo {
@@ -45,21 +48,21 @@ public class VertexBufferObjectDemo {
         glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
         glBufferData(GL_ARRAY_BUFFER, vertexData, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
+
         int vboColorHandle = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, vboColorHandle);
         glBufferData(GL_ARRAY_BUFFER, colorData, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
+
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT);
 
             glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
             glVertexPointer(vertexSize, GL_FLOAT, 0, 0L);
-            
+
             glBindBuffer(GL_ARRAY_BUFFER, vboColorHandle);
             glColorPointer(colorSize, GL_FLOAT, 0, 0L);
-            
+
             glEnableClientState(GL_VERTEX_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
             glDrawArrays(GL_TRIANGLES, 0, amountOfVertices);

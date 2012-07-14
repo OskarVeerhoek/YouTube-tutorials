@@ -1,6 +1,7 @@
 package episode_11_12_13;
 
 import org.lwjgl.input.Mouse;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class SelectionBox {

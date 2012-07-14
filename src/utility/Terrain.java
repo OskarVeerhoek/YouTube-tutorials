@@ -2,10 +2,12 @@ package utility;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 
 /**
  * A 3D terrain
+ *
  * @author Oskar Veerhoek
  */
 public class Terrain {

@@ -9,16 +9,14 @@ import utility.BufferTools;
 import utility.LWJGLTimer;
 
 import java.nio.FloatBuffer;
-import java.util.List;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.ARBFramebufferObject.*;
+import static org.lwjgl.opengl.GL11.*;
 
 
 /**
  * Shows the use of a frame buffer.
+ *
  * @author Oskar Veerhoek
  */
 public class FrameBufferDemo {
@@ -66,10 +64,10 @@ public class FrameBufferDemo {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 switch (Keyboard.getEventKey()) {
-                    case Keyboard.KEY_N :
+                    case Keyboard.KEY_N:
                         useReadPixels = false;
                         break;
-                    case Keyboard.KEY_M :
+                    case Keyboard.KEY_M:
                         useReadPixels = true;
                         break;
                 }

@@ -1,11 +1,14 @@
 package episode_3;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.opengl.*;
-import org.lwjgl.*;
 
 /**
  * Shows some basic shape drawing.
+ *
  * @author Oskar
  */
 public class SimpleOGLRenderer {

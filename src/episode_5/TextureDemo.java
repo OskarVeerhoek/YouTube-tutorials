@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Nothing special, just a texture.
+ *
  * @author Oskar Veerhoek
  */
 public class TextureDemo {
@@ -30,7 +31,7 @@ public class TextureDemo {
         }
         try {
             // Load the wood texture from "res/wood.png"
-            wood =  TextureLoader.getTexture("PNG", new FileInputStream(new File("res/wood.png")));
+            wood = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/wood.png")));
         } catch (IOException e) {
             e.printStackTrace();
             Display.destroy();

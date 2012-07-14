@@ -4,6 +4,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -32,6 +33,7 @@ public class SmoothTransitions {
          */
         MAIN;
     }
+
     /**
      * Default state is intro.
      */

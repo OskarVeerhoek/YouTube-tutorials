@@ -3,10 +3,12 @@ package episode_14;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Explains the use of glOrtho
+ *
  * @author Oskar
  */
 public class CoordinateSystems {

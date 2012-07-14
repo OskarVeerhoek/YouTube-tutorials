@@ -13,11 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
+import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
-import static org.lwjgl.opengl.ARBTextureRectangle.*;
 
 /**
  * @author Oskar Veerhoek
@@ -26,7 +24,7 @@ public class HeightmapsDemo {
 
     private static final String WINDOW_TITLE = "Heightmaps";
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
-    
+
     private static int texture;
     private static int[] heightmap = new int[1280];
 
@@ -100,7 +98,7 @@ public class HeightmapsDemo {
         glReadPixels(0, 0, 1280, 1, GL_RGB, GL_FLOAT, pixels);
         for (int i = 0; i < 1280 * 3; i++) {
             if (i < 1277)
-            heightmap[i] = (int) (pixels.get(i) * 100f);
+                heightmap[i] = (int) (pixels.get(i) * 100f);
         }
         for (int i : heightmap) {
             System.out.println(i);

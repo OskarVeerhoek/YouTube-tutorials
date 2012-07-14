@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Prints out your version of OpenGL
+ *
  * @author Oskar
  */
 public class VersionTest {

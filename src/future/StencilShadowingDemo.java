@@ -1,8 +1,9 @@
 package future;
 
-import org.lwjgl.*;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.Sphere;
 import utility.Camera;
 import utility.LWJGLTimer;
@@ -11,6 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Simulating shadows using the stencil buffer
+ *
  * @author Oskar Veerhoek
  */
 public class StencilShadowingDemo {
@@ -31,13 +33,13 @@ public class StencilShadowingDemo {
 //        glVertex3f(-50, -2, 50);
 //        glEnd();
         glPushMatrix();
-        glColor4d(1,1,1,0.7);
-        glScalef(4,2,4);
+        glColor4d(1, 1, 1, 0.7);
+        glScalef(4, 2, 4);
         glBegin(GL_QUADS);
-        glVertex3d(-1,-1,1);
-        glVertex3d(-1,1,-0.5);
-        glVertex3d(1,1,-0.5);
-        glVertex3f(1,-1,1);
+        glVertex3d(-1, -1, 1);
+        glVertex3d(-1, 1, -0.5);
+        glVertex3d(1, 1, -0.5);
+        glVertex3f(1, -1, 1);
         glEnd();
         glPopMatrix();
     }
@@ -46,13 +48,13 @@ public class StencilShadowingDemo {
 //        glColor3f(1, 0, 0);
 //        sphere.draw(2, 10, 10);
         glPushMatrix();
-        glTranslated(0,2.5,0);
-        glScalef(2,2,2);
+        glTranslated(0, 2.5, 0);
+        glScalef(2, 2, 2);
         glBegin(GL_QUADS);
-        glVertex3f(-1,-1,0);
-        glVertex3f(-1,1,0);
-        glVertex3f(1,1,0);
-        glVertex3f(1,-1,0);
+        glVertex3f(-1, -1, 0);
+        glVertex3f(-1, 1, 0);
+        glVertex3f(1, 1, 0);
+        glVertex3f(1, -1, 0);
         glEnd();
         glPopMatrix();
     }
@@ -110,10 +112,10 @@ public class StencilShadowingDemo {
     }
 
     private static void setUpMatrices() {
-       camera.applyPerspectiveMatrix();
+        camera.applyPerspectiveMatrix();
     }
 
-    private static void setUpStates() { 
+    private static void setUpStates() {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glShadeModel(GL_SMOOTH);

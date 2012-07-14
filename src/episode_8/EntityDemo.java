@@ -5,10 +5,12 @@ import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Shows the use of an entity driven game engine
+ *
  * @author Oskar
  */
 public class EntityDemo {
@@ -37,7 +39,7 @@ public class EntityDemo {
 //            glRectd(x, y, x + width, y + height);
 //        }
 //    }
-    
+
     private static class Box extends AbstractMoveableEntity {
         public Box(double x, double y, double width, double height) {
             super(x, y, width, height);
@@ -47,7 +49,7 @@ public class EntityDemo {
         public void draw() {
             glRectd(x, y, x + width, y + height);
         }
-        
+
     }
 
     private static class Point extends AbstractEntity {

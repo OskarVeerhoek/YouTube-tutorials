@@ -7,6 +7,7 @@ import org.lwjgl.opengl.DisplayMode;
 /**
  * If this application shows a blank and responsive window
  * and doesn't throw any errors, you know you have installed lwjgl correctly.
+ *
  * @author Oskar
  */
 public class DisplayTest {
@@ -19,12 +20,12 @@ public class DisplayTest {
             System.err.println("The display couldn't be initialized.");
             System.exit(1);
         }
-        
+
         while (!Display.isCloseRequested()) {
             Display.update();
             Display.sync(60);
         }
-        
+
         Display.destroy();
         System.exit(0);
     }

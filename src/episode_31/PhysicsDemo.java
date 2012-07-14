@@ -42,7 +42,7 @@ public class PhysicsDemo {
     }
 
     private static void logic() {
-        world.step(1/60f, 8, 3);
+        world.step(1 / 60f, 8, 3);
     }
 
     private static void input() {
@@ -54,7 +54,7 @@ public class PhysicsDemo {
                     body.applyAngularImpulse(-0.01f);
                 }
                 if (Mouse.isButtonDown(0)) {
-                    Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(0.5f).mul(1/30f);
+                    Vec2 mousePosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(0.5f).mul(1 / 30f);
                     Vec2 bodyPosition = body.getPosition();
                     Vec2 force = mousePosition.sub(bodyPosition);
                     body.applyForce(force, body.getPosition());
@@ -76,7 +76,7 @@ public class PhysicsDemo {
 
     private static void setUpObjects() {
         BodyDef boxDef = new BodyDef();
-        boxDef.position.set(320/30/2, 240/30/2);
+        boxDef.position.set(320 / 30 / 2, 240 / 30 / 2);
         boxDef.type = BodyType.DYNAMIC;
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(0.75f, 0.75f);

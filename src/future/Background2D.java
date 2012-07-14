@@ -11,15 +11,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.ARBTextureRectangle.*;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
 
 /**
  * A 2D program that gives the illusion of depth.
+ *
  * @author Oskar Veerhoek
  */
 public class Background2D {

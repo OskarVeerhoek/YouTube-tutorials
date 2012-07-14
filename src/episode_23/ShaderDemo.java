@@ -1,16 +1,17 @@
 package episode_23;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import static org.lwjgl.opengl.GL20.*;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 
 /**
- *
  * @author Oskar
  */
 public class ShaderDemo {

@@ -1,13 +1,15 @@
 package episode_18;
 
-import java.nio.FloatBuffer;
-import java.util.Random;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.nio.FloatBuffer;
+import java.util.Random;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
@@ -26,7 +28,9 @@ public class AdvancedRendering {
      */
     private static enum RenderMode {
         IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS;
-    };
+    }
+
+    ;
     private RenderMode mode;
 
     public float getDelta() {
@@ -39,6 +43,7 @@ public class AdvancedRendering {
     public long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
+
     // The speed in which the "camera" travels
     float speed = 0.0f;
     //
@@ -72,7 +77,7 @@ public class AdvancedRendering {
         /**
          * Display lists
          */
-        
+
         // Generate a handle to a display list 
         int displayList = glGenLists(1);
         // Create the display list using the displayList handle
@@ -89,7 +94,7 @@ public class AdvancedRendering {
         /**
          * Vertex Arrays and Vertex Buffer Objects
          */
-        
+
         // Create a new FloatBuffer (complex array of floats) with the capacity
         // of the length of the points * 3 (because we have 3 vertices per point)
         FloatBuffer vertexArray = BufferUtils.createFloatBuffer(points.length * 3);

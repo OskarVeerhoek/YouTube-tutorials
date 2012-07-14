@@ -1,13 +1,16 @@
 package episode_22;
 
+import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.openal.AL;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.WaveData;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import org.lwjgl.*;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.*;
-import org.lwjgl.openal.AL;
+
 import static org.lwjgl.openal.AL10.*;
-import org.lwjgl.util.WaveData;
 
 public class OpenALDemo {
 

@@ -5,6 +5,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -56,7 +57,7 @@ public class SideScrollerDemo {
             float mousex = Mouse.getX() - translate_x;
             float mousey = 480 - Mouse.getY() - 1;
 
-			System.out.println("Mouse: x " + mousex + ", y " + mousey);
+            System.out.println("Mouse: x " + mousex + ", y " + mousey);
 
             // Do some OpenGL rendering (code from SimpleOGLRenderer.java).
             glBegin(GL_QUADS);

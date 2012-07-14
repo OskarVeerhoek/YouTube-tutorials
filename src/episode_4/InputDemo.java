@@ -1,27 +1,30 @@
 package episode_4;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Shows how to use input coupled with threads to achieve cool results.
+ *
  * @author Oskar
  */
 public class InputDemo {
 
-    private List<Box> shapes = new ArrayList<Box>(16);
-    private boolean somethingIsSelected = false;
-    @SuppressWarnings("unused") // For some reason Eclipse doesn't recognize this as used.
-	private volatile boolean randomColorCooldown = false;
+    private static List<Box> shapes = new ArrayList<Box>(16);
+    private static boolean somethingIsSelected = false;
+    // Disregard Eclipse's whining - this variable is being used!
+    private static volatile boolean randomColorCooldown = false;
 
-    public InputDemo() {
+    public static void main(String args[]) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Input Demo");
@@ -29,33 +32,22 @@ public class InputDemo {
         } catch (LWJGLException e) {
             e.printStackTrace();
         }
-
         shapes.add(new Box(15, 15));
         shapes.add(new Box(100, 150));
-
-        // Initialization code OpenGL
         glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
         glOrtho(0, 640, 480, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
-
         while (!Display.isCloseRequested()) {
-            // Render
             glClear(GL_COLOR_BUFFER_BIT);
-
             while (Keyboard.next()) {
                 if (Keyboard.getEventKey() == Keyboard.KEY_C && Keyboard.getEventKeyState()) {
                     shapes.add(new Box(15, 15));
                 }
             }
-
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                 Display.destroy();
                 System.exit(0);
             }
-
-
-
             for (Box box : shapes) {
                 if (Mouse.isButtonDown(0) && box.inBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
                     somethingIsSelected = true;
@@ -98,6 +90,7 @@ public class InputDemo {
         Display.destroy();
     }
 
+
     private static class Box {
 
         public int x, y;
@@ -136,7 +129,6 @@ public class InputDemo {
 
         void draw() {
             glColor3f(colorRed, colorGreen, colorBlue);
-
             glBegin(GL_QUADS);
             glVertex2f(x, y);
             glVertex2f(x + 50, y);
@@ -144,12 +136,5 @@ public class InputDemo {
             glVertex2f(x, y + 50);
             glEnd();
         }
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new InputDemo();
     }
 }

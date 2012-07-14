@@ -1,12 +1,15 @@
 package episode_6;
-import static org.lwjgl.opengl.GL11.*;
 
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.*;
-import org.lwjgl.*;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+
+import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Shows the use of different game states.
+ *
  * @author Oskar
  */
 public class StateDemo {
@@ -15,6 +18,7 @@ public class StateDemo {
 
         INTRO, MAIN_MENU, GAME;
     }
+
     private State state = State.INTRO;
 
     public StateDemo() {

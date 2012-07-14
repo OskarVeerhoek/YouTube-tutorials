@@ -1,11 +1,13 @@
 package episode_11_12_13;
 
-import java.io.File;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.io.File;
+
 import static org.lwjgl.opengl.GL11.*;
 
 public class Boot {

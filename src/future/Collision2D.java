@@ -1,6 +1,5 @@
 package future;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -8,14 +7,12 @@ import org.lwjgl.opengl.DisplayMode;
 import utility.BufferTools;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glPopMatrix;
 
 /**
  * 2D Collision with circles and rectangles.
+ *
  * @author Oskar Veerhoek
  */
 public class Collision2D {
@@ -81,7 +78,7 @@ public class Collision2D {
         float dx = pointLocation[0] - circlePosition[0];
         float dy = pointLocation[1] - circlePosition[1];
         float distance_squared = dx * dx + dy * dy;
-        float radius_squared= circleRadius * circleRadius;
+        float radius_squared = circleRadius * circleRadius;
         if (distance_squared < radius_squared)
             return true;
         else

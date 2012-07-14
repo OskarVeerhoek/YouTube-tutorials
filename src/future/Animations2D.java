@@ -1,14 +1,16 @@
 package future;
 
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import utility.ImagingTools;
 
+import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.ARBTextureRectangle.*;
 
 /**
  * Shows 2D animations.
+ *
  * @author Oskar Veerhoek
  */
 public class Animations2D {

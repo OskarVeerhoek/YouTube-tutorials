@@ -8,10 +8,9 @@ import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
-import utility.*;
+import utility.ImagingTools;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glDeleteTextures;
 
 /**
  * Demonstrates face culling
@@ -24,7 +23,9 @@ public class CullingTheoryDemo {
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
 
     private static enum RenderShape {TRIANGLES, LINES, POINTS, MODELS}
+
     private static enum CullState {FRONT, FRONT_AND_BACK, BACK, NONE,}
+
     private static CullState cullState = CullState.NONE;
     private static UnicodeFont font;
     private static RenderShape renderShape = RenderShape.TRIANGLES;

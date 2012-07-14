@@ -6,7 +6,7 @@ public abstract class AbstractMoveableEntity extends AbstractEntity implements
     protected double dx, dy;
 
     public AbstractMoveableEntity(double x, double y, double width,
-            double height) {
+                                  double height) {
         super(x, y, width, height);
         this.dx = 0;
         this.dy = 0;

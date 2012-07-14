@@ -11,10 +11,10 @@ import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glBindTexture;
 
 /**
  * Some useful methods for loading images.
+ *
  * @author Oskar Veerhoek
  */
 public class ImagingTools {

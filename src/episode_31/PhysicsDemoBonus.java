@@ -42,7 +42,7 @@ public class PhysicsDemoBonus {
     }
 
     private static void logic() {
-        world.step(1/60f, 8, 3);
+        world.step(1 / 60f, 8, 3);
     }
 
     private static void input() {
@@ -50,7 +50,7 @@ public class PhysicsDemoBonus {
             if (Keyboard.getEventKeyState()) {
                 switch (Keyboard.getEventKey()) {
                     case Keyboard.KEY_C:
-                        Vec2 bodyPosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(0.5f).mul(1/30f);
+                        Vec2 bodyPosition = new Vec2(Mouse.getX(), Mouse.getY()).mul(0.5f).mul(1 / 30f);
                         BodyDef boxDef = new BodyDef();
                         boxDef.position.set(bodyPosition);
                         boxDef.type = BodyType.DYNAMIC;
@@ -96,7 +96,7 @@ public class PhysicsDemoBonus {
 
     private static void setUpObjects() {
         BodyDef boxDef = new BodyDef();
-        boxDef.position.set(320/30/2f, 240/30/2f);
+        boxDef.position.set(320 / 30 / 2f, 240 / 30 / 2f);
         boxDef.type = BodyType.DYNAMIC;
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(0.75f, 0.75f);
@@ -132,7 +132,7 @@ public class PhysicsDemoBonus {
         leftWall.createFixture(leftWallFixture);
 
         BodyDef rightWallDef = new BodyDef();
-        rightWallDef.position.set(320f/30, 0);
+        rightWallDef.position.set(320f / 30, 0);
         rightWallDef.type = BodyType.STATIC;
         PolygonShape rightWallShape = new PolygonShape();
         rightWallShape.setAsBox(0, 1000);
@@ -144,7 +144,7 @@ public class PhysicsDemoBonus {
         rightWall.createFixture(rightWallFixture);
 
         BodyDef topWallDef = new BodyDef();
-        topWallDef.position.set(0, 240f/30);
+        topWallDef.position.set(0, 240f / 30);
         topWallDef.type = BodyType.STATIC;
         PolygonShape topWallShape = new PolygonShape();
         topWallShape.setAsBox(1000, 0);

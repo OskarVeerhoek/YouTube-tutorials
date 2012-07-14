@@ -4,13 +4,15 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
-import static org.lwjgl.opengl.GL11.*;  // For standard OpenGL
-import static org.lwjgl.opengl.GL15.*;  // For Buffer Objects
-import static org.lwjgl.opengl.GL21.*;  // For PBOs
 import static org.lwjgl.opengl.EXTFramebufferObject.GL_COLOR_ATTACHMENT0_EXT;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL15.glGenBuffers;
+import static org.lwjgl.opengl.GL21.GL_PIXEL_PACK_BUFFER;
 
 /**
  * Shows the use of Pixel Buffer Objects.
+ *
  * @author Oskar Veerhoek
  */
 public class PBODemo {

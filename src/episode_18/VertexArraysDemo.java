@@ -1,14 +1,17 @@
 package episode_18;
 
-import java.nio.FloatBuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
+import java.nio.FloatBuffer;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Renders a colored triangle using Vertex Arrays
+ *
  * @author Oskar
  */
 public class VertexArraysDemo {
@@ -31,11 +34,11 @@ public class VertexArraysDemo {
         final int amountOfVertices = 3;
         final int vertexSize = 2;
         final int colorSize = 3;
-        
+
         FloatBuffer vertexData = BufferUtils.createFloatBuffer(amountOfVertices * vertexSize);
         vertexData.put(new float[]{-0.5f, -0.5f, 0.5f, -0.5f, 0.5f, 0.5f});
         vertexData.flip();
-        
+
         FloatBuffer colorData = BufferUtils.createFloatBuffer(amountOfVertices * colorSize);
         colorData.put(new float[]{1, 0, 0, 0, 1, 0, 0, 0, 1});
         colorData.flip();
@@ -45,12 +48,12 @@ public class VertexArraysDemo {
 
             glEnableClientState(GL_VERTEX_ARRAY);
             glEnableClientState(GL_COLOR_ARRAY);
-            
+
             glVertexPointer(vertexSize, 0, vertexData);
             glColorPointer(colorSize, 0, colorData);
-            
+
             glDrawArrays(GL_TRIANGLES, 0, amountOfVertices);
-            
+
             glDisableClientState(GL_COLOR_ARRAY);
             glDisableClientState(GL_VERTEX_ARRAY);
 

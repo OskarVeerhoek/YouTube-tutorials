@@ -6,10 +6,12 @@ import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Creates the simplistic game Pong. Discontinued to to lack of popularity.
+ *
  * @author Oskar
  */
 public class PongGame {
@@ -48,6 +50,7 @@ public class PongGame {
             bat.setDY(0);
         }
     }
+
     private long lastFrame;
 
     private long getTime() {

@@ -1,6 +1,5 @@
 package episode_21;
 
-import java.awt.Toolkit;
 import net.java.games.input.Component;
 import net.java.games.input.Controller;
 import net.java.games.input.ControllerEnvironment;
@@ -8,16 +7,17 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import java.awt.*;
+
 /**
- *
  * @author Oskar
  */
 public class JInputDemo {
-    
+
     private static volatile boolean running = true;
 
     public static void main(String[] args) {
-        
+
         try {
             Display.setDisplayMode(new DisplayMode(800, 600));
             Display.create();
@@ -26,33 +26,33 @@ public class JInputDemo {
             Display.destroy();
             System.exit(1);
         }
-        
+
         Controller joystick = null;
-        
+
         for (Controller c : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
             if (c.getType() == Controller.Type.STICK) {
                 joystick = c;
                 System.out.println(joystick.getName());
             }
         }
-        
+
         if (joystick == null) {
             System.err.println("No joystick was found.");
             Display.destroy();
             System.exit(1);
         }
-        
+
         for (Controller c : ControllerEnvironment.getDefaultEnvironment().getControllers()) {
             System.out.println(c.getName());
         }
-        
+
         @SuppressWarnings("unused")
-		float dx = 0;
-        
+        float dx = 0;
+
         while (running) {
             joystick.poll();
             for (Component c : joystick.getComponents()) {
-                
+
                 if (c.getName().equals("x")) {
                     dx += c.getPollData();
                 } else if (c.getName().equals("pov")) {
@@ -60,7 +60,7 @@ public class JInputDemo {
                         Toolkit.getDefaultToolkit().beep();
                     }
                 }
-                
+
             }
             running = !Display.isCloseRequested();
             Display.update();
@@ -68,6 +68,6 @@ public class JInputDemo {
         }
         Display.destroy();
         System.exit(0);
-        
+
     }
 }

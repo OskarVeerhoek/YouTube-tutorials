@@ -12,15 +12,14 @@ import org.lwjgl.util.vector.Vector3f;
 import utility.BufferTools;
 import utility.ShaderLoader;
 
-import java.io.File;
-
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.*;
 
 /**
  * Using core profile modern OpenGL only!
+ *
  * @author Oskar Veerhoek
  */
 public class ModernOpenGLDemo {
@@ -55,7 +54,7 @@ public class ModernOpenGLDemo {
         glUniform2f(mousePositionLocation, Mouse.getX(), Mouse.getY());
 
 //        for (int i = 0; i < 10000; i++)
-            glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glUseProgram(0);
         glBindVertexArray(0);

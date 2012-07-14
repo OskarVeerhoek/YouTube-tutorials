@@ -2,6 +2,17 @@ package episode_19;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.Sys;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GLContext;
+import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.Color;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,33 +21,24 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
+
 import static org.lwjgl.opengl.GL11.*;
-import org.lwjgl.opengl.GLContext;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
-import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.Color;
 
 /**
-* A LWJGL port of the awesome MineFront Pre-ALPHA 0.02 Controls: W/UP =
-* forward; A/LEFT = strafe left; D/RIGHT = strafe right; S/DOWN = backward;
-* SPACE = fly up; SHIFT = fly down; CONTROL = move faster; TAB = move slower; Q
-* = increase walking speed; Z = decrease walking speed; O = increase mouse
-* speed; L = decrease mouse speed; C = reset position
-*
-* @author Oskar Veerhoek, Yan Chernikov
-*/
+ * A LWJGL port of the awesome MineFront Pre-ALPHA 0.02 Controls: W/UP =
+ * forward; A/LEFT = strafe left; D/RIGHT = strafe right; S/DOWN = backward;
+ * SPACE = fly up; SHIFT = fly down; CONTROL = move faster; TAB = move slower; Q
+ * = increase walking speed; Z = decrease walking speed; O = increase mouse
+ * speed; L = decrease mouse speed; C = reset position
+ *
+ * @author Oskar Veerhoek, Yan Chernikov
+ */
 public class MineFront {
 
     /**
-* Defines if the application is resizable.
-*/
+     * Defines if the application is resizable.
+     */
     public static final boolean resizable = true;
     /*
 * Defines if the application is running. Set to false to terminate the
@@ -44,89 +46,89 @@ public class MineFront {
 */
     public static volatile boolean running = true;
     /**
-* The position of the player as a 3D vector (xyz).
-*/
+     * The position of the player as a 3D vector (xyz).
+     */
     public static Vector3f position = new Vector3f(0, 0, 0);
     /**
-* The rotation of the axis (where to the player looks). The X component
-* stands for the rotation along the x-axis, where 0 is dead ahead, 180 is
-* backwards, and 360 is automically set to 0 (dead ahead). The value must
-* be between (including) 0 and 360. The Y component stands for the rotation
-* along the y-axis, where 0 is looking straight ahead, -90 is straight up,
-* and 90 is straight down. The value must be between (including) -90 and
-* 90.
-*/
+     * The rotation of the axis (where to the player looks). The X component
+     * stands for the rotation along the x-axis, where 0 is dead ahead, 180 is
+     * backwards, and 360 is automically set to 0 (dead ahead). The value must
+     * be between (including) 0 and 360. The Y component stands for the rotation
+     * along the y-axis, where 0 is looking straight ahead, -90 is straight up,
+     * and 90 is straight down. The value must be between (including) -90 and
+     * 90.
+     */
     public static Vector3f rotation = new Vector3f(0, 0, 0);
     /**
-* The minimal distance from the camera where objects are rendered.
-*/
+     * The minimal distance from the camera where objects are rendered.
+     */
     public static float zNear = 0.3f;
     /**
-* The width and length of the floor and ceiling. Don't put anything above
-* 1000, or OpenGL will start to freak out, though.
-*/
+     * The width and length of the floor and ceiling. Don't put anything above
+     * 1000, or OpenGL will start to freak out, though.
+     */
     public static final int gridSize = 10;
     /**
-* The size of tiles, where 0.5 is the standard size. Increasing the size by
-* results in smaller tiles, and vice versa.
-*/
+     * The size of tiles, where 0.5 is the standard size. Increasing the size by
+     * results in smaller tiles, and vice versa.
+     */
     public static final float tileSize = 0.20f;
     /**
-* The maximal distance from the camera where objects are rendered.
-*/
+     * The maximal distance from the camera where objects are rendered.
+     */
     public static float zFar = 20f;
     /**
-* The distance where fog starts appearing.
-*/
+     * The distance where fog starts appearing.
+     */
     public static float fogNear = 9f;
     /**
-* The distance where the fog stops appearing (fully black here)
-*/
+     * The distance where the fog stops appearing (fully black here)
+     */
     public static float fogFar = 13f;
     /**
-* The color of the fog in rgba.
-*/
+     * The color of the fog in rgba.
+     */
     public static Color fogColor = new Color(0f, 0f, 0f, 1f);
     /**
-* Defines if the application utilizes full-screen.
-*/
+     * Defines if the application utilizes full-screen.
+     */
     public static final boolean fullscreen = false;
     /**
-* Defines the walking speed, where 10 is the standard.
-*/
+     * Defines the walking speed, where 10 is the standard.
+     */
     public static int walkingSpeed = 10;
     /**
-* Defines the mouse speed.
-*/
+     * Defines the mouse speed.
+     */
     public static int mouseSpeed = 2;
     /**
-* Defines if the application utilizes vertical synchronization (eliminates
-* screen tearing; caps fps to 60fps)
-*/
+     * Defines if the application utilizes vertical synchronization (eliminates
+     * screen tearing; caps fps to 60fps)
+     */
     public static final boolean vsync = true;
     /**
-* Defines if the applications prints its frames-per-second to the console.
-*/
+     * Defines if the applications prints its frames-per-second to the console.
+     */
     public static boolean printFPS = false;
     /**
-* Defines the maximum angle at which the player can look up.
-*/
+     * Defines the maximum angle at which the player can look up.
+     */
     public static final int maxLookUp = 85;
     /**
-* Defines the minimum angle at which the player can look down.
-*/
+     * Defines the minimum angle at which the player can look down.
+     */
     public static final int maxLookDown = -85;
     /**
-* The height of the ceiling.
-*/
+     * The height of the ceiling.
+     */
     public static final float ceilingHeight = 10;
     /**
-* The height of the floor.
-*/
+     * The height of the floor.
+     */
     public static final float floorHeight = -1;
     /**
-* Defines the field of view.
-*/
+     * Defines the field of view.
+     */
     public static int fov = 68;
     private static int fps;
     private static long lastFPS;
@@ -344,14 +346,14 @@ public class MineFront {
             glVertex3d(1, -0.75, -6);
             glColor4f(0, 0, 1, 1f);
             glVertex3d(-1, -.75, -6);
-            
+
             glColor4f(1, 1, 0, 1f);
             glVertex3d(0, topPoint, -5);
             glColor4f(0, 0, 1, 1f);
             glVertex3d(-1, -0.75, -6);
             glColor4f(0, 0, 1, 1f);
             glVertex3d(-1, -.75, -4);
-            
+
             glEnd();
             // Here below if the dull old triangle, if you so desire.
 // glBegin(GL_TRIANGLES);
