@@ -109,7 +109,7 @@ public final class Camera {
     /**
      * Processes mouse input and converts it in to camera movement using the mouseSpeed value.
      *
-     * @param mouseSpeed  the speed (sensitity) of the mouse
+     * @param mouseSpeed  the speed (sensitivity) of the mouse
      * @param maxLookUp   the maximum angle at which you can look up
      * @param maxLookDown the maximum angle at which you can look down
      */
