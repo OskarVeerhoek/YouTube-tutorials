@@ -54,7 +54,7 @@ public class Animations2D {
     }
 
     private static void setUpTextures() {
-        animationTexture = ImagingTools.glLoadTextureLinear("res/images/animations.png");
+        animationTexture = ImagingTools.glLoadLinearPNG("res/images/animations.png");
     }
 
     private static void drawFrame(int frameNumber, int x, int y, int x2, int y2) {

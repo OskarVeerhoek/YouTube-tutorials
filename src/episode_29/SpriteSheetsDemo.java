@@ -96,7 +96,7 @@ public class SpriteSheetsDemo {
     }
 
     private static void setUpSpriteSheets() {
-        spritesheet = ImagingTools.glLoadTextureLinear(SPRITESHEET_IMAGE_LOCATION);
+        spritesheet = ImagingTools.glLoadLinearPNG(SPRITESHEET_IMAGE_LOCATION);
         SAXBuilder builder = new SAXBuilder();
         try {
             Document document = builder.build(new File(SPRITESHEET_XML_LOCATION));
