@@ -20,7 +20,7 @@ local.properties
 ## IntelliJ
 ###############
 .idea
-*.iml
+.iml
 *.class
 out
 
