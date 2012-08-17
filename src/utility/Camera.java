@@ -180,6 +180,13 @@ public final class Camera {
         }
     }
 
+    /**
+     * Move in the direction you're looking. That is, this method assumes a new coordinate system where the axis you're
+     * looking down is the z-axis, the axis to your left is the x-axis, and the upward axis is the y-axis.
+     * @param dx
+     * @param dy
+     * @param dz
+     */
     public void moveFromLook(float dx, float dy, float dz) {
         float nX = this.x;
         float nY = this.y;
@@ -204,19 +211,35 @@ public final class Camera {
         this.z = nZ;
     }
 
-    public void moveAlongAxis(float magnitude, float x, float y, float z) {
-        this.x += x * magnitude;
-        this.y += y * magnitude;
-        this.z += z * magnitude;
-        System.out.println(this.x + ", " + this.y + ", " + this.z);
+    /**
+     * Move along the x, y, and z axes with the given distance.
+     * @param distance the distance you will travel
+     * @param x the distance you will travel along the x-axis
+     * @param y the distance you will travel along the y-axis
+     * @param z the distance you will travel along the z-axis
+     */
+    public void moveAlongAxis(float distance, float x, float y, float z) {
+        this.x += x * distance;
+        this.y += y * distance;
+        this.z += z * distance;
     }
 
+    /**
+     * Sets the position of the camera.
+     * @param x the x-coordinate of the camera
+     * @param y the y-coordinate of the camera
+     * @param z the z-coordinate of the camera
+     */
     public void setPosition(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
+    /**
+     * Applies an orthographic projection matrix. When it's done the method will set the matrix mode of OpenGL to
+     * GL_MODELVIEW.
+     */
     public void applyOrthographicMatrix() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -224,6 +247,10 @@ public final class Camera {
         glMatrixMode(GL_MODELVIEW);
     }
 
+    /**
+     * Applies a perspective projection matrix. When it's done the method will set the matrix mode of OpenGL
+     * to GL_MODELVIEW.
+     */
     public void applyPerspectiveMatrix() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -231,8 +258,10 @@ public final class Camera {
         glMatrixMode(GL_MODELVIEW);
     }
 
-    public void applyModelviewMatrix(boolean resetMatrix) {
-        if (resetMatrix) glLoadIdentity();
+    /**
+     * Applies the camera translations along the three axes.
+     */
+    public void applyTranslations() {
         glRotatef(pitch, 1, 0, 0);
         glRotatef(yaw, 0, 1, 0);
         glRotatef(roll, 0, 0, 1);

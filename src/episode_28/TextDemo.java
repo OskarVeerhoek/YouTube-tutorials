@@ -62,7 +62,8 @@ public class TextDemo {
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        cam.applyModelviewMatrix(true);
+        glLoadIdentity();
+        cam.applyTranslations();
         glUseProgram(shaderProgram);
         glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
         glUniform1f(diffuseLocation, 1.0f);

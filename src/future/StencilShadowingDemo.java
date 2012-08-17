@@ -60,7 +60,8 @@ public class StencilShadowingDemo {
     }
 
     private static void render() {
-        camera.applyModelviewMatrix(true);
+        glLoadIdentity();
+        camera.applyTranslations();
         glClearStencil(0);
         glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT
         glColorMask(false, false, false, false);

@@ -26,7 +26,8 @@ public class SkyboxDemo {
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        camera.applyModelviewMatrix(true);
+        glLoadIdentity();
+        camera.applyTranslations();
     }
 
     private static void logic() {
