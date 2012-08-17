@@ -24,7 +24,7 @@ public class OpenALDemo {
             e.printStackTrace();
             System.exit(1);
         }
-        WaveData data = WaveData.create(new FileInputStream("res/thump.wav"));
+        WaveData data = WaveData.create(new FileInputStream("res/sounds/thump.wav"));
         int buffer = alGenBuffers();
         alBufferData(buffer, data.format, data.data, data.samplerate);
         data.dispose();

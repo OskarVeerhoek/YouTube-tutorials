@@ -26,7 +26,7 @@ public class ModelDemo {
     private static Camera cam;
     private static int bunnyDisplayList;
 
-    public static final String MODEL_LOCATION = "res/bunny.obj";
+    public static final String MODEL_LOCATION = "res/models/bunny.obj";
 
     public static void main(String[] args) {
         setUpDisplay();

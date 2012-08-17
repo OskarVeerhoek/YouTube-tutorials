@@ -58,7 +58,7 @@ public class MainMenuDemo {
     }
 
     private static void setUpTextures() {
-        textures.put("background", ImagingTools.glLoadTextureLinear("res/background.png"));
+        textures.put("background", ImagingTools.glLoadTextureLinear("res/images/background.png"));
     }
 
     private static void setUpStates() {

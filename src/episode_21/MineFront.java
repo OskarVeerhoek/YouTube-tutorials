@@ -224,7 +224,7 @@ public class MineFront {
         {
             InputStream in = null;
             try {
-                in = new FileInputStream("res/floor.png");
+                in = new FileInputStream("res/images/floor.png");
                 PNGDecoder decoder = new PNGDecoder(in);
                 ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
                 decoder.decode(buffer, decoder.getWidth() * 4, Format.RGBA);

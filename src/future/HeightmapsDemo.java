@@ -66,7 +66,7 @@ public class HeightmapsDemo {
         {
             InputStream in = null;
             try {
-                in = new FileInputStream("res/heightmap.png");
+                in = new FileInputStream("res/images/heightmap.png");
                 PNGDecoder decoder = new PNGDecoder(in);
                 ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
                 decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);

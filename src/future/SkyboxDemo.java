@@ -18,7 +18,7 @@ public class SkyboxDemo {
 
     private static final String WINDOW_TITLE = "Skybox Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
-    private static final String SKYBOX_TEXTURE_LOCATION = "res/skybox.png";
+    private static final String SKYBOX_TEXTURE_LOCATION = "res/images/skybox.png";
 
     private static int skyboxTextureID;
     private static Camera camera = new Camera((float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1]);

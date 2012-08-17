@@ -41,7 +41,7 @@ public class ThirdShadowingDemo {
         glDepthFunc(GL_LESS);
         glEnable(GL_CULL_FACE);
         int depthProgramID = ShaderLoader.loadShaderPair(
-                "res/DepthRTT.vertexshader", "res/DepthRTT.fragmentshader");
+                "res/shaders/DepthRTT.vertexshader", "res/shaders/DepthRTT.fragmentshader");
         int depthMatrixID = glGetUniformLocation(depthProgramID, "depthMVP");
         int depth_vertexPosition_modelspaceID = glGetAttribLocation(
                 depthProgramID, "vertexPosition_modelspace");
@@ -50,7 +50,7 @@ public class ThirdShadowingDemo {
         int modelDisplayList = 0;
         try {
             modelDisplayList = OBJLoader.createDisplayList(OBJLoader
-                    .loadModel(new File("res/bunny.obj")));
+                    .loadModel(new File("res/models/bunny.obj")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             glDeleteLists(modelDisplayList, 1);
@@ -91,17 +91,17 @@ public class ThirdShadowingDemo {
                 asFloatBuffer(-1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f,
                         1.0f, 0.0f, -1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 1.0f,
                         1.0f, 0.0f), GL_STATIC_DRAW);
-        int quad_programID = ShaderLoader.loadShaderPair("res/Passthrough.vertexshader", "res/Passthrough.fragmentshader");
+        int quad_programID = ShaderLoader.loadShaderPair("res/shaders/Passthrough.vertexshader", "res/shaders/Passthrough.fragmentshader");
         int texID = glGetUniformLocation(quad_programID, "renderedTexture");
         int timeID = glGetUniformLocation(quad_programID, "time");
-        int programID = ShaderLoader.loadShaderPair("res/StandardShading.vertexshader", "ShadowMapping.fragmentshader");
+        int programID = ShaderLoader.loadShaderPair("res/shaders/StandardShading.vertexshader", "ShadowMapping.fragmentshader");
         int matrixID = glGetUniformLocation(programID, "MVP");
         int viewMatrixID = glGetUniformLocation(programID, "V");
         int modelMatrixID = glGetUniformLocation(programID, "M");
         int depthBiasID = glGetUniformLocation(programID, "DepthBiasMVP");
         int shadowMapID = glGetUniformLocation(programID, "shadowMap");
         int lightInvDirID = glGetUniformLocation(programID, "LightInvDirection_worldspace");
-//		int[] vbos = OBJLoader.createVBO(OBJLoader.loadModel(new File("res/bunny.obj")));
+//		int[] vbos = OBJLoader.createVBO(OBJLoader.loadModel(new File("res/models/bunny.obj")));
 //		int vertexbuffer = vbos[0];
 
         while (!Display.isCloseRequested()) {

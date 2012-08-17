@@ -33,9 +33,9 @@ public class MatricesDemo {
     private static LWJGLTimer timer = new LWJGLTimer();
     private static Model model;
 
-    public static final String MODEL_LOCATION = "res/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/specular_lighting.vert";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/specular_lighting.frag";
+    public static final String MODEL_LOCATION = "res/models/bunny.obj";
+    public static final String VERTEX_SHADER_LOCATION = "res/shaders/specular_lighting.vert";
+    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/specular_lighting.frag";
 
     public static void main(String[] args) {
         setUpDisplay();

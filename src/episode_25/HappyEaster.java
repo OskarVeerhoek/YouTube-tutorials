@@ -25,7 +25,7 @@ public class HappyEaster {
     private static float[] lightPosition = {-2.19f, 1.36f, 11.45f, 1f};
     private static int bunnyDisplayList;
 
-    public static final String MODEL_LOCATION = "res/bunny.obj";
+    public static final String MODEL_LOCATION = "res/models/bunny.obj";
 
     public static void main(String[] args) {
         setUpDisplay();

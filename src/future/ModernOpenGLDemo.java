@@ -26,8 +26,8 @@ public class ModernOpenGLDemo {
 
     private static final String WINDOW_TITLE = "Modern OpenGL!";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
-    private static final String VERTEX_SHADER_LOCATION = "res/core_basic_shader.vert";
-    private static final String FRAGMENT_SHADER_LOCATION = "res/core_basic_shader.frag";
+    private static final String VERTEX_SHADER_LOCATION = "res/shaders/core_basic_shader.vert";
+    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/core_basic_shader.frag";
 
     private static int vbo;
     private static int vao;

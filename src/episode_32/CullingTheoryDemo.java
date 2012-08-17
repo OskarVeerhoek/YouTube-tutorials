@@ -128,7 +128,7 @@ public class CullingTheoryDemo {
     }
 
     private static void setUpTextures() {
-        int loadingTexture = ImagingTools.glLoadTextureLinear("res/loading16x9.png");
+        int loadingTexture = ImagingTools.glLoadTextureLinear("res/images/loading16x9.png");
         glPushAttrib(GL_ENABLE_BIT);
         glEnable(ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB);
         glBindTexture(ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB, loadingTexture);

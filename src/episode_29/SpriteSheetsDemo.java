@@ -31,8 +31,8 @@ public class SpriteSheetsDemo {
     private static int spritesheet;
     private static Map<String, Sprite> spriteMap = new HashMap<String, Sprite>();
     private static Sprite currentSprite;
-    private static final String SPRITESHEET_IMAGE_LOCATION = "res/spritesheet.png";
-    private static final String SPRITESHEET_XML_LOCATION = "res/spritesheet.xml";
+    private static final String SPRITESHEET_IMAGE_LOCATION = "res/images/spritesheet.png";
+    private static final String SPRITESHEET_XML_LOCATION = "res/images/spritesheet.xml";
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT);

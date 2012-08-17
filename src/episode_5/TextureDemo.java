@@ -30,8 +30,8 @@ public class TextureDemo {
             e.printStackTrace();
         }
         try {
-            // Load the wood texture from "res/wood.png"
-            wood = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/wood.png")));
+            // Load the wood texture from "res/images/wood.png"
+            wood = TextureLoader.getTexture("PNG", new FileInputStream(new File("res/images/wood.png")));
         } catch (IOException e) {
             e.printStackTrace();
             Display.destroy();
