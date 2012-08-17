@@ -68,8 +68,8 @@ public class TextDemo {
     private static FloatBuffer orthographicProjectionMatrix = reserveData(16);
 
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/specular_lighting.vert";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/specular_lighting.frag";
+    public static final String VERTEX_SHADER_LOCATION = "res/shaders/specular_lighting.vs";
+    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/specular_lighting.fs";
     public static final int DISPLAY_WIDTH = 640;
     public static final int DISPLAY_HEIGHT = 480;
 
