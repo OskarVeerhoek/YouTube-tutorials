@@ -32,9 +32,9 @@ public class Background2D {
     private static float speed = 1.5f;
     private static float cameraPosition[] = {0, 0};
 
-    private static final String DIRECT_BACKGROUND_LOCATION = "res/direct_background.png";
-    private static final String SEMI_BACKGROUND_LOCATION = "res/semi_background.png";
-    private static final String STATIC_BACKGROUND_LOCATION = "res/static_background.png";
+    private static final String DIRECT_BACKGROUND_LOCATION = "res/images/direct_background.png";
+    private static final String SEMI_BACKGROUND_LOCATION = "res/images/semi_background.png";
+    private static final String STATIC_BACKGROUND_LOCATION = "res/images/static_background.png";
     private static final String WINDOW_TITLE = "2D Backgrounds!";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
