@@ -43,20 +43,20 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class TimerDemo {
 
-    private long lastFrame;
+    private static long lastFrame;
 
-    private long getTime() {
+    private static long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
-    private double getDelta() {
+    private static double getDelta() {
         long currentTime = getTime();
         double delta = (double) (currentTime - lastFrame);
         lastFrame = getTime();
         return delta;
     }
 
-    public TimerDemo() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Timer Demo");
@@ -95,13 +95,6 @@ public class TimerDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new TimerDemo();
     }
 }
 
