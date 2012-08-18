@@ -152,17 +152,6 @@ public class PerPixelLighting {
         }
     }
 
-    @SuppressWarnings("unused")
-    private static float[] asFloats(Vector3f v) {
-        return new float[]{v.x, v.y, v.z};
-    }
-
-    @SuppressWarnings("unused")
-    private static FloatBuffer reserveData(int size) {
-        FloatBuffer data = BufferUtils.createFloatBuffer(size);
-        return data;
-    }
-
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
     }
