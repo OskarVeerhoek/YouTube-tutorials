@@ -36,10 +36,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
-import utility.Camera;
-import utility.Face;
-import utility.Model;
-import utility.OBJLoader;
+import utility.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -111,7 +108,7 @@ public class HappyEaster {
     private static void checkInput() {
         cam.processMouse(1, 80, -80);
         cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(lightPosition));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFloatBuffer(lightPosition));
         if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
             lightPosition = new float[]{cam.getX(), cam.getY(), cam.getZ(), 1};
         }
@@ -138,10 +135,10 @@ public class HappyEaster {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f,
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFloatBuffer(new float[]{0.05f,
                 0.05f, 0.05f, 1f}));
         glLight(GL_LIGHT0, GL_POSITION,
-                asFloatBuffer(new float[]{0, 0, 0, 1}));
+                BufferTools.asFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -166,12 +163,5 @@ public class HappyEaster {
             Display.destroy();
             System.exit(1);
         }
-    }
-
-    private static FloatBuffer asFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
     }
 }

@@ -61,8 +61,8 @@ public class TextDemo {
     private static int vboVertexHandle;
     private static int vboNormalHandle;
 
-    private static FloatBuffer perspectiveProjectionMatrix = reserveData(16);
-    private static FloatBuffer orthographicProjectionMatrix = reserveData(16);
+    private static FloatBuffer perspectiveProjectionMatrix = BufferTools.reserveData(16);
+    private static FloatBuffer orthographicProjectionMatrix = BufferTools.reserveData(16);
 
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
     public static final String VERTEX_SHADER_LOCATION = "res/shaders/specular_lighting.vs";
@@ -167,15 +167,15 @@ public class TextDemo {
             cleanUp();
             System.exit(1);
         }
-        FloatBuffer vertices = reserveData(model.faces.size() * 9);
-        FloatBuffer normals = reserveData(model.faces.size() * 9);
+        FloatBuffer vertices = BufferTools.reserveData(model.faces.size() * 9);
+        FloatBuffer normals = BufferTools.reserveData(model.faces.size() * 9);
         for (Face face : model.faces) {
-            vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
-            vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
-            vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
-            normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
-            normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
-            normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
+            vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.x - 1)));
+            vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.y - 1)));
+            vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.z - 1)));
+            normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.x - 1)));
+            normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.y - 1)));
+            normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.z - 1)));
         }
         vertices.flip();
         normals.flip();
@@ -184,15 +184,6 @@ public class TextDemo {
         glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
         glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
-    private static float[] asFloats(Vector3f v) {
-        return new float[]{v.x, v.y, v.z};
-    }
-
-    private static FloatBuffer reserveData(int size) {
-        FloatBuffer data = BufferUtils.createFloatBuffer(size);
-        return data;
     }
 
     private static void setUpShaders() {

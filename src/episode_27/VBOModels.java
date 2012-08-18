@@ -35,10 +35,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
-import utility.Camera;
-import utility.Model;
-import utility.OBJLoader;
-import utility.ShaderLoader;
+import utility.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -99,7 +96,7 @@ public class VBOModels {
         glLoadIdentity();
         cam.applyTranslations();
         glUseProgram(shaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
         glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
         glVertexPointer(3, GL_FLOAT, 0, 0L);
         glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
@@ -120,10 +117,10 @@ public class VBOModels {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f,
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFloatBuffer(new float[]{0.05f,
                 0.05f, 0.05f, 1f}));
         glLight(GL_LIGHT0, GL_POSITION,
-                asFloatBuffer(new float[]{0, 0, 0, 1}));
+                BufferTools.asFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -179,17 +176,6 @@ public class VBOModels {
 //		glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    @SuppressWarnings("unused")
-    private static float[] asFloats(Vector3f v) {
-        return new float[]{v.x, v.y, v.z};
-    }
-
-    @SuppressWarnings("unused")
-    private static FloatBuffer reserveData(int size) {
-        FloatBuffer data = BufferUtils.createFloatBuffer(size);
-        return data;
-    }
-
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
     }
@@ -212,12 +198,5 @@ public class VBOModels {
             Display.destroy();
             System.exit(1);
         }
-    }
-
-    private static FloatBuffer asFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
     }
 }

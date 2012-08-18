@@ -130,13 +130,6 @@ public class PhysicsDemo {
         bodies.add(ground);
     }
 
-    private static void setUpStates() {
-//        glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
     private static void update() {
         Display.update();
         Display.sync(60);
@@ -164,7 +157,6 @@ public class PhysicsDemo {
 
     public static void main(String[] args) {
         setUpDisplay();
-        setUpStates();
         setUpObjects();
         setUpMatrices();
         enterGameLoop();

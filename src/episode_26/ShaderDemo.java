@@ -34,6 +34,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import utility.BufferTools;
 import utility.Camera;
 import utility.OBJLoader;
 import utility.ShaderLoader;
@@ -125,20 +126,13 @@ public class ShaderDemo {
         }
     }
 
-    private static FloatBuffer asFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
-    }
-
     private static void setUpLighting() {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
