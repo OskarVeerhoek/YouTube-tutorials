@@ -21,6 +21,7 @@ local.properties
 ###############
 .idea
 .iml
+.eml
 *.class
 out
 
