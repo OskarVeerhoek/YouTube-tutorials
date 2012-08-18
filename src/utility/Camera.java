@@ -49,7 +49,7 @@ public final class Camera {
     private float yaw = 0;
     private float roll = 0;
     private float fov = 90;
-    private float aspectRatio;
+    private final float aspectRatio;
     private float zNear = 0.3f;
     private float zFar = 100f;
 
@@ -355,10 +355,6 @@ public final class Camera {
 
     public float getAspectRatio() {
         return aspectRatio;
-    }
-
-    public void setAspectRatio(float aspectRatio) {
-        this.aspectRatio = aspectRatio;
     }
 
     public float getzNear() {
