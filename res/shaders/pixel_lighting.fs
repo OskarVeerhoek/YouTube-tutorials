@@ -29,8 +29,11 @@
 
 #version 120
 
+// The colour that we passed in through the vertex shader.
 varying vec4 varyingColour;
+// The normal that we passed in through the vertex shader.
 varying vec3 varyingNormal;
+// The vertex that we passed in through the vertex shader.
 varying vec4 varyingVertex;
 
 void main() {
