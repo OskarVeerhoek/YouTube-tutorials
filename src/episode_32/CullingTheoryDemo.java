@@ -51,7 +51,7 @@ public class CullingTheoryDemo {
     private static final String WINDOW_TITLE = "Culling!";
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
 
-    private static enum RenderShape {TRIANGLES, LINES, POINTS, MODELS}
+    private static enum RenderShape {TRIANGLES, LINES, POINTS}
 
     private static enum CullState {FRONT, FRONT_AND_BACK, BACK, NONE,}
 
