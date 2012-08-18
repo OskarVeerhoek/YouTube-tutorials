@@ -57,11 +57,9 @@ public class TextDemo {
     private static Model model;
 
     private static Camera cam;
-    private static int texture;
     private static int shaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
-    private static int bunnyDisplayList;
     private static int diffuseLocation;
 
     private static FloatBuffer perspectiveProjectionMatrix = reserveData(16);
@@ -249,9 +247,7 @@ public class TextDemo {
     }
 
     private static void cleanUp() {
-        glDeleteTextures(texture);
         glDeleteProgram(shaderProgram);
-        glDeleteLists(bunnyDisplayList, 1);
         glDeleteBuffers(vboVertexHandle);
         glDeleteBuffers(vboNormalHandle);
         Display.destroy();
