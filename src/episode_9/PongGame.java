@@ -47,11 +47,11 @@ public class PongGame {
 
     public static final int WIDTH = 640;
     public static final int HEIGHT = 480;
-    private boolean isRunning = true;
-    private Ball ball;
-    private Bat bat;
+    private static boolean isRunning = true;
+    private static Ball ball;
+    private static Bat bat;
 
-    public PongGame() {
+    public static void main(String[] args) {
         setUpDisplay();
         setUpOpenGL();
         setUpEntities();
@@ -70,7 +70,7 @@ public class PongGame {
         System.exit(0);
     }
 
-    private void input() {
+    private static void input() {
         if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
             bat.setDY(-.2);
         } else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
@@ -80,20 +80,20 @@ public class PongGame {
         }
     }
 
-    private long lastFrame;
+    private static long lastFrame;
 
-    private long getTime() {
+    private static long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
-    private int getDelta() {
+    private static int getDelta() {
         long currentTime = getTime();
         int delta = (int) (currentTime - lastFrame);
         lastFrame = getTime();
         return delta;
     }
 
-    private void setUpDisplay() {
+    private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
             Display.setTitle("Pong");
@@ -103,30 +103,30 @@ public class PongGame {
         }
     }
 
-    private void setUpOpenGL() {
+    private static void setUpOpenGL() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, 640, 480, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
     }
 
-    private void setUpEntities() {
+    private static void setUpEntities() {
         bat = new Bat(10, HEIGHT / 2 - 80 / 2, 10, 80);
         ball = new Ball(WIDTH / 2 - 10 / 2, HEIGHT / 2 - 10 / 2, 10, 10);
         ball.setDX(-.1);
     }
 
-    private void setUpTimer() {
+    private static void setUpTimer() {
         lastFrame = getTime();
     }
 
-    private void render() {
+    private static void render() {
         glClear(GL_COLOR_BUFFER_BIT);
         ball.draw();
         bat.draw();
     }
 
-    private void logic(int delta) {
+    private static void logic(int delta) {
         ball.update(delta);
         bat.update(delta);
         if (ball.getX() <= bat.getX() + bat.getWidth()
@@ -158,9 +158,5 @@ public class PongGame {
         public void draw() {
             glRectd(x, y, x + width, y + height);
         }
-    }
-
-    public static void main(String[] args) {
-        new PongGame();
     }
 }
