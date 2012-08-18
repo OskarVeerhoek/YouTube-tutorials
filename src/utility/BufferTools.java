@@ -41,6 +41,15 @@ public class BufferTools {
         return new float[]{v.x, v.y, v.z};
     }
 
+    public static boolean bufferEquals(FloatBuffer bufferOne, FloatBuffer bufferTwo, int elements) {
+        for (int i = 0; i < elements; i++) {
+            if (bufferOne.get(i) != bufferTwo.get(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static ByteBuffer asByteBuffer(byte... values) {
         ByteBuffer buffer = BufferUtils.createByteBuffer(values.length);
         buffer.put(values);
