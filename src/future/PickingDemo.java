@@ -29,11 +29,13 @@
 
 package future;
 import org.lwjgl.*;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 import utility.BufferTools;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -43,14 +45,50 @@ public class PickingDemo {
     private static final String WINDOW_TITLE = "Picking Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
-    private static final ByteBuffer trianglePickingColour = BufferTools.asByteBuffer((byte) 0, (byte) 0, (byte) 0);
-    private static final ByteBuffer otherTrianglePickingColour = BufferTools.asByteBuffer((byte) 10, (byte) 0, (byte) 0);
-    private static final ByteBuffer realTrianglePickingColour = BufferTools.asByteBuffer((byte) 255, (byte) 0, (byte) 0);
-    private static final ByteBuffer realOtherTrianglePickingColour = BufferTools.asByteBuffer((byte) 0, (byte) 255, (byte) 0);
+    private static final FloatBuffer pickingTriangleColour = BufferTools.asFloatBuffer(1.0f, 1.0f, 0.0f);
+    private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0.0f, 1.0f, 0.0f);
+    private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
+    private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT); // | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT
-        // Add rendering code here
+        while (Mouse.next()) {
+            if (Mouse.isButtonDown(0)) {
+                // Draw With Picking
+                glClearColor(0, 0, 0, 0);
+                glBegin(GL_TRIANGLES);
+                glColor3f(pickingTriangleColour.get(0), pickingTriangleColour.get(1), pickingTriangleColour.get(2));
+                glVertex2f(-1, -1);
+                glVertex2f(0, -1);
+                glVertex2f(-1, +1);
+                glColor3f(pickingOtherTriangleColour.get(0), pickingOtherTriangleColour.get(1), pickingOtherTriangleColour.get(2));
+                glVertex2f(1, -1);
+                glVertex2f(0, -1);
+                glVertex2f(1, 1);
+                glEnd();
+                FloatBuffer pixels = BufferTools.reserveData(3);
+                glReadPixels(Mouse.getX(), Mouse.getY(), 1, 1, GL_RGB, GL_FLOAT, pixels);
+                if (BufferTools.bufferEquals(pixels, pickingTriangleColour, 3)) {
+                    System.out.println("Left Triangle!");
+                } else if (BufferTools.bufferEquals(pixels, pickingOtherTriangleColour, 3)) {
+                    System.out.println("Right Triangle!");
+                } else {
+                    System.out.println("No Triangle!");
+                }
+            }
+        }
+        // Draw Normally
+        glClear(GL_COLOR_BUFFER_BIT);
+        glBegin(GL_TRIANGLES);
+        glColor3f(realTriangleColour.get(0), realTriangleColour.get(1), realTriangleColour.get(2));
+        glVertex2f(-1, -1);
+        glVertex2f(0, -1);
+        glVertex2f(-1, +1);
+        glColor3f(realOtherTriangleColour.get(0), realOtherTriangleColour.get(1), realOtherTriangleColour.get(2));
+        glVertex2f(1, -1);
+        glVertex2f(0, -1);
+        glVertex2f(1, 1);
+        glEnd();
     }
 
     private static void logic() {
@@ -71,7 +109,7 @@ public class PickingDemo {
         // Add code for the initialization of the projection matrix here
     }
 
-    private static void setUpStates() { 
+    private static void setUpStates() {
 //        glEnable(GL_DEPTH_TEST);
 //        glEnable(GL_LIGHTING);
 //        glEnable(GL_BLEND);
