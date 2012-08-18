@@ -39,9 +39,7 @@
 // program. 
 // Attribute is set by the Java code and read by the vertex program. 
 
-varying vec3 color; 
-
-uniform float diffuseIntensityModifier;
+varying vec3 color;
 
 // Object Space: Vertices you specify with glVertex(Pointer)
 // Eye Space: Vertices transformed by the modelview matrix 
@@ -72,7 +70,7 @@ void main() {
 	// the surface normal and the light direction vectors and stores the value in a scalar. 
 	// If the value is lower than 0, the light is messed up and we don't want
 	// to show it.
-	float diffuseLightIntensity = diffuseIntensityModifier * max(0, dot(surfaceNormal, lightDirection));
+	float diffuseLightIntensity = max(0, dot(surfaceNormal, lightDirection));
 	// Sets the color (which is passed to the fragment program) to the concatenation 
 	// of the material color and the diffuse light intensity. 
 	color.rgb = diffuseLightIntensity * gl_Color.rgb;

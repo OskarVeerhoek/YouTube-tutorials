@@ -57,7 +57,6 @@ public class MatricesDemo {
     private static int shaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
-    private static int diffuseLocation;
 
     private static LWJGLTimer timer = new LWJGLTimer();
     private static Model model;
@@ -118,7 +117,6 @@ public class MatricesDemo {
         cam.applyTranslations();
         glUseProgram(shaderProgram);
         glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
-        glUniform1f(diffuseLocation, 1.0f);
         glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
         glVertexPointer(3, GL_FLOAT, 0, 0L);
         glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
@@ -169,8 +167,6 @@ public class MatricesDemo {
 
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
-        diffuseLocation = glGetUniformLocation(shaderProgram,
-                "diffuseIntensityModifier");
     }
 
     private static void setUpCamera() {

@@ -53,7 +53,7 @@ import static org.lwjgl.opengl.GL20.*;
  */
 public class ShaderDemo {
 
-    private static int shaderProgram, bunny, diffuseModifierUniform;
+    private static int shaderProgram, bunny;
 
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
     public static final String VERTEX_SHADER_LOCATION = "res/shaders/specular_lighting.vs";
@@ -87,7 +87,6 @@ public class ShaderDemo {
             cam.applyTranslations();
 
             glUseProgram(shaderProgram);
-            glUniform1f(diffuseModifierUniform, 1.5f);
             glCallList(bunny);
             glUseProgram(0);
 
@@ -148,6 +147,5 @@ public class ShaderDemo {
 
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
-        diffuseModifierUniform = glGetUniformLocation(shaderProgram, "diffuseIntensityModifier");
     }
 }
