@@ -42,7 +42,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DisplayListsDemo {
 
-    public DisplayListsDemo() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Display Lists Demo");
@@ -82,9 +82,5 @@ public class DisplayListsDemo {
         glDeleteLists(displayListHandle, 1);
         Display.destroy();
         System.exit(0);
-    }
-
-    public static void main(String[] args) {
-        new DisplayListsDemo();
     }
 }

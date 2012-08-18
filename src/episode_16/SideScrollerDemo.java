@@ -45,7 +45,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class SideScrollerDemo {
 
-    public SideScrollerDemo() {
+    public static void main(String[] args) {
         // Create a Display with 640 width, 480 height, and title "Side Scroller"
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
@@ -111,12 +111,5 @@ public class SideScrollerDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new SideScrollerDemo();
     }
 }

@@ -46,7 +46,7 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
  */
 public class ThreeDeeDemo {
 
-    public ThreeDeeDemo() {
+    public static void main(String[] args) {
         // Initialization code Display
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
@@ -147,12 +147,5 @@ public class ThreeDeeDemo {
             this.y = y;
             this.z = z;
         }
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new ThreeDeeDemo();
     }
 }

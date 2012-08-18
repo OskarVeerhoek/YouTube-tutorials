@@ -66,9 +66,9 @@ public class SmoothTransitions {
     /**
      * Default state is intro.
      */
-    private State state = State.INTRO;
+    private static State state = State.INTRO;
 
-    public SmoothTransitions() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Smooth Transitions");
@@ -167,12 +167,5 @@ public class SmoothTransitions {
         Display.destroy();
         // Exit the JVM
         System.exit(0);
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new SmoothTransitions();
     }
 }

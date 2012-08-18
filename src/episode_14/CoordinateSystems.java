@@ -42,7 +42,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class CoordinateSystems {
 
-    public CoordinateSystems() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Coordinate Systems");
@@ -77,12 +77,5 @@ public class CoordinateSystems {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new CoordinateSystems();
     }
 }

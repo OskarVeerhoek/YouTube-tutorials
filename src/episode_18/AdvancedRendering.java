@@ -50,7 +50,7 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
  */
 public class AdvancedRendering {
 
-    private long lastFrame;
+    private static long lastFrame;
 
     /**
      * All the different render modes
@@ -59,25 +59,24 @@ public class AdvancedRendering {
         IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS;
     }
 
-    ;
-    private RenderMode mode;
+    private static RenderMode mode;
 
-    public float getDelta() {
+    public static float getDelta() {
         long time = getTime();
         float delta = (float) (time - lastFrame);
         lastFrame = time;
         return delta;
     }
 
-    public long getTime() {
+    public static long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
     // The speed in which the "camera" travels
-    float speed = 0.0f;
+    static float speed = 0.0f;
     //
 
-    public AdvancedRendering() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Three Dee Demo");
@@ -255,12 +254,5 @@ public class AdvancedRendering {
             this.y = y;
             this.z = z;
         }
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new AdvancedRendering();
     }
 }

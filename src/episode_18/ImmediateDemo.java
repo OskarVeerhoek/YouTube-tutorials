@@ -42,7 +42,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ImmediateDemo {
 
-    public ImmediateDemo() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Immediate Mode Demo");
@@ -75,9 +75,5 @@ public class ImmediateDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    public static void main(String[] args) {
-        new ImmediateDemo();
     }
 }

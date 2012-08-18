@@ -46,7 +46,7 @@ import static org.lwjgl.opengl.GL15.*;
  */
 public class VertexBufferObjectDemo {
 
-    public VertexBufferObjectDemo() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Vertex Buffer Object Demo");
@@ -107,9 +107,5 @@ public class VertexBufferObjectDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    public static void main(String[] args) {
-        new VertexBufferObjectDemo();
     }
 }

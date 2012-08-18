@@ -41,12 +41,12 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Boot {
 
-    private BlockGrid grid;
-    private BlockType selection = BlockType.STONE;
-    private int selector_x = 0, selector_y = 0;
-    private boolean mouseEnabled = true;
+    private static BlockGrid grid;
+    private static BlockType selection = BlockType.STONE;
+    private static int selector_x = 0, selector_y = 0;
+    private static boolean mouseEnabled = true;
 
-    public Boot() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Minecraft 2D");
@@ -82,7 +82,7 @@ public class Boot {
         System.exit(0);
     }
 
-    private void drawSelectionBox() {
+    private static void drawSelectionBox() {
         int x = selector_x * World.BLOCK_SIZE;
         int y = selector_y * World.BLOCK_SIZE;
         int x2 = x + World.BLOCK_SIZE;
@@ -106,7 +106,7 @@ public class Boot {
         }
     }
 
-    private void input() {
+    private static void input() {
         if (mouseEnabled || Mouse.isButtonDown(0)) {
             mouseEnabled = true;
             int mousex = Mouse.getX();
@@ -173,12 +173,5 @@ public class Boot {
                 System.exit(0);
             }
         }
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new Boot();
     }
 }
