@@ -52,11 +52,9 @@ import static org.lwjgl.opengl.GL20.*;
 public class PerPixelLighting {
 
     private static Camera cam;
-    private static int texture;
     private static int shaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
-    private static int bunnyDisplayList;
 
     private static Model model;
 
@@ -90,9 +88,7 @@ public class PerPixelLighting {
     }
 
     private static void cleanUp() {
-        glDeleteTextures(texture);
         glDeleteProgram(shaderProgram);
-        glDeleteLists(bunnyDisplayList, 1);
         glDeleteBuffers(vboVertexHandle);
         glDeleteBuffers(vboNormalHandle);
         Display.destroy();
