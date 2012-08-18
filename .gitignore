@@ -20,8 +20,8 @@ local.properties
 ## IntelliJ
 ###############
 .idea
-.iml
-.eml
+Youtube-Tutorials.iml
+Youtube-Tutorials.eml
 *.class
 out
 
