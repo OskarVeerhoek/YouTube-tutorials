@@ -35,10 +35,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
-import utility.Camera;
-import utility.Model;
-import utility.OBJLoader;
-import utility.ShaderLoader;
+import utility.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -143,9 +140,28 @@ public class CoreLighting {
         int[] vbos;
         try {
             model = OBJLoader.loadModel(new File(MODEL_LOCATION));
-            vbos = OBJLoader.createVBO(model);
-            vboVertexHandle = vbos[0];
-            vboNormalHandle = vbos[1];
+            int vboVertexHandle = glGenBuffers();
+            int vboNormalHandle = glGenBuffers();
+            FloatBuffer vertices = BufferTools.reserveData(model.faces.size() * 9);
+            FloatBuffer normals = BufferTools.reserveData(model.faces.size() * 9);
+            for (Face face : model.faces) {
+                vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.x - 1)));
+                vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.y - 1)));
+                vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.z - 1)));
+                normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.x - 1)));
+                normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.y - 1)));
+                normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.z - 1)));
+            }
+            vertices.flip();
+            normals.flip();
+            glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+            glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+            glEnableVertexAttribArray(attributeVertex);
+            glVertexAttribPointer(attributeVertex, 3, false, 0, vertices);
+            glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+            glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
+            glNormalPointer(GL_FLOAT, 0, 0L);
+            // TODO: This really isn't finished yet. :-(
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             cleanUp();
@@ -182,7 +198,7 @@ public class CoreLighting {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setVSyncEnabled(true);
-            Display.setTitle("Per Pixel Lighting Demo");
+            Display.setTitle("Core Lighting Demo");
             Display.create();
         } catch (LWJGLException e) {
             System.err.println("The display wasn't initialized correctly. :(");
