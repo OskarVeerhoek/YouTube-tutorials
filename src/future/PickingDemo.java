@@ -28,18 +28,19 @@
  */
 
 package future;
+
 import org.lwjgl.*;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.*;
 import utility.BufferTools;
 
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
 
-
+/**
+ * Showcases OpenGL picking. Press the left mouse button over either one of the triangles.
+ */
 public class PickingDemo {
 
     private static final String WINDOW_TITLE = "Picking Demo";
