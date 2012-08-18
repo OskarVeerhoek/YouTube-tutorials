@@ -33,11 +33,18 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 
 public class BufferTools {
     public static float[] asFloats(Vector3f v) {
         return new float[]{v.x, v.y, v.z};
+    }
+
+    public static ByteBuffer asByteBuffer(byte... values) {
+        ByteBuffer buffer = BufferUtils.createByteBuffer(values.length);
+        buffer.put(values);
+        return buffer;
     }
 
     public static String bufferToString(FloatBuffer buffer, int elements) {
