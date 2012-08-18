@@ -38,8 +38,8 @@ import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * NOT DONE YET
  * Shows 2D animations.
- *
  * @author Oskar Veerhoek
  */
 public class Animations2D {

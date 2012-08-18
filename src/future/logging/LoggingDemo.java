@@ -42,7 +42,8 @@ import java.util.logging.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * 
+ * NOT DONE YET
+ * Shows logging functionality using the java.util.logging classes.
  * @author Oskar Veerhoek
  */
 public class LoggingDemo {

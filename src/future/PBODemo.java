@@ -40,8 +40,8 @@ import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL21.GL_PIXEL_PACK_BUFFER;
 
 /**
+ * NOT DONE YET
  * Shows the use of Pixel Buffer Objects.
- *
  * @author Oskar Veerhoek
  */
 public class PBODemo {

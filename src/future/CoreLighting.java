@@ -46,6 +46,10 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
+/**
+ * NOT DONE YET
+ * Shows lighting without using the fixed function pipeline.
+ */
 public class CoreLighting {
 
     private static Camera cam;

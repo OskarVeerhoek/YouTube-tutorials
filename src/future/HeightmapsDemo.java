@@ -47,6 +47,7 @@ import static org.lwjgl.opengl.ARBTextureRectangle.GL_TEXTURE_RECTANGLE_ARB;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * NOT DONE YET
  * @author Oskar Veerhoek
  */
 public class HeightmapsDemo {
