@@ -31,10 +31,15 @@ package utility;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import java.nio.FloatBuffer;
 
 public class BufferTools {
+    public static float[] asFloats(Vector3f v) {
+        return new float[]{v.x, v.y, v.z};
+    }
+
     public static String bufferToString(FloatBuffer buffer, int elements) {
         StringBuilder bufferString = new StringBuilder();
         for (int i = 0; i < elements; i++) {
