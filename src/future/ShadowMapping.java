@@ -60,7 +60,7 @@ public class ShadowMapping {
 			Display.update();
 			Display.sync(60);
 		}
-		Display.destroy();
+		cleanUp();
 		System.exit(0);
 	}
 
@@ -355,7 +355,7 @@ public class ShadowMapping {
 
 		if (GLContext.getCapabilities().OpenGL20
 				|| GLContext.getCapabilities().GL_EXT_framebuffer_object) {
-			System.out.println("Higher quality shadows are availible!!");
+			System.out.println("Higher quality shadows are availible.");
 		}
 
 		maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
@@ -462,6 +462,7 @@ public class ShadowMapping {
 	private static void cleanUp() {
 		glDeleteFramebuffersEXT(framebufferID);
 		glDeleteRenderbuffersEXT(renderbufferID);
+		Display.destroy();
 	}
 
 	/**
