@@ -44,30 +44,18 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class EntityDemo {
 
-    private long lastFrame;
+    private static long lastFrame;
 
-    private long getTime() {
+    private static long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
-    private int getDelta() {
+    private static int getDelta() {
         long currentTime = getTime();
         int delta = (int) (currentTime - lastFrame);
         lastFrame = getTime();
         return delta;
     }
-
-//    private static class Box extends AbstractMoveableEntity {
-//
-//        public Box(double x, double y, double width, double height) {
-//            super(x, y, width, height);
-//        }
-//
-//        @Override
-//        public void draw() {
-//            glRectd(x, y, x + width, y + height);
-//        }
-//    }
 
     private static class Box extends AbstractMoveableEntity {
         public Box(double x, double y, double width, double height) {
@@ -100,7 +88,7 @@ public class EntityDemo {
         }
     }
 
-    public EntityDemo() {
+    public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Entity Demo");
@@ -145,12 +133,5 @@ public class EntityDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        new EntityDemo();
     }
 }
