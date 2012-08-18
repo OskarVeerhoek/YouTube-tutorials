@@ -60,7 +60,7 @@ public class ShaderDemo {
         StringBuilder vertexShaderSource = new StringBuilder();
         StringBuilder fragmentShaderSource = new StringBuilder();
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("src/episode_23/shader.vert"));
+            BufferedReader reader = new BufferedReader(new FileReader("src/episode_23/shader.vs"));
             String line;
             while ((line = reader.readLine()) != null) {
                 vertexShaderSource.append(line).append('\n');
@@ -72,7 +72,7 @@ public class ShaderDemo {
             System.exit(1);
         }
         try {
-            BufferedReader reader = new BufferedReader(new FileReader("src/episode_23/shader.frag"));
+            BufferedReader reader = new BufferedReader(new FileReader("src/episode_23/shader.fs"));
             String line;
             while ((line = reader.readLine()) != null) {
                 fragmentShaderSource.append(line).append('\n');
