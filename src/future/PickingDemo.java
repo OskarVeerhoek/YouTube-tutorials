@@ -125,8 +125,6 @@ public class PickingDemo {
 
     public static void main(String[] args) {
         setUpDisplay();
-        setUpStates();
-        setUpMatrices();
         enterGameLoop();
         cleanUp(false);
     }
