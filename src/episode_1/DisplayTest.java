@@ -46,7 +46,8 @@ public class DisplayTest {
             Display.setTitle("Episode 1 – Display Test");
             Display.create();
         } catch (LWJGLException e) {
-            System.err.println("The display couldn't be initialized.");
+            e.printStackTrace();
+            Display.destroy();
             System.exit(1);
         }
         while (!Display.isCloseRequested()) {

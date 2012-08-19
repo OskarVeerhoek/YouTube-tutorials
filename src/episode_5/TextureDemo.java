@@ -57,6 +57,8 @@ public class TextureDemo {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
         try {
             // Load the wood texture from "res/images/wood.png"

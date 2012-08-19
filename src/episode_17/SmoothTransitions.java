@@ -76,7 +76,8 @@ public class SmoothTransitions {
             Display.setVSyncEnabled(true);
             Display.create();
         } catch (LWJGLException e) {
-            System.err.println("Creation of the display failed ;(");
+            e.printStackTrace();
+            Display.destroy();
             System.exit(1);
         }
 

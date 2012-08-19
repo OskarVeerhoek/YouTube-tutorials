@@ -51,7 +51,7 @@ public class JInputDemo {
             Display.setDisplayMode(new DisplayMode(800, 600));
             Display.create();
         } catch (LWJGLException ex) {
-            System.err.println("Display wasn't able to be created.");
+            ex.printStackTrace();
             Display.destroy();
             System.exit(1);
         }

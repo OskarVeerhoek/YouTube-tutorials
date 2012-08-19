@@ -56,6 +56,8 @@ public class StateDemo {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
         glMatrixMode(GL_PROJECTION);
         glOrtho(0, 640, 480, 0, 1, -1);

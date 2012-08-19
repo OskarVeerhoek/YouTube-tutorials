@@ -49,6 +49,8 @@ public class CoordinateSystems {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
 
         // Initialization code OpenGL

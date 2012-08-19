@@ -63,6 +63,8 @@ public class TimerDemo {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
 
         int x = 100;

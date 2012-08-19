@@ -201,7 +201,8 @@ public class MineFront {
             Display.setVSyncEnabled(vsync);
             Display.create();
         } catch (LWJGLException ex) {
-            System.err.println("Display initialization failed.");
+            ex.printStackTrace();
+            Display.destroy();
             System.exit(1);
         }
 

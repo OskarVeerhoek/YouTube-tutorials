@@ -53,6 +53,8 @@ public class SideScrollerDemo {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
 
         // Set-up an orthographic presentation where (0, 0) is the upper-left corner and (640, 480) is the bottom right one.

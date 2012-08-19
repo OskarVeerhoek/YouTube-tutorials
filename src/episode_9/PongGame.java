@@ -100,6 +100,8 @@ public class PongGame {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
     }
 

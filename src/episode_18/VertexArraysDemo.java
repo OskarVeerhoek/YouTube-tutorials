@@ -52,6 +52,8 @@ public class VertexArraysDemo {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
 
         glMatrixMode(GL_PROJECTION);

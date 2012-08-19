@@ -60,6 +60,8 @@ public class InputDemo {
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            System.exit(1);
         }
         shapes.add(new Box(15, 15));
         shapes.add(new Box(100, 150));
