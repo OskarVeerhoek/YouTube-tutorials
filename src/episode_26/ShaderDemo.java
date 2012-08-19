@@ -29,7 +29,6 @@
 
 package episode_26;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -42,10 +41,10 @@ import utility.ShaderLoader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 /**
  * Uses the Phong lighting model to display a tasty chocolate bunny.

@@ -29,21 +29,26 @@
 
 package future.logging;
 
-import org.lwjgl.*;
-import org.lwjgl.opengl.*;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.*;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.glClear;
 
 /**
  * NOT DONE YET
  * Shows logging functionality using the java.util.logging classes.
+ *
  * @author Oskar Veerhoek
  */
 public class LoggingDemo {
@@ -95,7 +100,7 @@ public class LoggingDemo {
         }
     }
 
-    private static void setUpStates() { 
+    private static void setUpStates() {
         logger.fine("Setting Up States");
     }
 

@@ -29,8 +29,6 @@
 
 package utility;
 
-import org.lwjgl.opengl.Display;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -42,7 +40,8 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShaderLoader {
     /**
      * Loads a shader program from two source files.
-     * @param vertexShaderLocation the location of the file containing the vertex shader source
+     *
+     * @param vertexShaderLocation   the location of the file containing the vertex shader source
      * @param fragmentShaderLocation the location of the file containing the fragment shader source
      * @return the shader program or -1 if the loading or compiling failed
      */

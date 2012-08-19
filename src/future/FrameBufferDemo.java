@@ -46,6 +46,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * NOT DONE YET
  * Shows the use of a frame buffer.
+ *
  * @author Oskar Veerhoek
  */
 public class FrameBufferDemo {

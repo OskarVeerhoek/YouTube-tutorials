@@ -41,6 +41,7 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * NOT DONE YET
  * Shows skyboxes.
+ *
  * @author Oskar Veerhoek
  */
 public class SkyboxDemo {

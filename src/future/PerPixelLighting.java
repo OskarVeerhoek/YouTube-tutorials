@@ -34,7 +34,6 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.vector.Vector3f;
 import utility.Camera;
 import utility.Model;
 import utility.OBJLoader;
@@ -47,7 +46,8 @@ import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 public class PerPixelLighting {
 

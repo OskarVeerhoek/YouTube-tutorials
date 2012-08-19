@@ -212,6 +212,7 @@ public final class Camera {
     /**
      * Move in the direction you're looking. That is, this method assumes a new coordinate system where the axis you're
      * looking down is the z-axis, the axis to your left is the x-axis, and the upward axis is the y-axis.
+     *
      * @param dx
      * @param dy
      * @param dz
@@ -242,10 +243,11 @@ public final class Camera {
 
     /**
      * Move along the x, y, and z axes with the given distance.
+     *
      * @param distance the distance you will travel
-     * @param x the distance you will travel along the x-axis
-     * @param y the distance you will travel along the y-axis
-     * @param z the distance you will travel along the z-axis
+     * @param x        the distance you will travel along the x-axis
+     * @param y        the distance you will travel along the y-axis
+     * @param z        the distance you will travel along the z-axis
      */
     public void moveAlongAxis(float distance, float x, float y, float z) {
         this.x += x * distance;
@@ -255,6 +257,7 @@ public final class Camera {
 
     /**
      * Sets the position of the camera.
+     *
      * @param x the x-coordinate of the camera
      * @param y the y-coordinate of the camera
      * @param z the z-coordinate of the camera

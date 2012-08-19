@@ -48,6 +48,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * NOT DONE YET
+ *
  * @author Oskar Veerhoek
  */
 public class HeightmapsDemo {

@@ -49,6 +49,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class ImagingTools {
     /**
      * Loads a PNG texture and puts it in Gl_TEXTURE_RECTANGLE_ARB
+     *
      * @param location the location of the png image file
      * @return the generated texture handle or -1 if there was a loading error
      */
@@ -80,6 +81,7 @@ public class ImagingTools {
 
     /**
      * Loads a PNG texture and puts it in Gl_TEXTURE_2D
+     *
      * @param location the location of the png image file
      * @return the generated texture handle or -1 if there was a loading error
      */
