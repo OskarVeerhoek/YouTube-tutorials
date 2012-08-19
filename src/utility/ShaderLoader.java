@@ -81,7 +81,7 @@ public class ShaderLoader {
         if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
             System.err
                     .println("Vertex shader wasn't able to be compiled correctly. Error log:");
-            System.err.println(glGetShaderInfoLog(vertexShader, 1024));
+            System.err.println(glGetShaderInfoLog(vertexShader, glGetProgram(shaderProgram, GL_INFO_LOG_LENGTH)));
             return -1;
         }
         glShaderSource(fragmentShader, fragmentShaderSource);
@@ -89,7 +89,7 @@ public class ShaderLoader {
         if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
             System.err
                     .println("Fragment shader wasn't able to be compiled correctly. Error log:");
-            System.err.println(glGetShaderInfoLog(fragmentShader, 1024));
+            System.err.println(glGetShaderInfoLog(fragmentShader, glGetProgram(shaderProgram, GL_INFO_LOG_LENGTH)));
         }
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);
