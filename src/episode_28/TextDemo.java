@@ -91,7 +91,7 @@ public class TextDemo {
         glLoadIdentity();
         cam.applyTranslations();
         glUseProgram(shaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
         glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
         glVertexPointer(3, GL_FLOAT, 0, 0L);
         glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
@@ -142,10 +142,10 @@ public class TextDemo {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f,
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
                 0.05f, 0.05f, 1f}));
         glLight(GL_LIGHT0, GL_POSITION,
-                asFloatBuffer(new float[]{0, 0, 0, 1}));
+                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -215,13 +215,6 @@ public class TextDemo {
             Display.destroy();
             System.exit(1);
         }
-    }
-
-    private static FloatBuffer asFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
     }
 
     private static void checkInput() {

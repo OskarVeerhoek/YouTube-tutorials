@@ -108,7 +108,7 @@ public class HappyEaster {
     private static void checkInput() {
         cam.processMouse(1, 80, -80);
         cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
-        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFloatBuffer(lightPosition));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(lightPosition));
         if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
             lightPosition = new float[]{cam.getX(), cam.getY(), cam.getZ(), 1};
         }
@@ -135,10 +135,10 @@ public class HappyEaster {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFloatBuffer(new float[]{0.05f,
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
                 0.05f, 0.05f, 1f}));
         glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFloatBuffer(new float[]{0, 0, 0, 1}));
+                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
