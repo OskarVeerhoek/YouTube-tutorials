@@ -252,7 +252,6 @@ public class MineFront {
                 ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
                 decoder.decode(buffer, decoder.getWidth() * 4, Format.RGBA);
                 buffer.flip();
-                in.close();
                 glBindTexture(GL_TEXTURE_2D, floorTexture);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -260,12 +259,22 @@ public class MineFront {
                 glBindTexture(GL_TEXTURE_2D, 0);
             } catch (FileNotFoundException ex) {
                 System.err.println("Failed to find the texture files.");
+                ex.printStackTrace();
                 Display.destroy();
                 System.exit(1);
             } catch (IOException ex) {
                 System.err.println("Failed to load the texture files.");
+                ex.printStackTrace();
                 Display.destroy();
                 System.exit(1);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
 

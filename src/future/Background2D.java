@@ -221,18 +221,27 @@ public class Background2D {
                 ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
                 decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
                 buffer.flip();
-                in.close();
                 glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture);
                 glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
                 glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
                 glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
             } catch (FileNotFoundException ex) {
+                ex.printStackTrace();
                 System.err.println("Failed to find the texture file.");
                 cleanUp(true);
             } catch (IOException ex) {
+                ex.printStackTrace();
                 System.err.println("Failed to load the texture files.");
                 cleanUp(true);
+            } finally {
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
