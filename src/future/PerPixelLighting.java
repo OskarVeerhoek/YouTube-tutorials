@@ -31,6 +31,7 @@ package future;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -49,18 +50,25 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
+/**
+ * Shows per pixel lighting. Press 'P' for per pixel lighting and 'V' for per vertex.
+ */
 public class PerPixelLighting {
 
     private static Camera cam;
-    private static int shaderProgram;
+    private static int perPixelShaderProgram;
+    private static int perVertexShaderProgram;
+    private static int currentShaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
 
     private static Model model;
 
-    public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/pixel_lighting.vs";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/pixel_lighting.fs";
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
+    private static final String VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_lighting.vs";
+    private static final String VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/specular_lighting.vs";
+    private static final String FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_lighting.fs";
+    private static final String FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/specular_lighting.fs";
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -85,10 +93,18 @@ public class PerPixelLighting {
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
             Mouse.setGrabbed(false);
+        while (Keyboard.next()) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
+                currentShaderProgram = perPixelShaderProgram;
+            } else if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
+                currentShaderProgram = perVertexShaderProgram;
+            }
+        }
     }
 
     private static void cleanUp() {
-        glDeleteProgram(shaderProgram);
+        glDeleteProgram(perPixelShaderProgram);
+        glDeleteProgram(perVertexShaderProgram);
         glDeleteBuffers(vboVertexHandle);
         glDeleteBuffers(vboNormalHandle);
         Display.destroy();
@@ -98,21 +114,9 @@ public class PerPixelLighting {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         cam.applyTranslations();
-        glUseProgram(shaderProgram);
+        glUseProgram(currentShaderProgram);
         glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
-        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-        glVertexPointer(3, GL_FLOAT, 0, 0L);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-        glNormalPointer(GL_FLOAT, 0, 0L);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glColor3f(0.4f, 0.27f, 0.17f);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
         glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glUseProgram(0);
     }
 
     private static void setUpLighting() {
@@ -128,6 +132,8 @@ public class PerPixelLighting {
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
         glColorMaterial(GL_FRONT, GL_DIFFUSE);
+        glColor3f(0.4f, 0.27f, 0.17f);
+        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
     }
 
     private static void setUpVBOs() {
@@ -146,10 +152,18 @@ public class PerPixelLighting {
             cleanUp();
             System.exit(1);
         }
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+        glVertexPointer(3, GL_FLOAT, 0, 0L);
+        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+        glNormalPointer(GL_FLOAT, 0, 0L);
     }
 
     private static void setUpShaders() {
-        shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
+        perPixelShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION, FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION);
+        perVertexShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION, FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION);
+        currentShaderProgram = perPixelShaderProgram;
     }
 
     private static void setUpCamera() {
