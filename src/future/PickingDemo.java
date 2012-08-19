@@ -40,7 +40,7 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Showcases OpenGL picking. Press the left mouse button over either one of the triangles.
+ * Showcases OpenGL picking. Press the left mouse button over either one of the triangles and look at the console output.
  */
 public class PickingDemo {
 
@@ -52,12 +52,19 @@ public class PickingDemo {
     private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
     private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
 
-    private static void render() {
-        glClear(GL_COLOR_BUFFER_BIT); // | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT
+    private static void cleanUp(boolean asCrash) {
+        Display.destroy();
+        System.exit(asCrash ? 1 : 0);
+    }
+
+    private static void update() {
+        glClear(GL_COLOR_BUFFER_BIT);
         while (Mouse.next()) {
+            // If the left mouse button has been pressed ...
             if (Mouse.isButtonDown(0)) {
-                // Draw With Picking
+                // Set the background colour to black so it won't interfere with the picking.
                 glClearColor(0, 0, 0, 0);
+                // Draw the triangle with their colours that are used for picking.
                 glBegin(GL_TRIANGLES);
                 glColor3f(pickingTriangleColour.get(0), pickingTriangleColour.get(1), pickingTriangleColour.get(2));
                 glVertex2f(-1, -1);
@@ -69,17 +76,21 @@ public class PickingDemo {
                 glVertex2f(1, 1);
                 glEnd();
                 FloatBuffer pixels = BufferTools.reserveData(3);
+                // Read the pixel colour at the mouse coordinates and store the information (red-green-blue) in "pixels".
                 glReadPixels(Mouse.getX(), Mouse.getY(), 1, 1, GL_RGB, GL_FLOAT, pixels);
+                // If the pixel colour equals the triangle's picking colour ...
                 if (BufferTools.bufferEquals(pixels, pickingTriangleColour, 3)) {
                     System.out.println("Left Triangle!");
+                    // If the pixel colour equals the other triangle's picking colour ...
                 } else if (BufferTools.bufferEquals(pixels, pickingOtherTriangleColour, 3)) {
                     System.out.println("Right Triangle!");
+                    // If the pixel colour equals neither of the triangles' picking colours.
                 } else {
                     System.out.println("No Triangle!");
                 }
             }
         }
-        // Draw Normally
+        // Draw the triangles with their real colours.
         glClear(GL_COLOR_BUFFER_BIT);
         glBegin(GL_TRIANGLES);
         glColor3f(realTriangleColour.get(0), realTriangleColour.get(1), realTriangleColour.get(2));
@@ -91,43 +102,12 @@ public class PickingDemo {
         glVertex2f(0, -1);
         glVertex2f(1, 1);
         glEnd();
-    }
-
-    private static void logic() {
-        // Add logic code here
-    }
-
-    private static void input() {
-        // Add input handling code here
-    }
-
-    private static void cleanUp(boolean asCrash) {
-        // Add cleaning code here
-        Display.destroy();
-        System.exit(asCrash ? 1 : 0);
-    }
-
-    private static void setUpMatrices() {
-        // Add code for the initialization of the projection matrix here
-    }
-
-    private static void setUpStates() {
-//        glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    private static void update() {
         Display.update();
         Display.sync(60);
     }
 
     private static void enterGameLoop() {
         while (!Display.isCloseRequested()) {
-            render();
-            logic();
-            input();
             update();
         }
     }
