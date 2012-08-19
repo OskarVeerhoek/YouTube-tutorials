@@ -40,6 +40,12 @@ import static org.lwjgl.opengl.GL20.*;
 
 
 public class ShaderLoader {
+    /**
+     * Loads a shader program from two source files.
+     * @param vertexShaderLocation the location of the file containing the vertex shader source
+     * @param fragmentShaderLocation the location of the file containing the fragment shader source
+     * @return the shader program or -1 if the loading or compiling failed
+     */
     public static int loadShaderPair(String vertexShaderLocation, String fragmentShaderLocation) {
         int shaderProgram = glCreateProgram();
         int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -55,9 +61,8 @@ public class ShaderLoader {
             }
             reader.close();
         } catch (IOException e) {
-            System.err.println("Vertex shader wasn't loaded properly.");
-            Display.destroy();
-            System.exit(1);
+            e.printStackTrace();
+            return -1;
         }
         try {
             BufferedReader reader = new BufferedReader(new FileReader(
@@ -69,9 +74,7 @@ public class ShaderLoader {
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Fragment shader wasn't loaded properly.");
-            Display.destroy();
-            System.exit(1);
+            return -1;
         }
         glShaderSource(vertexShader, vertexShaderSource);
         glCompileShader(vertexShader);
@@ -79,6 +82,7 @@ public class ShaderLoader {
             System.err
                     .println("Vertex shader wasn't able to be compiled correctly. Error log:");
             System.err.println(glGetShaderInfoLog(vertexShader, 1024));
+            return -1;
         }
         glShaderSource(fragmentShader, fragmentShaderSource);
         glCompileShader(fragmentShader);
@@ -90,6 +94,11 @@ public class ShaderLoader {
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);
         glLinkProgram(shaderProgram);
+        if (glGetProgram(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
+            System.err.println("Shader program wasn't linked correctly.");
+            System.err.println(glGetProgramInfoLog(shaderProgram, 1024));
+            return -1;
+        }
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         return shaderProgram;
