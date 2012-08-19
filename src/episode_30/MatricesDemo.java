@@ -61,8 +61,8 @@ public class MatricesDemo {
     private static Model model;
 
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/specular_lighting.vs";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/specular_lighting.fs";
+    public static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
+    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
 
     public static void main(String[] args) {
         setUpDisplay();

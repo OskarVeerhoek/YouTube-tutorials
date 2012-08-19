@@ -65,10 +65,10 @@ public class PerPixelLighting {
     private static Model model;
 
     private static final String MODEL_LOCATION = "res/models/bunny.obj";
-    private static final String VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_lighting.vs";
-    private static final String VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/specular_lighting.vs";
-    private static final String FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_lighting.fs";
-    private static final String FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/specular_lighting.fs";
+    private static final String VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_phong_lighting.vs";
+    private static final String VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/vertex_phong_lighting.vs";
+    private static final String FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_phong_lighting.fs";
+    private static final String FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/vertex_phong_lighting.fs";
 
     public static void main(String[] args) {
         setUpDisplay();

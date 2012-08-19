@@ -39,7 +39,7 @@
 // program. 
 // Attribute is set by the Java code and read by the vertex program. 
 
-varying vec3 color;
+varying vec3 varyingColour;
 
 // Object Space: Vertices you specify with glVertex(Pointer)
 // Eye Space: Vertices transformed by the modelview matrix 
@@ -71,11 +71,11 @@ void main() {
 	// If the value is lower than 0, the light is messed up and we don't want
 	// to show it.
 	float diffuseLightIntensity = max(0, dot(surfaceNormal, lightDirection));
-	// Sets the color (which is passed to the fragment program) to the concatenation 
-	// of the material color and the diffuse light intensity. 
-	color.rgb = diffuseLightIntensity * gl_Color.rgb;
-	// Adds ambient color to the color so even the darkest part equals ambientColor.
-	color += gl_LightModel.ambient.rgb;
+	// Sets the colour (which is passed to the fragment program) to the concatenation
+	// of the material colour and the diffuse light intensity.
+	varyingColour.rgb = diffuseLightIntensity * gl_Color.rgb;
+	// Adds ambient colour to the colour so even the darkest part equals ambientColour.
+	varyingColour += gl_LightModel.ambient.rgb;
 	
 	// Calculates the direction of the reflectionDirection by using the method reflect, which takes 
 	// the normalized direction from the light source to the surface as the 1st parameter,
@@ -89,8 +89,8 @@ void main() {
 	if (diffuseLightIntensity != 0) {
 		// Enhances the specular scalar value by raising it to the exponent of the shininess.
 		float fspecular = pow(specular, gl_FrontMaterial.shininess);
-		// Adds the specular value to the color.
-		color.rgb += vec3(fspecular, fspecular, fspecular);
+		// Adds the specular value to the colour.
+		varyingColour.rgb += vec3(fspecular, fspecular, fspecular);
 	}
 	
 	// Retrieves the position of the vertex in clip space by multiplying it by the modelview-
