@@ -40,6 +40,7 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * TODO: Use FBO so AA won't interfere with picking
  * Showcases OpenGL picking. Press the left mouse button over either one of the triangles and look at the console output.
  */
 public class PickingDemo {
