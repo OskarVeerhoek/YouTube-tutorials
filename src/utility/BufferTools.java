@@ -69,7 +69,7 @@ public class BufferTools {
     }
 
     /**
-     * @param buffer a readable buffer
+     * @param buffer   a readable buffer
      * @param elements the amount of elements in the buffer
      * @return a string representation of the elements in the buffer
      */
@@ -103,7 +103,6 @@ public class BufferTools {
     }
 
     /**
-     *
      * @param values the float values that are to be turned into a readable FloatBuffer
      * @return a readable FloatBuffer containing values
      */
