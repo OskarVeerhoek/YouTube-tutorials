@@ -57,7 +57,7 @@ public class CoordinateSystems {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         //glOrtho(0, 640, 480, 0, 1, -1);
-        glOrtho(1, 1, 1, 1, 1, -1);
+        glOrtho(-1, 1, -1, 1, 1, -1);
         glMatrixMode(GL_MODELVIEW);
 
         while (!Display.isCloseRequested()) {
