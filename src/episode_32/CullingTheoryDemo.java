@@ -106,10 +106,10 @@ public class CullingTheoryDemo {
 
     }
 
+    @SuppressWarnings("unchecked")
     private static void setUpFonts() {
         java.awt.Font awtFont = new java.awt.Font("Helvetica", java.awt.Font.BOLD, 18);
         font = new UnicodeFont(awtFont);
-        //noinspection unchecked
         font.getEffects().add(new ColorEffect(java.awt.Color.white));
         font.addAsciiGlyphs();
         try {
