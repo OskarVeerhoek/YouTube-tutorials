@@ -27,55 +27,32 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package future;
+package episode_33;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.gluErrorString;
+import static org.lwjgl.util.glu.GLU.*;
 
 /**
  * OpenGL error handling using glGetError and gluErrorString
  */
 public class ErrorHandling {
 
-    private static final String WINDOW_TITLE = "Error Handling";
-    private static final int[] WINDOW_DIMENSIONS = {640, 480};
-
-    private static void printErrors() {
-        String error = gluErrorString(glGetError());
-        do {
-            System.err.println(error);
-            error = gluErrorString(glGetError());
-        } while (!error.equals("No error"));
-    }
-
-    private static void createErrors() {
-        //glBegin(GL_LIGHTING);
-    }
-
-    private static void cleanUp(boolean asCrash) {
-        Display.destroy();
-        System.exit(asCrash ? 1 : 0);
-    }
-
-    private static void setUpDisplay() {
-        try {
-            Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
-            Display.setTitle(WINDOW_TITLE);
-            Display.create();
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            cleanUp(true);
+    public static void main(String[] args) throws LWJGLException {
+        Display.create();
+        // Do something illegal.
+        glBegin(GL_LIGHTING);
+        // Retrieve the last OpenGL error.
+        int errorFlag = glGetError();
+        // If an error has occurred...
+        if (errorFlag != GL_NO_ERROR) {
+            // Print the error to System.err.
+            System.err.println(gluErrorString(errorFlag));
         }
+        Display.destroy();
+        System.exit(0);
     }
 
-    public static void main(String[] args) {
-        setUpDisplay();
-        createErrors();
-        printErrors();
-        cleanUp(false);
-    }
 }
