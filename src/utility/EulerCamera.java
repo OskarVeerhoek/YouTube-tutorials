@@ -221,7 +221,7 @@ public final class EulerCamera {
     public void moveFromLook(float dx, float dy, float dz) {
         this.z += dx * (float) cos(toRadians(yaw - 90)) + dz * cos(toRadians(yaw));
         this.x -= dx * (float) sin(toRadians(yaw - 90)) + dz * sin(toRadians(yaw));
-        this.y += dy;
+        this.y += dy * (float) sin(toRadians(pitch - 90)) + dz * sin(toRadians(pitch));
         //float hypotenuseX = dx;
         //float adjacentX = hypotenuseX * (float) Math.cos(Math.toRadians(yaw - 90));
         //float oppositeX = (float) Math.sin(Math.toRadians(yaw - 90)) * hypotenuseX;
