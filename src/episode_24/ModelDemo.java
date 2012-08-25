@@ -34,7 +34,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
-import utility.Camera;
+import utility.EulerCamera;
 import utility.Face;
 import utility.Model;
 import utility.OBJLoader;
@@ -52,7 +52,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ModelDemo {
 
-    private static Camera cam;
+    private static EulerCamera cam;
     private static int bunnyDisplayList;
 
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
@@ -130,7 +130,7 @@ public class ModelDemo {
     }
 
     private static void setUpCamera() {
-        cam = new Camera((float) Display.getWidth()
+        cam = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -1.38f, 1.36f, 7.95f);
         cam.setPitch(-1.12f);
         cam.setYaw(0.16f);

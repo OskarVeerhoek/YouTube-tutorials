@@ -51,7 +51,7 @@ import static org.lwjgl.opengl.GL20.*;
  */
 public class CoreLighting {
 
-    private static Camera cam;
+    private static EulerCamera cam;
     private static int shaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
@@ -191,7 +191,7 @@ public class CoreLighting {
     }
 
     private static void setUpCamera() {
-        cam = new Camera((float) Display.getWidth()
+        cam = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         cam.setFov(70);
         cam.applyPerspectiveMatrix();

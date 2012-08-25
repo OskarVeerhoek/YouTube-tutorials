@@ -34,7 +34,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import utility.BufferTools;
-import utility.Camera;
+import utility.EulerCamera;
 import utility.OBJLoader;
 import utility.ShaderLoader;
 
@@ -71,7 +71,7 @@ public class ShaderDemo {
             System.exit(1);
         }
 
-        Camera cam = new Camera((float) Display.getWidth()
+        EulerCamera cam = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         cam.setFov(60);
         cam.applyPerspectiveMatrix();

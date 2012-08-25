@@ -101,16 +101,23 @@ public class ImagingTools {
             ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
             decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
             buffer.flip();
-            in.close();
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         } catch (FileNotFoundException e) {
-            System.err.println("Texture file could not be found.");
+            e.printStackTrace();
             return -1;
         } catch (IOException e) {
-            System.err.print("Failed to load the texture file.");
+            e.printStackTrace();
             return -1;
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         glBindTexture(GL_TEXTURE_2D, 0);
         return texture;

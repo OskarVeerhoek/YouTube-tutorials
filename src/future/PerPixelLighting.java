@@ -35,7 +35,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import utility.Camera;
+import utility.EulerCamera;
 import utility.Model;
 import utility.OBJLoader;
 import utility.ShaderLoader;
@@ -55,7 +55,7 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
  */
 public class PerPixelLighting {
 
-    private static Camera cam;
+    private static EulerCamera cam;
     private static int perPixelShaderProgram;
     private static int perVertexShaderProgram;
     private static int currentShaderProgram;
@@ -167,7 +167,7 @@ public class PerPixelLighting {
     }
 
     private static void setUpCamera() {
-        cam = new Camera((float) Display.getWidth()
+        cam = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         cam.setFov(70);
         cam.applyPerspectiveMatrix();

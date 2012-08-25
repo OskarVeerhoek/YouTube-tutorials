@@ -45,7 +45,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class HappyEaster {
 
-    private static Camera cam;
+    private static EulerCamera cam;
     private static float[] lightPosition = {-2.19f, 1.36f, 11.45f, 1f};
     private static int bunnyDisplayList;
 
@@ -144,7 +144,7 @@ public class HappyEaster {
     }
 
     private static void setUpCamera() {
-        cam = new Camera((float) Display.getWidth()
+        cam = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         cam.setFov(70);
         cam.applyPerspectiveMatrix();

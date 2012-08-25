@@ -40,7 +40,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Oskar Veerhoek
  */
-public final class Camera {
+public final class EulerCamera {
 
     private float x = 0;
     private float y = 0;
@@ -59,7 +59,7 @@ public final class Camera {
      *
      * @param aspectRatio the aspect ratio (width/height) of the camera
      */
-    public Camera(float aspectRatio) {
+    public EulerCamera(float aspectRatio) {
         this.aspectRatio = aspectRatio;
     }
 
@@ -71,7 +71,7 @@ public final class Camera {
      * @param y           the second location coordinate
      * @param z           the third location coordinate
      */
-    public Camera(float aspectRatio, double x, double y, double z) {
+    public EulerCamera(float aspectRatio, double x, double y, double z) {
         this.aspectRatio = aspectRatio;
         this.x = (float) x;
         this.y = (float) y;
@@ -86,7 +86,7 @@ public final class Camera {
      * @param y           the second location coordinate
      * @param z           the third location coordinate
      */
-    public Camera(float aspectRatio, float x, float y, float z) {
+    public EulerCamera(float aspectRatio, float x, float y, float z) {
         this.aspectRatio = aspectRatio;
         this.x = x;
         this.y = y;
@@ -104,7 +104,7 @@ public final class Camera {
      * @param yaw         the yaw (rotation on the y-axis)
      * @param roll        the roll (rotation on the z-axis)
      */
-    public Camera(float aspectRatio, double x, double y, double z, double pitch, double yaw, double roll) {
+    public EulerCamera(float aspectRatio, double x, double y, double z, double pitch, double yaw, double roll) {
         this.aspectRatio = aspectRatio;
         this.x = (float) x;
         this.y = (float) y;
@@ -125,7 +125,7 @@ public final class Camera {
      * @param yaw         the yaw (rotation on the y-axis)
      * @param roll        the roll (rotation on the z-axis)
      */
-    public Camera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll) {
+    public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll) {
         this.aspectRatio = aspectRatio;
         this.x = x;
         this.y = y;
@@ -384,7 +384,7 @@ public final class Camera {
 
     @Override
     public String toString() {
-        return "Camera [x=" + x + ", y=" + y + ", z=" + z + ", pitch=" + pitch
+        return "EulerCamera [x=" + x + ", y=" + y + ", z=" + z + ", pitch=" + pitch
                 + ", yaw=" + yaw + ", roll=" + roll + ", fov=" + fov
                 + ", aspectRatio=" + aspectRatio + ", zNear=" + zNear
                 + ", zFar=" + zFar + "]";

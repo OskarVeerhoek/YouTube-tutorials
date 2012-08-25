@@ -33,7 +33,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import utility.Camera;
+import utility.EulerCamera;
 import utility.LWJGLTimer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -51,7 +51,7 @@ public class SkyboxDemo {
     private static final String SKYBOX_TEXTURE_LOCATION = "res/images/skybox.png";
 
     private static int skyboxTextureID;
-    private static Camera camera = new Camera((float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1]);
+    private static EulerCamera camera = new EulerCamera((float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1]);
     private static LWJGLTimer timer = new LWJGLTimer(false);
 
     private static void render() {
