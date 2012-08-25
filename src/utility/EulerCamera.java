@@ -33,6 +33,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.glu.GLU;
 
+import static java.lang.Math.*;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -218,19 +219,22 @@ public final class EulerCamera {
      * @param dz the movement along the z-axis
      */
     public void moveFromLook(float dx, float dy, float dz) {
-        float hypotenuseX = dx;
-        float adjacentX = hypotenuseX * (float) Math.cos(Math.toRadians(yaw - 90));
-        float oppositeX = (float) Math.sin(Math.toRadians(yaw - 90)) * hypotenuseX;
-        this.z += adjacentX;
-        this.x -= oppositeX;
-
+        this.z += dx * (float) cos(toRadians(yaw - 90)) + dz * cos(toRadians(yaw));
+        this.x -= dx * (float) sin(toRadians(yaw - 90)) + dz * sin(toRadians(yaw));
         this.y += dy;
-
-        float hypotenuseZ = dz;
-        float adjacentZ = hypotenuseZ * (float) Math.cos(Math.toRadians(yaw));
-        float oppositeZ = (float) Math.sin(Math.toRadians(yaw)) * hypotenuseZ;
-        this.z += adjacentZ;
-        this.x -= oppositeZ;
+        //float hypotenuseX = dx;
+        //float adjacentX = hypotenuseX * (float) Math.cos(Math.toRadians(yaw - 90));
+        //float oppositeX = (float) Math.sin(Math.toRadians(yaw - 90)) * hypotenuseX;
+        //this.z += adjacentX;
+        //this.x -= oppositeX;
+        //
+        //this.y += dy;
+        //
+        //float hypotenuseZ = dz;
+        //float adjacentZ = hypotenuseZ * (float) Math.cos(Math.toRadians(yaw));
+        //float oppositeZ = (float) Math.sin(Math.toRadians(yaw)) * hypotenuseZ;
+        //this.z += adjacentZ;
+        //this.x -= oppositeZ;
     }
 
     /**
