@@ -56,7 +56,7 @@ public class FrameBufferDemo {
 
     private static int fbo;
     private static int rbo;
-    private static LWJGLTimer timer = new LWJGLTimer(true);
+    private static LWJGLTimer timer = new LWJGLTimer();
     private static boolean useReadPixels = true;
 
     private static void render() {

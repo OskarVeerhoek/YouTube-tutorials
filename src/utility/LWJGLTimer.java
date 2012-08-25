@@ -37,8 +37,6 @@ package utility;
  */
 public class LWJGLTimer {
     private long lastTime; // nanoseconds
-    private long lastPrintTime; // nanoseconds
-    private final boolean printTime;
     private double elapsedTime;
     private boolean firstRun = true;
 
@@ -46,16 +44,6 @@ public class LWJGLTimer {
      * Creates a timer.
      */
     public LWJGLTimer() {
-        printTime = false;
-    }
-
-    /**
-     * Creates a timer.
-     *
-     * @param printTime if the timer prints out the elapsed time every second
-     */
-    public LWJGLTimer(boolean printTime) {
-        this.printTime = printTime;
     }
 
     /**
@@ -63,7 +51,6 @@ public class LWJGLTimer {
      */
     public void initialize() {
         lastTime = System.nanoTime();
-        lastPrintTime = System.nanoTime();
         firstRun = false;
     }
 
@@ -84,17 +71,9 @@ public class LWJGLTimer {
         if (firstRun) {
             firstRun = false;
             lastTime = System.nanoTime();
-            lastPrintTime = System.nanoTime();
             return 0;
         } else {
             long elapsedTime = System.nanoTime() - lastTime;
-            if (printTime) {
-                long elapsedPrintTime = System.nanoTime() - lastPrintTime;
-                if (elapsedPrintTime / (double) 1000000 > 1000) {
-                    System.out.println("Elapsed time (ms) : " + (elapsedTime / (double) 1000000));
-                    lastPrintTime = System.nanoTime();
-                }
-            }
             lastTime = System.nanoTime();
             this.elapsedTime = elapsedTime / (double) 1000000;
             return this.elapsedTime;
