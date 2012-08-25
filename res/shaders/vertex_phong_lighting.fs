@@ -31,8 +31,6 @@
 
 // Per-vertex Phong lighting model
 
-// Author: Oskar Veerhoek, www.youtube.com/thecodinguniverse
-
 varying vec3 varyingColour;
 
 void main() {

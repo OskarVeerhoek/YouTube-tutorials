@@ -31,8 +31,6 @@
 
 // Per-vertex Phong lighting model
 
-// Author: Oskar Veerhoek, www.youtube.com/thecodinguniverse
-
 // Varying is set by the vertex program and read by the fragment
 // program.
 // Uniform is set by the Java code and read by the vertex and fragment
