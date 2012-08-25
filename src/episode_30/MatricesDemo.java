@@ -69,7 +69,7 @@ public class MatricesDemo {
         setUpVBOs();
         setUpCamera();
         setUpShaders();
-        setUpLighting();
+        setUpStates();
         timer.initialize();
         while (!Display.isCloseRequested()) {
             render();
@@ -131,7 +131,7 @@ public class MatricesDemo {
         glUseProgram(0);
     }
 
-    private static void setUpLighting() {
+    private static void setUpStates() {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
