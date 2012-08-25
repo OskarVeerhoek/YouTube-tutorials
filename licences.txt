@@ -1,10 +1,10 @@
 Adhere to the following licences if you use the following code:
- chunks of tutorial source code => line number 11  to 38
- JBox2D (2D Physics)			=> line number 40  to 60
- LWJGL                          => line number 116 to 144
- PNGDecoder (TWL)               => line number 162 to 188
- TextureLoader (Slick)          => line number 148 to 158
- JDom (XML Loading)             => line number 64  to 112
+ chunks of tutorial source code => line number 11  to 37 
+ LWJGL                          => line number 116 to 145
+ PNGDecoder (TWL)               => line number 186 to 213
+ TextureLoader (Slick)          => line number 172 to 183
+ JDom (XML Loading)             => line number 64  to 113
+ SLF4J (Console Logging)        => line number 148 to 169
  
 --------------------------------------------------------------------------------
 
@@ -142,6 +142,30 @@ PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
 LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
 NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+--------------------------------------------------------------------------------
+
+Copyright (c) 2004-2008 QOS.ch
+All rights reserved.
+
+Permission is hereby granted, free  of charge, to any person obtaining
+a  copy  of this  software  and  associated  documentation files  (the
+"Software"), to  deal in  the Software without  restriction, including
+without limitation  the rights to  use, copy, modify,  merge, publish,
+distribute,  sublicense, and/or sell  copies of  the Software,  and to
+permit persons to whom the Software  is furnished to do so, subject to
+the following conditions:
+
+The  above  copyright  notice  and  this permission  notice  shall  be
+included in all copies or substantial portions of the Software.
+
+THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
+EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
+MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
+WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------------------------------------------------------------------------
 
