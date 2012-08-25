@@ -120,7 +120,7 @@ public class SpriteSheetsDemo {
 
     private static void setUpMatrices() {
         glMatrixMode(GL_PROJECTION);
-        glOrtho(1, 1, 1, 1, -1f, 1f);
+        glOrtho(1, -1, 1, -1, -1f, 1f);
         glMatrixMode(GL_MODELVIEW);
     }
 
