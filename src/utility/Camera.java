@@ -305,6 +305,19 @@ public final class Camera {
         glMatrixMode(previousMatrixMode);
     }
 
+    /**
+     * Applies a translation of [x y z] to the camera.
+     *
+     * @param x the x-coordinate of the translation vector
+     * @param y the y-coordinate of the translation vector
+     * @param z the z-coordinate of the translation vector
+     */
+    public void translate(float x, float y, float z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+    }
+
     public float getX() {
         return x;
     }
