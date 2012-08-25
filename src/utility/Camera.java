@@ -218,41 +218,19 @@ public final class Camera {
      * @param dz the movement along the z-axis
      */
     public void moveFromLook(float dx, float dy, float dz) {
-        float nX = this.x;
-        float nY = this.y;
-        float nZ = this.z;
-
         float hypotenuseX = dx;
         float adjacentX = hypotenuseX * (float) Math.cos(Math.toRadians(yaw - 90));
         float oppositeX = (float) Math.sin(Math.toRadians(yaw - 90)) * hypotenuseX;
-        nZ += adjacentX;
-        nX -= oppositeX;
+        this.z += adjacentX;
+        this.x -= oppositeX;
 
-        nY += dy;
+        this.y += dy;
 
         float hypotenuseZ = dz;
         float adjacentZ = hypotenuseZ * (float) Math.cos(Math.toRadians(yaw));
         float oppositeZ = (float) Math.sin(Math.toRadians(yaw)) * hypotenuseZ;
-        nZ += adjacentZ;
-        nX -= oppositeZ;
-
-        this.x = nX;
-        this.y = nY;
-        this.z = nZ;
-    }
-
-    /**
-     * Move along the x, y, and z axes with the given distance.
-     *
-     * @param distance the distance you will travel
-     * @param x        the distance you will travel along the x-axis
-     * @param y        the distance you will travel along the y-axis
-     * @param z        the distance you will travel along the z-axis
-     */
-    public void moveAlongAxis(float distance, float x, float y, float z) {
-        this.x += x * distance;
-        this.y += y * distance;
-        this.z += z * distance;
+        this.z += adjacentZ;
+        this.x -= oppositeZ;
     }
 
     /**
@@ -303,6 +281,19 @@ public final class Camera {
         glRotatef(roll, 0, 0, 1);
         glTranslatef(-x, -y, -z);
         glMatrixMode(previousMatrixMode);
+    }
+
+    /**
+     * Sets the rotation of the camera in euler angles.
+     *
+     * @param pitch the rotation around the x-axis in degrees
+     * @param yaw   the rotation around the y-axis in degrees
+     * @param roll  the rotation around the z-axis in degrees
+     */
+    public void setRotation(float pitch, float yaw, float roll) {
+        this.pitch = pitch;
+        this.yaw = yaw;
+        this.roll = roll;
     }
 
     /**
@@ -370,6 +361,11 @@ public final class Camera {
         return fov;
     }
 
+    /**
+     * Sets the field of view angle in degrees in the y direction.
+     *
+     * @param fov the field of view angle in degrees in the y direction
+     */
     public void setFov(float fov) {
         this.fov = fov;
     }
