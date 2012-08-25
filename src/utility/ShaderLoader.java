@@ -51,29 +51,45 @@ public class ShaderLoader {
         int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
         StringBuilder vertexShaderSource = new StringBuilder();
         StringBuilder fragmentShaderSource = new StringBuilder();
+        BufferedReader vertexShaderFileReader = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(
+            vertexShaderFileReader = new BufferedReader(new FileReader(
                     vertexShaderLocation));
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = vertexShaderFileReader.readLine()) != null) {
                 vertexShaderSource.append(line).append('\n');
             }
-            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
+        } finally {
+            if (vertexShaderFileReader != null) {
+                try {
+                    vertexShaderFileReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
         }
+        BufferedReader fragmentShaderFileReader = null;
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(
+            fragmentShaderFileReader = new BufferedReader(new FileReader(
                     fragmentShaderLocation));
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = fragmentShaderFileReader.readLine()) != null) {
                 fragmentShaderSource.append(line).append('\n');
             }
-            reader.close();
         } catch (IOException e) {
             e.printStackTrace();
             return -1;
+        } finally {
+            if (fragmentShaderFileReader != null) {
+                try {
+                    fragmentShaderFileReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+            }
         }
         glShaderSource(vertexShader, vertexShaderSource);
         glCompileShader(vertexShader);
