@@ -30,7 +30,8 @@
 package utility;
 
 /**
- * For frame-rate independent movement
+ * A timer that uses System.nanoTime(). Call update() every iteration of the game loop and
+ * then call getElapsedTime and use that as a factor for movement to create frame-rate independent movement.
  *
  * @author Oskar Veerhoek
  */
@@ -39,6 +40,7 @@ public class LWJGLTimer {
     private long lastPrintTime; // nanoseconds
     private final boolean printTime;
     private double elapsedTime;
+    private boolean firstRun = true;
 
     /**
      * Creates a timer.
@@ -60,7 +62,9 @@ public class LWJGLTimer {
      * Initializes the timer. Call this just before entering the game loop.
      */
     public void initialize() {
-        lastTime = lastPrintTime = System.nanoTime();
+        lastTime = System.nanoTime();
+        lastPrintTime = System.nanoTime();
+        firstRun = false;
     }
 
     /**
@@ -71,22 +75,30 @@ public class LWJGLTimer {
     }
 
     /**
-     * Updates the timer. Call this once every iteration of the game loop.
+     * Updates the timer. Call this once every iteration of the game loop. The first time you call this method it
+     * returns 0.
      *
      * @return the elapsed time in milliseconds
      */
     public double update() {
-        long elapsedTime = System.nanoTime() - lastTime;
-        if (printTime) {
-            long elapsedPrintTime = System.nanoTime() - lastPrintTime;
-            if (elapsedPrintTime / (double) 1000000 > 1000) {
-                System.out.println("Elapsed time (ms) : " + (elapsedTime / (double) 1000000));
-                lastPrintTime = System.nanoTime();
+        if (firstRun) {
+            firstRun = false;
+            lastTime = System.nanoTime();
+            lastPrintTime = System.nanoTime();
+            return 0;
+        } else {
+            long elapsedTime = System.nanoTime() - lastTime;
+            if (printTime) {
+                long elapsedPrintTime = System.nanoTime() - lastPrintTime;
+                if (elapsedPrintTime / (double) 1000000 > 1000) {
+                    System.out.println("Elapsed time (ms) : " + (elapsedTime / (double) 1000000));
+                    lastPrintTime = System.nanoTime();
+                }
             }
+            lastTime = System.nanoTime();
+            this.elapsedTime = elapsedTime / (double) 1000000;
+            return this.elapsedTime;
         }
-        lastTime = System.nanoTime();
-        this.elapsedTime = elapsedTime / (double) 1000000;
-        return this.elapsedTime;
     }
 
 }
