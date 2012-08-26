@@ -86,7 +86,7 @@ public class SmoothTransitions {
         // (0, 0) is center, (1, 1) is the upper-right, (-1, -1) is the bottom-left
         glOrtho(1, -1, 1, -1, 1, -1);
         glMatrixMode(GL_MODELVIEW);
-        // Enable trancluency
+        // Enable translucency
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
