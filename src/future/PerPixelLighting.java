@@ -29,21 +29,18 @@
 
 package future;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.ARBDepthClamp;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import utility.EulerCamera;
-import utility.Model;
-import utility.OBJLoader;
-import utility.ShaderLoader;
+import org.lwjgl.opengl.GLContext;
+import utility.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -55,7 +52,8 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
  */
 public class PerPixelLighting {
 
-    private static EulerCamera cam;
+    private static EulerCamera camera;
+    private static LWJGLTimer timer;
     private static int perPixelShaderProgram;
     private static int perVertexShaderProgram;
     private static int currentShaderProgram;
@@ -75,7 +73,8 @@ public class PerPixelLighting {
         setUpVBOs();
         setUpCamera();
         setUpShaders();
-        setUpLighting();
+        setUpStates();
+        setUpTimer();
         while (!Display.isCloseRequested()) {
             render();
             checkInput();
@@ -86,9 +85,15 @@ public class PerPixelLighting {
         System.exit(0);
     }
 
+    private static void setUpTimer() {
+        timer = new LWJGLTimer();
+        timer.initialize();
+    }
+
     private static void checkInput() {
-        cam.processMouse(1, 80, -80);
-        cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
+        timer.update();
+        camera.processMouse((float) timer.getElapsedTime() / 16f, 80, -80);
+        camera.processKeyboard((float) timer.getElapsedTime(), 0.003f, 0.003f, 0.003f);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
@@ -113,27 +118,30 @@ public class PerPixelLighting {
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
-        cam.applyTranslations();
+        camera.applyTranslations();
         glUseProgram(currentShaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(camera.getX(), camera.getY(), camera.getZ(), 1));
         glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
     }
 
-    private static void setUpLighting() {
+    private static void setUpStates() {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f,
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
                 0.05f, 0.05f, 1f}));
         glLight(GL_LIGHT0, GL_POSITION,
-                asFloatBuffer(new float[]{0, 0, 0, 1}));
+                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
         glColorMaterial(GL_FRONT, GL_DIFFUSE);
         glColor3f(0.4f, 0.27f, 0.17f);
         glMaterialf(GL_FRONT, GL_SHININESS, 10f);
+        if (GLContext.getCapabilities().GL_ARB_depth_clamp) {
+            glEnable(ARBDepthClamp.GL_DEPTH_CLAMP);
+        }
     }
 
     private static void setUpVBOs() {
@@ -167,10 +175,10 @@ public class PerPixelLighting {
     }
 
     private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth()
+        camera = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
-        cam.setFov(70);
-        cam.applyPerspectiveMatrix();
+        camera.setFov(70);
+        camera.applyPerspectiveMatrix();
     }
 
     private static void setUpDisplay() {
@@ -184,12 +192,5 @@ public class PerPixelLighting {
             Display.destroy();
             System.exit(1);
         }
-    }
-
-    private static FloatBuffer asFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
     }
 }
