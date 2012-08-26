@@ -59,7 +59,7 @@ public class VertexBufferObjectDemo {
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glOrtho(1, 1, 1, 1, 1, -1);
+        glOrtho(1, -1, 1, -1, 1, -1);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
