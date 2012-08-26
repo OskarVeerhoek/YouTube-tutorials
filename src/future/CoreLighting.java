@@ -162,6 +162,7 @@ public class CoreLighting {
             glEnableVertexAttribArray(attributeVertex);
             glVertexAttribPointer(attributeVertex, 3, false, 0, vertices);
             glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+            glEnableVertexAttribArray(attributeNormal);
             glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
             glNormalPointer(GL_FLOAT, 0, 0L);
             // TODO: This really isn't finished yet. :-(
