@@ -70,6 +70,7 @@ public class ThreeDeeDemo {
         glMatrixMode(GL_MODELVIEW);
         //
 
+        // To make sure the points closest to the camera are shown in front of the points that are farther away.
         glEnable(GL_DEPTH_TEST);
 
         // Initialization code random points
