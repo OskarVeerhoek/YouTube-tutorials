@@ -37,9 +37,12 @@ import utility.BufferTools;
 
 import java.nio.FloatBuffer;
 
+import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 /**
+ * NOT DONE YET
  * TODO: Use FBO so AA won't interfere with picking
  * Showcases OpenGL picking. Press the left mouse button over either one of the triangles and look at the console output.
  */
@@ -52,8 +55,15 @@ public class PickingDemo {
     private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0.0f, 1.0f, 0.0f);
     private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
     private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
+    /** The frame-buffer object that will contain our custom render buffer */
+    private static int frameBuffer;
+    /** The render-buffer that will store the picking rendering */
+    private static int renderBuffer;
 
     private static void cleanUp(boolean asCrash) {
+        glDeleteFramebuffersEXT(frameBuffer);
+        glDeleteRenderbuffersEXT(renderBuffer);
+        System.err.println(gluErrorString(glGetError()));
         Display.destroy();
         System.exit(asCrash ? 1 : 0);
     }
@@ -62,7 +72,7 @@ public class PickingDemo {
         glClear(GL_COLOR_BUFFER_BIT);
         while (Mouse.next()) {
             // If the left mouse button has been pressed ...
-            if (Mouse.isButtonDown(0)) {
+            if (Mouse.isButtonDown(0) && Mouse.getEventButtonState()) {
                 // Set the background colour to black so it won't interfere with the picking.
                 glClearColor(0, 0, 0, 0);
                 // Draw the triangle with their colours that are used for picking.
@@ -113,6 +123,24 @@ public class PickingDemo {
         }
     }
 
+    private static void setUpFBOs() {
+        frameBuffer = glGenFramebuffersEXT();
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
+        renderBuffer = glGenRenderbuffersEXT();
+        System.err.println(gluErrorString(glGetError()));
+        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_RGB, Display.getWidth(), Display.getHeight());
+        System.err.println(gluErrorString(glGetError()));
+        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT, renderBuffer);
+        System.err.println(gluErrorString(glGetError()));
+        final int frameBufferError = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
+        if (frameBufferError != GL_FRAMEBUFFER_COMPLETE_EXT) {
+            System.err.println("Frame Buffer is not complete: " + frameBufferError);
+        } else {
+            System.err.println("Frame Buffer is complete.");
+        }
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+    }
+
     private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
@@ -126,6 +154,7 @@ public class PickingDemo {
 
     public static void main(String[] args) {
         setUpDisplay();
+        setUpFBOs();
         enterGameLoop();
         cleanUp(false);
     }
