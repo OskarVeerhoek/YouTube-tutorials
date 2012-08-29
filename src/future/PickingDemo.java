@@ -42,19 +42,18 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 /**
- * NOT DONE YET
- * TODO: Use FBO so AA won't interfere with picking
  * Showcases OpenGL_ picking. Press the left mouse button over either one of the triangles and look at the console output.
  */
 public class PickingDemo {
 
-    private static final String WINDOWTITLE = "Picking Demo";
-    private static final int[] WINDOWDIMENSIONS = {640, 480};
+    private static final String WINDOW_TITLE = "Picking Demo";
+    private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
     private static final FloatBuffer pickingTriangleColour = BufferTools.asFloatBuffer(1.0f, 1.0f, 0.0f);
     private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0.0f, 1.0f, 0.0f);
     private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
     private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
+
     /**
      * The frame-buffer object that will contain our custom render buffer
      */
@@ -75,9 +74,9 @@ public class PickingDemo {
     private static void render() {
         glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-// Set the background colour to black so it won't interfere with the picking.
+        // Set the background colour to black so it won't interfere with the picking.
         glClearColor(0, 0, 0, 0);
-// Draw the triangle with their colours that are used for picking.
+        // Draw the triangle with their colours that are used for picking.
         glBegin(GL_TRIANGLES);
         glColor3f(pickingTriangleColour.get(0), pickingTriangleColour.get(1), pickingTriangleColour.get(2));
         glVertex2f(-1, -1);
@@ -159,8 +158,8 @@ public class PickingDemo {
 
     private static void setUpDisplay() {
         try {
-            Display.setDisplayMode(new DisplayMode(WINDOWDIMENSIONS[0], WINDOWDIMENSIONS[1]));
-            Display.setTitle(WINDOWTITLE);
+            Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
+            Display.setTitle(WINDOW_TITLE);
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
