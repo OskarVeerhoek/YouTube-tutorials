@@ -55,9 +55,13 @@ public class PickingDemo {
     private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0.0f, 1.0f, 0.0f);
     private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
     private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
-    /** The frame-buffer object that will contain our custom render buffer */
+    /**
+     * The frame-buffer object that will contain our custom render buffer
+     */
     private static int frameBuffer;
-    /** The render-buffer that will store the picking rendering */
+    /**
+     * The render-buffer that will store the picking rendering
+     */
     private static int renderBuffer;
 
     private static void cleanUp(boolean asCrash) {
@@ -68,24 +72,45 @@ public class PickingDemo {
         System.exit(asCrash ? 1 : 0);
     }
 
-    private static void update() {
+    private static void render() {
+        glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+// Set the background colour to black so it won't interfere with the picking.
+        glClearColor(0, 0, 0, 0);
+// Draw the triangle with their colours that are used for picking.
+        glBegin(GL_TRIANGLES);
+        glColor3f(pickingTriangleColour.get(0), pickingTriangleColour.get(1), pickingTriangleColour.get(2));
+        glVertex2f(-1, -1);
+        glVertex2f(0, -1);
+        glVertex2f(-1, +1);
+        glColor3f(pickingOtherTriangleColour.get(0), pickingOtherTriangleColour.get(1), pickingOtherTriangleColour.get(2));
+        glVertex2f(1, -1);
+        glVertex2f(0, -1);
+        glVertex2f(1, 1);
+        glEnd();
+        glBindRenderbuffer(GL_RENDERBUFFER, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        // Draw the triangles with their real colours.
         glClear(GL_COLOR_BUFFER_BIT);
+        glBegin(GL_TRIANGLES);
+        glColor3f(realTriangleColour.get(0), realTriangleColour.get(1), realTriangleColour.get(2));
+        glVertex2f(-1, -1);
+        glVertex2f(0, -1);
+        glVertex2f(-1, +1);
+        glColor3f(realOtherTriangleColour.get(0), realOtherTriangleColour.get(1), realOtherTriangleColour.get(2));
+        glVertex2f(1, -1);
+        glVertex2f(0, -1);
+        glVertex2f(1, 1);
+        glEnd();
+        Display.update();
+    }
+
+    private static void update() {
         while (Mouse.next()) {
             // If the left mouse button has been pressed ...
             if (Mouse.isButtonDown(0) && Mouse.getEventButtonState()) {
-                // Set the background colour to black so it won't interfere with the picking.
-                glClearColor(0, 0, 0, 0);
-                // Draw the triangle with their colours that are used for picking.
-                glBegin(GL_TRIANGLES);
-                glColor3f(pickingTriangleColour.get(0), pickingTriangleColour.get(1), pickingTriangleColour.get(2));
-                glVertex2f(-1, -1);
-                glVertex2f(0, -1);
-                glVertex2f(-1, +1);
-                glColor3f(pickingOtherTriangleColour.get(0), pickingOtherTriangleColour.get(1), pickingOtherTriangleColour.get(2));
-                glVertex2f(1, -1);
-                glVertex2f(0, -1);
-                glVertex2f(1, 1);
-                glEnd();
+                glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+                glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
                 FloatBuffer pixels = BufferTools.reserveData(3);
                 // Read the pixel colour at the mouse coordinates and store the information (red-green-blue) in "pixels".
                 glReadPixels(Mouse.getX(), Mouse.getY(), 1, 1, GL_RGB, GL_FLOAT, pixels);
@@ -99,20 +124,10 @@ public class PickingDemo {
                 } else {
                     System.out.println("No Triangle!");
                 }
+                glBindRenderbuffer(GL_RENDERBUFFER, 0);
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
             }
         }
-        // Draw the triangles with their real colours.
-        glClear(GL_COLOR_BUFFER_BIT);
-        glBegin(GL_TRIANGLES);
-        glColor3f(realTriangleColour.get(0), realTriangleColour.get(1), realTriangleColour.get(2));
-        glVertex2f(-1, -1);
-        glVertex2f(0, -1);
-        glVertex2f(-1, +1);
-        glColor3f(realOtherTriangleColour.get(0), realOtherTriangleColour.get(1), realOtherTriangleColour.get(2));
-        glVertex2f(1, -1);
-        glVertex2f(0, -1);
-        glVertex2f(1, 1);
-        glEnd();
         Display.update();
         Display.sync(60);
     }
@@ -156,6 +171,7 @@ public class PickingDemo {
     public static void main(String[] args) {
         setUpDisplay();
         setUpFBOs();
+        render();
         enterGameLoop();
         cleanUp(false);
     }
