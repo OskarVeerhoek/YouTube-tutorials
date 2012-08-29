@@ -37,19 +37,19 @@ import utility.BufferTools;
 
 import java.nio.FloatBuffer;
 
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
+import static org.lwjgl.opengl.ARBFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 /**
  * NOT DONE YET
  * TODO: Use FBO so AA won't interfere with picking
- * Showcases OpenGL picking. Press the left mouse button over either one of the triangles and look at the console output.
+ * Showcases OpenGL_ picking. Press the left mouse button over either one of the triangles and look at the console output.
  */
 public class PickingDemo {
 
-    private static final String WINDOW_TITLE = "Picking Demo";
-    private static final int[] WINDOW_DIMENSIONS = {640, 480};
+    private static final String WINDOWTITLE = "Picking Demo";
+    private static final int[] WINDOWDIMENSIONS = {640, 480};
 
     private static final FloatBuffer pickingTriangleColour = BufferTools.asFloatBuffer(1.0f, 1.0f, 0.0f);
     private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0.0f, 1.0f, 0.0f);
@@ -61,8 +61,8 @@ public class PickingDemo {
     private static int renderBuffer;
 
     private static void cleanUp(boolean asCrash) {
-        glDeleteFramebuffersEXT(frameBuffer);
-        glDeleteRenderbuffersEXT(renderBuffer);
+        glDeleteFramebuffers(frameBuffer);
+        glDeleteRenderbuffers(renderBuffer);
         System.err.println(gluErrorString(glGetError()));
         Display.destroy();
         System.exit(asCrash ? 1 : 0);
@@ -124,27 +124,28 @@ public class PickingDemo {
     }
 
     private static void setUpFBOs() {
-        frameBuffer = glGenFramebuffersEXT();
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
-        renderBuffer = glGenRenderbuffersEXT();
+        frameBuffer = glGenFramebuffers();
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        renderBuffer = glGenRenderbuffers();
+        glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
         System.err.println(gluErrorString(glGetError()));
-        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_RGB, Display.getWidth(), Display.getHeight());
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_RGB, Display.getWidth(), Display.getHeight());
         System.err.println(gluErrorString(glGetError()));
-        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_RENDERBUFFER_EXT, renderBuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, renderBuffer);
         System.err.println(gluErrorString(glGetError()));
-        final int frameBufferError = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-        if (frameBufferError != GL_FRAMEBUFFER_COMPLETE_EXT) {
+        final int frameBufferError = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (frameBufferError != GL_FRAMEBUFFER_COMPLETE) {
             System.err.println("Frame Buffer is not complete: " + frameBufferError);
         } else {
             System.err.println("Frame Buffer is complete.");
         }
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
     private static void setUpDisplay() {
         try {
-            Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
-            Display.setTitle(WINDOW_TITLE);
+            Display.setDisplayMode(new DisplayMode(WINDOWDIMENSIONS[0], WINDOWDIMENSIONS[1]));
+            Display.setTitle(WINDOWTITLE);
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
