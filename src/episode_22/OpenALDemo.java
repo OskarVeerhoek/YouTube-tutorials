@@ -36,6 +36,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.WaveData;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
@@ -44,7 +45,7 @@ import static org.lwjgl.openal.AL10.*;
 public class OpenALDemo {
 
     public static void main(String[] args) throws FileNotFoundException {
-        // TODO: Investigate Source Code, Doesn't Seem To Be Working
+        // TODO: Investigate Source Code, Doesn't Seem To Be Working For Some People
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("OpenAL Demo");
@@ -54,7 +55,7 @@ public class OpenALDemo {
             e.printStackTrace();
             System.exit(1);
         }
-        WaveData data = WaveData.create(new FileInputStream("res/sounds/thump.wav"));
+        WaveData data = WaveData.create(new FileInputStream("res" + File.separatorChar + "sounds" + File.separatorChar + "thump.wav"));
         int buffer = alGenBuffers();
         alBufferData(buffer, data.format, data.data, data.samplerate);
         data.dispose();
