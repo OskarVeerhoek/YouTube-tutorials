@@ -46,7 +46,6 @@ import static org.lwjgl.openal.AL10.*;
 public class OpenALDemo {
 
     public static void main(String[] args) throws FileNotFoundException {
-        // TODO: Investigate Source Code, Doesn't Seem To Be Working For Some People
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("OpenAL Demo");
