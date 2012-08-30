@@ -36,6 +36,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.WaveData;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -55,7 +56,7 @@ public class OpenALDemo {
             e.printStackTrace();
             System.exit(1);
         }
-        WaveData data = WaveData.create(new FileInputStream("res" + File.separatorChar + "sounds" + File.separatorChar + "thump.wav"));
+        WaveData data = WaveData.create(new BufferedInputStream(new FileInputStream("res" + File.separatorChar + "sounds" + File.separatorChar + "thump.wav")));
         int buffer = alGenBuffers();
         alBufferData(buffer, data.format, data.data, data.samplerate);
         data.dispose();
