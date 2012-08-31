@@ -53,6 +53,8 @@ public class OpenALDemo {
             AL.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
+            Display.destroy();
+            AL.destroy();
             System.exit(1);
         }
         WaveData data = WaveData.create(new BufferedInputStream(new FileInputStream("res" + File.separatorChar + "sounds" + File.separatorChar + "thump.wav")));
