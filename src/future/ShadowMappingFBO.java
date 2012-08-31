@@ -31,6 +31,7 @@ package future;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -56,8 +57,8 @@ import static org.lwjgl.util.glu.GLU.*;
  * @author Daniel W.
  */
 public class ShadowMappingFBO {
-    private static int shadowWidth = 640;
-    private static int shadowHeight = 480;
+    private static int shadowWidth;
+    private static int shadowHeight;
 
     private static int frameBuffer;
     private static int renderBuffer;
@@ -240,7 +241,7 @@ public class ShadowMappingFBO {
 
         glEnable(GL_POLYGON_OFFSET_FILL);
 
-        renderObjects(false);
+        renderObjects();
 
         glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
                 shadowWidth, shadowHeight, 0);
@@ -272,6 +273,7 @@ public class ShadowMappingFBO {
 
     private static void setUpCamera() {
         camera = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), 100.0F, 50.0F, 200.0F);
+        camera.setRotation(15.51F, 328.96F, 0.0f);
     }
 
     /**
@@ -290,23 +292,21 @@ public class ShadowMappingFBO {
         }
     }
 
+    private static void renderGround() {
+        glColor3f(0.0F, 0.0F, 0.9F);
+        glNormal3f(0.0F, 1.0F, 0.0F);
+        glBegin(GL_QUADS);
+        glVertex3f(-100.0F, -25.0F, -100.0F);
+        glVertex3f(-100.0F, -25.0F, 100.0F);
+        glVertex3f(100.0F, -25.0F, 100.0F);
+        glVertex3f(100.0F, -25.0F, -100.0F);
+        glEnd();
+    }
+
     /**
      * This is where anything you want rendered into your world should go.
-     *
-     * @param drawGround
      */
-    private static void renderObjects(boolean drawGround) {
-        if (drawGround) {
-            glColor3f(0.0F, 0.0F, 0.9F);
-            glNormal3f(0.0F, 1.0F, 0.0F);
-            glBegin(GL_QUADS);
-            glVertex3f(-100.0F, -25.0F, -100.0F);
-            glVertex3f(-100.0F, -25.0F, 100.0F);
-            glVertex3f(100.0F, -25.0F, 100.0F);
-            glVertex3f(100.0F, -25.0F, -100.0F);
-            glEnd();
-        }
-
+    private static void renderObjects() {
         glColor3f(1.0F, 0.0F / 10, 0.0F);
         sphere.draw(12.0F, 50, 50);
 
@@ -335,10 +335,6 @@ public class ShadowMappingFBO {
         glPopMatrix();
     }
 
-
-    /**
-     * Render the scene, and then update.
-     */
     private static void render() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
@@ -394,7 +390,8 @@ public class ShadowMappingFBO {
 
         glTexGen(GL_Q, GL_EYE_PLANE, tempBuffer);
 
-        renderObjects(true);
+        renderGround();
+        renderObjects();
 
         glDisable(GL_ALPHA_TEST);
         glDisable(GL_TEXTURE_2D);
@@ -405,7 +402,7 @@ public class ShadowMappingFBO {
 
 
         if (glGetError() != GL_NO_ERROR) {
-            System.out.println("An OpenGL error occurred");
+            System.err.println("An OpenGL error occurred: " + gluErrorString(glGetError()));
         }
     }
 
@@ -422,6 +419,13 @@ public class ShadowMappingFBO {
         //    glPolygonOffset(factor, 10);
         //    generateShadowMap();
         //}
+        while (Keyboard.next()) {
+            if (Keyboard.getEventKeyState()) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
+                    System.out.println(camera);
+                }
+            }
+        }
         camera.processMouse(1.0f, 80, -80);
         camera.processKeyboard(16.0f, 0.1f, 0.1f, 0.1f);
         if (Mouse.isButtonDown(0))
