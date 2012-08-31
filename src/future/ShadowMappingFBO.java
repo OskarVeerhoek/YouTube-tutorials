@@ -103,6 +103,9 @@ public class ShadowMappingFBO {
         glShadeModel(GL_SMOOTH);
         glPolygonOffset(4.0F, 0.0F);
         glShadeModel(GL_SMOOTH);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
 
     private static void checkCapabilities() {
@@ -241,7 +244,7 @@ public class ShadowMappingFBO {
 
         glEnable(GL_POLYGON_OFFSET_FILL);
 
-        renderObjects();
+        drawObjects();
 
         glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
                 shadowWidth, shadowHeight, 0);
@@ -292,7 +295,7 @@ public class ShadowMappingFBO {
         }
     }
 
-    private static void renderGround() {
+    private static void drawGround() {
         glColor3f(0.0F, 0.0F, 0.9F);
         glNormal3f(0.0F, 1.0F, 0.0F);
         glBegin(GL_QUADS);
@@ -306,7 +309,7 @@ public class ShadowMappingFBO {
     /**
      * This is where anything you want rendered into your world should go.
      */
-    private static void renderObjects() {
+    private static void drawObjects() {
         glColor3f(1.0F, 0.0F / 10, 0.0F);
         sphere.draw(12.0F, 50, 50);
 
@@ -390,8 +393,8 @@ public class ShadowMappingFBO {
 
         glTexGen(GL_Q, GL_EYE_PLANE, tempBuffer);
 
-        renderGround();
-        renderObjects();
+        drawGround();
+        drawObjects();
 
         glDisable(GL_ALPHA_TEST);
         glDisable(GL_TEXTURE_2D);
@@ -401,8 +404,9 @@ public class ShadowMappingFBO {
         glDisable(GL_TEXTURE_GEN_Q);
 
 
-        if (glGetError() != GL_NO_ERROR) {
-            System.err.println("An OpenGL error occurred: " + gluErrorString(glGetError()));
+        int errorFlag = glGetError();
+        if (errorFlag != GL_NO_ERROR) {
+            System.err.println("An OpenGL error occurred: " + gluErrorString(errorFlag));
         }
     }
 
