@@ -1,3 +1,32 @@
+/*
+ * Copyright (c) 2012, Oskar Veerhoek
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this
+ *    list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * The views and conclusions contained in the software and documentation are those
+ * of the authors and should not be interpreted as representing official policies,
+ * either expressed or implied, of the FreeBSD Project.
+ */
+
 package future;
 
 import org.lwjgl.BufferUtils;
@@ -42,17 +71,17 @@ public class ShadowMapping {
     private static int shadowWidth = 640;
     private static int shadowHeight = 480;
 
-    private static int framebufferID;
-    private static int renderbufferID;
+    private static int frameBuffer;
+    private static int renderBuffer;
 
     private static FloatBuffer ambientLight = BufferUtils.createFloatBuffer(4);
     private static FloatBuffer diffuseLight = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer lightPos = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer cameraPos = BufferUtils.createFloatBuffer(4);
+    private static FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+    private static FloatBuffer cameraPosition = BufferUtils.createFloatBuffer(4);
     private static FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
 
-    static Matrix4f textureMatrix = new Matrix4f();
-    static Sphere s = new Sphere();
+    private static Matrix4f textureMatrix = new Matrix4f();
+    private static Sphere sphere = new Sphere();
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -101,30 +130,30 @@ public class ShadowMapping {
         }
 
         glColor3f(1.0F, 0.0F / 10, 0.0F);
-        s.draw(12.0F, 50, 50);
+        sphere.draw(12.0F, 50, 50);
 
         glColor3f(0.0F, 1.0F, 0.0F);
         glPushMatrix();
         glTranslatef(-60.0F, 0.0F, 0.0F);
-        s.draw(14.0F, 50, 50);
+        sphere.draw(14.0F, 50, 50);
         glPopMatrix();
 
         glColor3f(1.0F, 1.0F, 0.0F);
         glPushMatrix();
         glTranslatef(-60.0F, 0.0F, -24.0F);
-        s.draw(15.0F, 50, 50);
+        sphere.draw(15.0F, 50, 50);
         glPopMatrix();
 
         glColor3f(1.0F, 0.0F, 1.0F);
         glPushMatrix();
         glTranslatef(0.0F, 0.0F, 60.0F);
-        s.draw(16.0F, 50, 50);
+        sphere.draw(16.0F, 50, 50);
         glPopMatrix();
 
         glColor3f(0.0F, 1.0F, 1.0F);
         glPushMatrix();
         glTranslatef(0.0F, 0.0F, -60.0F);
-        s.draw(22.0F, 50, 50);
+        sphere.draw(22.0F, 50, 50);
         glPopMatrix();
     }
 
@@ -140,9 +169,15 @@ public class ShadowMapping {
 
         float sceneBoundingRadius = 95.0F;
 
-        lightToSceneDistance = (float) Math.sqrt(lightPos.get(0)
-                * lightPos.get(0) + lightPos.get(1) * lightPos.get(1)
-                + lightPos.get(2) * lightPos.get(2));
+        lightToSceneDistance = (float) Math.sqrt(lightPosition
+    .get(0)
+                * lightPosition
+    .get(0) + lightPosition
+    .get(1) * lightPosition
+    .get(1)
+                + lightPosition
+    .get(2) * lightPosition
+    .get(2));
 
         nearPlane = lightToSceneDistance - sceneBoundingRadius;
 
@@ -156,13 +191,16 @@ public class ShadowMapping {
         glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(lightPos.get(0), lightPos.get(1), lightPos.get(2), 0.0F,
+        gluLookAt(lightPosition
+    .get(0), lightPosition
+    .get(1), lightPosition
+    .get(2), 0.0F,
                 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
         glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
         glViewport(0, 0, shadowWidth, shadowHeight);
 
         if (useFBO) {
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID);
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
         }
 
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -218,14 +256,15 @@ public class ShadowMapping {
         gluPerspective(40, (float) Display.getWidth() / (float) Display.getHeight(), 1.0F, 1000.0F);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(cameraPos.get(0), cameraPos.get(1), cameraPos.get(2),
+        gluLookAt(cameraPosition.get(0), cameraPosition.get(1), cameraPosition.get(2),
                 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
         // TODO Add cam.applyModelViewMatrix(true) here and remove the 2
         // lines above
 
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
 
-        glLight(GL_LIGHT0, GL_POSITION, lightPos);
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition
+    );
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (showShadowMap) {
@@ -415,18 +454,18 @@ public class ShadowMapping {
 
         // If we are using a FBO, we need to setup the framebuffer.
         if (useFBO) {
-            framebufferID = glGenFramebuffersEXT();
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebufferID);
+            frameBuffer = glGenFramebuffersEXT();
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
 
-            renderbufferID = glGenRenderbuffersEXT();
-            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, renderbufferID);
+            renderBuffer = glGenRenderbuffersEXT();
+            glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, renderBuffer);
 
             glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT32,
                     maxTextureSize, maxTextureSize);
 
             glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT,
                     GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
-                    renderbufferID);
+                    renderBuffer);
 
             glDrawBuffer(GL_NONE);
             glReadBuffer(GL_NONE);
@@ -464,8 +503,8 @@ public class ShadowMapping {
      * Cleanup after the program.
      */
     private static void cleanUp() {
-        glDeleteFramebuffersEXT(framebufferID);
-        glDeleteRenderbuffersEXT(renderbufferID);
+        glDeleteFramebuffersEXT(frameBuffer);
+        glDeleteRenderbuffersEXT(renderBuffer);
         Display.destroy();
     }
 
@@ -479,10 +518,12 @@ public class ShadowMapping {
         diffuseLight.put(new float[]{0.7F, 0.7F, 0.7F, 1.0F});
         diffuseLight.flip();
 
-        cameraPos.put(new float[]{100.0F, 50.0F, 200.0F, 1.0F});
-        cameraPos.flip();
+        cameraPosition.put(new float[]{100.0F, 50.0F, 200.0F, 1.0F});
+        cameraPosition.flip();
 
-        lightPos.put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
-        lightPos.flip();
+        lightPosition
+    .put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
+        lightPosition
+    .flip();
     }
 }
