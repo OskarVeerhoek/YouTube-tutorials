@@ -31,7 +31,6 @@ package future;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -43,13 +42,12 @@ import utility.EulerCamera;
 
 import java.nio.FloatBuffer;
 
+import static org.lwjgl.opengl.ARBFramebufferObject.*;
 import static org.lwjgl.opengl.ARBShadowAmbient.GL_TEXTURE_COMPARE_FAIL_VALUE_ARB;
-import static org.lwjgl.opengl.EXTFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL14.*;
-import static org.lwjgl.util.glu.GLU.gluLookAt;
-import static org.lwjgl.util.glu.GLU.gluPerspective;
+import static org.lwjgl.util.glu.GLU.*;
 
 /**
  * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible.
@@ -58,11 +56,6 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
  * @author Daniel W.
  */
 public class ShadowMappingFBO {
-    // The amount of polygon offset to use
-    private static float factor = 4.0F;
-
-    public static int maxTextureSize;
-
     private static int shadowWidth = 640;
     private static int shadowHeight = 480;
 
@@ -80,9 +73,11 @@ public class ShadowMappingFBO {
 
     public static void main(String[] args) {
         setUpDisplay();
+        checkCapabilities();
+        setUpStates();
         setUpCamera();
         setUpBufferValues();
-        setUpOpenGL();
+        setUpFBOs();
         while (!Display.isCloseRequested()) {
             render();
             input();
@@ -91,6 +86,188 @@ public class ShadowMappingFBO {
         }
         cleanUp();
         System.exit(0);
+    }
+
+    private static void setUpStates() {
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_NORMALIZE);
+        glEnable(GL_LIGHT0);
+        glColorMask(true, true, true, true);
+        glDisable(GL_POLYGON_OFFSET_FILL);
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
+        glShadeModel(GL_SMOOTH);
+        glPolygonOffset(4.0F, 0.0F);
+        glShadeModel(GL_SMOOTH);
+    }
+
+    private static void checkCapabilities() {
+        if (!GLContext.getCapabilities().OpenGL14
+                && !GLContext.getCapabilities().GL_ARB_shadow) {
+            System.out
+                    .println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
+            Display.destroy();
+            System.exit(1);
+        }
+
+        if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
+            System.err
+                    .println("GL_ARB_shadow_ambient extension not available.");
+            Display.destroy();
+            System.exit(1);
+        }
+    }
+
+    /**
+     * Sets up the OpenGL states.
+     */
+    public static void setUpFBOs() {
+        int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
+        int maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
+
+        System.out.println("Maximum texture size: " + maxTextureSize);
+        System.out.println("Maximum renderbuffer size: " + maxRenderbufferSize);
+
+        /*
+           * Check to see if the maximum texture size is bigger than 2048.
+           * Performance drops too much if it much bigger than that.
+           */
+        if (maxTextureSize > 2048) {
+            maxTextureSize = 2048;
+            if (maxRenderbufferSize < maxTextureSize) {
+                maxTextureSize = maxRenderbufferSize;
+            }
+        }
+
+        shadowWidth = maxTextureSize;
+        shadowHeight = maxTextureSize;
+
+        // Setup some texture states
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB,
+                0.5F);
+
+        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+        glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+        glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+        glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+
+        frameBuffer = glGenFramebuffers();
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+        renderBuffer = glGenRenderbuffers();
+        glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
+
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32,
+                maxTextureSize, maxTextureSize);
+
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER,
+                GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
+                renderBuffer);
+
+        glDrawBuffer(GL_NONE);
+        glReadBuffer(GL_NONE);
+
+        int FBOStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if (FBOStatus != GL_FRAMEBUFFER_COMPLETE) {
+            System.err.println("Framebuffer error: " + gluErrorString(glGetError()));
+        }
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        generateShadowMap();
+    }
+
+    /**
+     * Generate the shadow map.
+     */
+    private static void generateShadowMap() {
+        float lightToSceneDistance, nearPlane, fieldOfView;
+        FloatBuffer lightModelView = BufferUtils.createFloatBuffer(16);
+        FloatBuffer lightProjection = BufferUtils.createFloatBuffer(16);
+        Matrix4f lightProjectionTemp = new Matrix4f();
+        Matrix4f lightModelViewTemp = new Matrix4f();
+
+        float sceneBoundingRadius = 95.0F;
+
+        lightToSceneDistance = (float) Math.sqrt(lightPosition
+                .get(0)
+                * lightPosition
+                .get(0) + lightPosition
+                .get(1) * lightPosition
+                .get(1)
+                + lightPosition
+                .get(2) * lightPosition
+                .get(2));
+
+        nearPlane = lightToSceneDistance - sceneBoundingRadius;
+
+        fieldOfView = (float) Math.toDegrees(2.0F * Math
+                .atan(sceneBoundingRadius / lightToSceneDistance));
+
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        gluPerspective(fieldOfView, 1.0F, nearPlane, nearPlane
+                + (2.0F * sceneBoundingRadius));
+        glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        gluLookAt(lightPosition
+                .get(0), lightPosition
+                .get(1), lightPosition
+                .get(2), 0.0F,
+                0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
+        glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
+        glViewport(0, 0, shadowWidth, shadowHeight);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        // Set rendering states to the minimum required, for speed.
+        glShadeModel(GL_FLAT);
+        glDisable(GL_LIGHTING);
+        glDisable(GL_COLOR_MATERIAL);
+        glDisable(GL_NORMALIZE);
+        glColorMask(false, false, false, false);
+
+        glEnable(GL_POLYGON_OFFSET_FILL);
+
+        renderObjects(false);
+
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
+                shadowWidth, shadowHeight, 0);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+        // Setup the rendering states.
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_COLOR_MATERIAL);
+        glEnable(GL_NORMALIZE);
+        glColorMask(true, true, true, true);
+        glDisable(GL_POLYGON_OFFSET_FILL);
+
+        lightProjectionTemp.load(lightProjection);
+        lightModelViewTemp.load(lightModelView);
+        lightProjection.flip();
+        lightModelView.flip();
+
+        Matrix4f tempMatrix = new Matrix4f();
+        tempMatrix.setIdentity();
+        tempMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
+        tempMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
+        Matrix4f.mul(tempMatrix, lightProjectionTemp, textureMatrix);
+        Matrix4f.mul(textureMatrix, lightModelViewTemp, tempMatrix);
+        Matrix4f.transpose(tempMatrix, textureMatrix);
+
     }
 
     private static void setUpCamera() {
@@ -158,90 +335,6 @@ public class ShadowMappingFBO {
         glPopMatrix();
     }
 
-    /**
-     * Generate the shadow map.
-     */
-    private static void generateShadowMap() {
-        float lightToSceneDistance, nearPlane, fieldOfView;
-        FloatBuffer lightModelView = BufferUtils.createFloatBuffer(16);
-        FloatBuffer lightProjection = BufferUtils.createFloatBuffer(16);
-        Matrix4f lightProjectionTemp = new Matrix4f();
-        Matrix4f lightModelViewTemp = new Matrix4f();
-
-        float sceneBoundingRadius = 95.0F;
-
-        lightToSceneDistance = (float) Math.sqrt(lightPosition
-                .get(0)
-                * lightPosition
-                .get(0) + lightPosition
-                .get(1) * lightPosition
-                .get(1)
-                + lightPosition
-                .get(2) * lightPosition
-                .get(2));
-
-        nearPlane = lightToSceneDistance - sceneBoundingRadius;
-
-        fieldOfView = (float) Math.toDegrees(2.0F * Math
-                .atan(sceneBoundingRadius / lightToSceneDistance));
-
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(fieldOfView, 1.0F, nearPlane, nearPlane
-                + (2.0F * sceneBoundingRadius));
-        glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluLookAt(lightPosition
-                .get(0), lightPosition
-                .get(1), lightPosition
-                .get(2), 0.0F,
-                0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
-        glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
-        glViewport(0, 0, shadowWidth, shadowHeight);
-
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
-
-        glClear(GL_DEPTH_BUFFER_BIT);
-
-        // Set rendering states to the minimum required, for speed.
-        glShadeModel(GL_FLAT);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_COLOR_MATERIAL);
-        glDisable(GL_NORMALIZE);
-        glColorMask(false, false, false, false);
-
-        glEnable(GL_POLYGON_OFFSET_FILL);
-
-        renderObjects(false);
-
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
-                shadowWidth, shadowHeight, 0);
-
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-
-        // Setup the rendering states.
-        glShadeModel(GL_SMOOTH);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_COLOR_MATERIAL);
-        glEnable(GL_NORMALIZE);
-        glColorMask(true, true, true, true);
-        glDisable(GL_POLYGON_OFFSET_FILL);
-
-        lightProjectionTemp.load(lightProjection);
-        lightModelViewTemp.load(lightModelView);
-        lightProjection.flip();
-        lightModelView.flip();
-
-        Matrix4f tempMatrix = new Matrix4f();
-        tempMatrix.setIdentity();
-        tempMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
-        tempMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
-        Matrix4f.mul(tempMatrix, lightProjectionTemp, textureMatrix);
-        Matrix4f.mul(textureMatrix, lightModelViewTemp, tempMatrix);
-        Matrix4f.transpose(tempMatrix, textureMatrix);
-
-    }
 
     /**
      * Render the scene, and then update.
@@ -317,117 +410,20 @@ public class ShadowMappingFBO {
     }
 
     /**
-     * Sets up the OpenGL states.
-     */
-    public static void setUpOpenGL() {
-        int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE_EXT);
-
-        if (!GLContext.getCapabilities().OpenGL14
-                && !GLContext.getCapabilities().GL_ARB_shadow) {
-            System.out
-                    .println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
-            Display.destroy();
-            System.exit(0);
-        }
-
-        if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
-            System.err
-                    .println("GL_ARB_shadow_ambient extension not availible.");
-            Display.destroy();
-            System.exit(0);
-        }
-
-        if (GLContext.getCapabilities().OpenGL20
-                || GLContext.getCapabilities().GL_EXT_framebuffer_object) {
-            System.out.println("Higher quality shadows are availible.");
-        }
-
-        maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
-
-        System.out.println("Maximum texture size: " + maxTextureSize);
-        System.out.println("Maximum renderbuffer size: " + maxRenderbufferSize);
-
-        /*
-           * Check to see if the maximum texture size is bigger than 2048.
-           * Performance drops too much if it much bigger than that.
-           */
-        if (maxTextureSize > 512) {
-            maxTextureSize = 512;
-            if (maxRenderbufferSize < maxTextureSize) {
-                maxTextureSize = maxRenderbufferSize;
-            }
-        }
-
-        shadowWidth = maxTextureSize;
-        shadowHeight = maxTextureSize;
-
-        glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-
-        glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-        glPolygonOffset(factor, 0.0F);
-
-        glShadeModel(GL_SMOOTH);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_COLOR_MATERIAL);
-        glEnable(GL_NORMALIZE);
-        glEnable(GL_LIGHT0);
-
-        // Setup some texture states
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
-
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB,
-                0.5F);
-
-        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-        glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-        glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-        glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-
-        frameBuffer = glGenFramebuffersEXT();
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, frameBuffer);
-
-        renderBuffer = glGenRenderbuffersEXT();
-        glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, renderBuffer);
-
-        glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT32,
-                maxTextureSize, maxTextureSize);
-
-        glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT,
-                GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
-                renderBuffer);
-
-        glDrawBuffer(GL_NONE);
-        glReadBuffer(GL_NONE);
-
-        int FBOStatus = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
-        if (FBOStatus != GL_FRAMEBUFFER_COMPLETE_EXT) {
-            System.out.println("Framebuffer error!");
-        }
-
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0);
-        generateShadowMap();
-    }
-
-    /**
      * Handles the keyboard and mouse input.
      */
     public static void input() {
-        if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
-            factor--;
-            glPolygonOffset(factor, 0.0F);
-            generateShadowMap();
-        } else if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
-            factor++;
-            glPolygonOffset(factor, 10);
-            generateShadowMap();
-        }
+        //if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
+        //    factor--;
+        //    glPolygonOffset(factor, 0.0F);
+        //    generateShadowMap();
+        //} else if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
+        //    factor++;
+        //    glPolygonOffset(factor, 10);
+        //    generateShadowMap();
+        //}
         camera.processMouse(1.0f, 80, -80);
-        camera.processKeyboard(16.0f, 0.15f, 0.15f, 0.15f);
+        camera.processKeyboard(16.0f, 0.1f, 0.1f, 0.1f);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
@@ -438,8 +434,8 @@ public class ShadowMappingFBO {
      * Cleanup after the program.
      */
     private static void cleanUp() {
-        glDeleteFramebuffersEXT(frameBuffer);
-        glDeleteRenderbuffersEXT(renderBuffer);
+        glDeleteFramebuffers(frameBuffer);
+        glDeleteRenderbuffers(renderBuffer);
         Display.destroy();
     }
 
