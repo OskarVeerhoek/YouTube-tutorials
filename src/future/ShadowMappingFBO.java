@@ -58,8 +58,8 @@ import static org.lwjgl.util.glu.GLU.*;
  * @author Daniel W.
  */
 public class ShadowMappingFBO {
-    private static int shadowWidth;
-    private static int shadowHeight;
+    private static int shadowMapWidth;
+    private static int shadowMapHeight;
 
     private static int frameBuffer;
     private static int renderBuffer;
@@ -157,8 +157,8 @@ public class ShadowMappingFBO {
             }
         }
 
-        shadowWidth = maxTextureSize;
-        shadowHeight = maxTextureSize;
+        shadowMapWidth = maxTextureSize;
+        shadowMapHeight = maxTextureSize;
 
         // Setup some texture states
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -240,7 +240,7 @@ public class ShadowMappingFBO {
                 .get(2), 0.0F,
                 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
         glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
-        glViewport(0, 0, shadowWidth, shadowHeight);
+        glViewport(0, 0, shadowMapWidth, shadowMapHeight);
 
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
@@ -258,7 +258,7 @@ public class ShadowMappingFBO {
         drawObjects();
 
         glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
-                shadowWidth, shadowHeight, 0);
+                shadowMapWidth, shadowMapHeight, 0);
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
