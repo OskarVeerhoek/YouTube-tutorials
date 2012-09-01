@@ -82,16 +82,38 @@ public class ScissorDemo {
     }
 
     private static void render() {
+        // Fills the entire window (or scissor box) with black.
         glClear(GL_COLOR_BUFFER_BIT);
+        /**
+         * The left x-coordinate of the scissor box.
+         */
         int scissorX = scissorBox[0];
+        /**
+         * The bottom y-coordinate of the scissor box.
+         */
         int scissorY = scissorBox[1];
+        /**
+         * The width of the scissor box. May be negative.
+         */
         int scissorWidth = scissorBox[2] - scissorBox[0];
+        /**
+         * The height of the scissor box. May be negative.
+         */
         int scissorHeight = scissorBox[3] - scissorBox[1];
-        if (scissorWidth > 0 && scissorHeight > 0) {
+        // If scissorWidth and scissorHeight are not negative ...
+        if (scissorWidth >= 0 && scissorHeight >= 0) {
+            // Specify the scissor box.
             glScissor(scissorX, scissorY, scissorWidth, scissorHeight);
+            // Fill the entire window with white. Due to scissoring
+            // only the an area that is equal to the scissor box will
+            // be drawn.
             glRectf(-1, -1, 1, 1);
+            // Since scissorWidth and scissorHeight are not negative,
+            // set scissorInverted to false.
             scissorInverted = false;
         } else {
+            // Since scissorWidth and scissorHeight are negative,
+            // set scissorInverted to false.
             scissorInverted = true;
         }
         glScissor(0, 0, WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]);
