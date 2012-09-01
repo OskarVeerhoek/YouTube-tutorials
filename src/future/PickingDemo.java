@@ -49,10 +49,10 @@ public class PickingDemo {
     private static final String WINDOW_TITLE = "Picking Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
-    private static final FloatBuffer pickingTriangleColour = BufferTools.asFloatBuffer(1.0f, 1.0f, 0.0f);
-    private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0.0f, 1.0f, 0.0f);
-    private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
-    private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
+    private static final FloatBuffer pickingTriangleColour      = BufferTools.asFloatBuffer(1, 0, 0);
+    private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0, 1, 0);
+    private static final FloatBuffer realTriangleColour         = BufferTools.asFloatBuffer(1, 0, 0);
+    private static final FloatBuffer realOtherTriangleColour    = BufferTools.asFloatBuffer(0, 0, 1);
 
     /**
      * The frame-buffer object that will contain our custom render buffer
@@ -72,6 +72,7 @@ public class PickingDemo {
     }
 
     private static void render() {
+        // Draw the shapes with their picking colours to our custom frame-buffer.
         glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
         // Set the background colour to black so it won't interfere with the picking.
