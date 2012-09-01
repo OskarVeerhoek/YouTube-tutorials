@@ -38,6 +38,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Shows how to use OpenGL scissoring to render a specific part of the viewport.
+ * Press the left mouse button to drag the bottom-left corner of scissoring area.
+ * Press the right mouse button to drag the upper-right corner of scissoring area.
  *
  * @author Oskar Veerhoek
  */
