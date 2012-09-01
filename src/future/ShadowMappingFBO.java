@@ -78,6 +78,7 @@ public class ShadowMappingFBO {
         setUpDisplay();
         checkCapabilities();
         setUpStates();
+        setUpCamera();
         setUpFBOs();
         while (!Display.isCloseRequested()) {
             render();
@@ -87,6 +88,9 @@ public class ShadowMappingFBO {
         }
         cleanUp();
         System.exit(0);
+    }
+
+    private static void setUpCamera() {
     }
 
     private static void setUpStates() {
@@ -425,7 +429,7 @@ public class ShadowMappingFBO {
             }
         }
         camera.processMouse(1.0f, 80, -80);
-        camera.processKeyboard(16.0f, 0.1f, 0.1f, 0.1f);
+        camera.processKeyboard(16.0f, 15, 15, 15);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))

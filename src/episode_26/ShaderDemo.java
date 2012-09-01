@@ -91,7 +91,7 @@ public class ShaderDemo {
             glUseProgram(0);
 
             cam.processMouse(1, 80, -80);
-            cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
+            cam.processKeyboard(16, 1, 1, 1);
 
             if (Mouse.isButtonDown(0))
                 Mouse.setGrabbed(true);

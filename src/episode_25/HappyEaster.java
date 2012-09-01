@@ -105,7 +105,7 @@ public class HappyEaster {
 
     private static void checkInput() {
         cam.processMouse(1, 80, -80);
-        cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
+        cam.processKeyboard(16, 1, 1, 1);
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(lightPosition));
         if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
             lightPosition = new float[]{cam.getX(), cam.getY(), cam.getZ(), 1};

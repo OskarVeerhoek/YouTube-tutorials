@@ -51,8 +51,8 @@ public final class EulerCamera {
     private float roll = 0;
     private float fov = 90;
     private final float aspectRatio;
-    private final float zNear = 0.3f;
-    private final float zFar = 100f;
+    private final float zNear;
+    private final float zFar;
 
     /**
      * Creates a new camera with the given aspect ratio.
@@ -62,6 +62,8 @@ public final class EulerCamera {
      */
     public EulerCamera(float aspectRatio) {
         this.aspectRatio = aspectRatio;
+        this.zNear = 0.3f;
+        this.zFar = 100;
     }
 
     /**
@@ -77,6 +79,8 @@ public final class EulerCamera {
         this.x = (float) x;
         this.y = (float) y;
         this.z = (float) z;
+        this.zNear = 0.3f;
+        this.zFar = 100;
     }
 
     /**
@@ -88,7 +92,7 @@ public final class EulerCamera {
      * @param z           the third location coordinate
      */
     public EulerCamera(float aspectRatio, float x, float y, float z) {
-        this.aspectRatio = aspectRatio;
+        this(aspectRatio);
         this.x = x;
         this.y = y;
         this.z = z;
@@ -106,10 +110,7 @@ public final class EulerCamera {
      * @param roll        the roll (rotation on the z-axis)
      */
     public EulerCamera(float aspectRatio, double x, double y, double z, double pitch, double yaw, double roll) {
-        this.aspectRatio = aspectRatio;
-        this.x = (float) x;
-        this.y = (float) y;
-        this.z = (float) z;
+        this(aspectRatio, x, y, z);
         this.pitch = (float) pitch;
         this.yaw = (float) yaw;
         this.roll = (float) roll;
@@ -127,10 +128,7 @@ public final class EulerCamera {
      * @param roll        the roll (rotation on the z-axis)
      */
     public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll) {
-        this.aspectRatio = aspectRatio;
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this(aspectRatio, x, y, z);
         this.pitch = pitch;
         this.yaw = yaw;
         this.roll = roll;
@@ -166,9 +164,9 @@ public final class EulerCamera {
 
     /**
      * @param delta  the elapsed time since the last frame update in milliseconds
-     * @param speedX the speed of the movement on the x-axis (normal = 0.003)
-     * @param speedY the speed of the movement on the y-axis (normal = 0.003)
-     * @param speedZ the speed of the movement on the z-axis (normal = 0.003)
+     * @param speedX the speed of the movement on the x-axis (normal = 1.0)
+     * @param speedY the speed of the movement on the y-axis (normal = 1.0)
+     * @param speedZ the speed of the movement on the z-axis (normal = 1.0)
      */
     public void processKeyboard(float delta, float speedX, float speedY, float speedZ) {
         boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_W);
@@ -179,34 +177,34 @@ public final class EulerCamera {
         boolean flyDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
 
         if (keyUp && keyRight && !keyLeft && !keyDown) {
-            moveFromLook(speedX * delta, 0, -speedZ * delta);
+            moveFromLook(speedX * delta * 0.003f, 0, -speedZ * delta * 0.003f);
         }
         if (keyUp && keyLeft && !keyRight && !keyDown) {
-            moveFromLook(-speedX * delta, 0, -speedZ * delta);
+            moveFromLook(-speedX * delta * 0.003f, 0, -speedZ * delta * 0.003f);
         }
         if (keyUp && !keyLeft && !keyRight && !keyDown) {
-            moveFromLook(0, 0, -speedZ * delta);
+            moveFromLook(0, 0, -speedZ * delta * 0.003f);
         }
         if (keyDown && keyLeft && !keyRight && !keyUp) {
-            moveFromLook(-speedX * delta, 0, speedZ * delta);
+            moveFromLook(-speedX * delta * 0.003f, 0, speedZ * delta * 0.003f);
         }
         if (keyDown && keyRight && !keyLeft && !keyUp) {
-            moveFromLook(speedX * delta, 0, speedZ * delta);
+            moveFromLook(speedX * delta * 0.003f, 0, speedZ * delta * 0.003f);
         }
         if (keyDown && !keyUp && !keyLeft && !keyRight) {
-            moveFromLook(0, 0, speedZ * delta);
+            moveFromLook(0, 0, speedZ * delta * 0.003f);
         }
         if (keyLeft && !keyRight && !keyUp && !keyDown) {
-            moveFromLook(-speedX * delta, 0, 0);
+            moveFromLook(-speedX * delta * 0.003f, 0, 0);
         }
         if (keyRight && !keyLeft && !keyUp && !keyDown) {
-            moveFromLook(speedX * delta, 0, 0);
+            moveFromLook(speedX * delta * 0.003f, 0, 0);
         }
         if (flyUp && !flyDown) {
-            y += speedY * delta;
+            y += speedY * delta * 0.003f;
         }
         if (flyDown && !flyUp) {
-            y -= speedY * delta;
+            y -= speedY * delta * 0.003f;
         }
     }
 
