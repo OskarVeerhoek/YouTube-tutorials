@@ -39,6 +39,7 @@ import org.lwjgl.opengl.GLContext;
 import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import utility.BufferTools;
 import utility.EulerCamera;
 
 import java.nio.FloatBuffer;
@@ -63,21 +64,20 @@ public class ShadowMappingFBO {
     private static int frameBuffer;
     private static int renderBuffer;
 
-    private static FloatBuffer ambientLight = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer diffuseLight = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer ambientLight  = BufferTools.asFlippedFloatBuffer(0.2F, 0.2F, 0.2F, 1.0F);
+    private static final FloatBuffer diffuseLight  = BufferTools.asFlippedFloatBuffer(0.7F, 0.7F, 0.7F, 1.0F);
+    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(100.0F, 300.0F, 100.0F, 1.0F);
+    private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
 
-    private static Matrix4f textureMatrix = new Matrix4f();
-    private static Sphere sphere = new Sphere();
-    private static EulerCamera camera;
+    private static final Matrix4f textureMatrix = new Matrix4f();
+    private static final Sphere sphere = new Sphere();
+    private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
+    private static final EulerCamera camera = new EulerCamera((float) DISPLAY_MODE.getWidth() / (float) DISPLAY_MODE.getHeight(), 100.0F, 50.0F, 200.0F, 15.51F, 328.96F, 0.0f);
 
     public static void main(String[] args) {
         setUpDisplay();
         checkCapabilities();
         setUpStates();
-        setUpCamera();
-        setUpBufferValues();
         setUpFBOs();
         while (!Display.isCloseRequested()) {
             render();
@@ -105,7 +105,6 @@ public class ShadowMappingFBO {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        //glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
     }
 
     private static void checkCapabilities() {
@@ -274,17 +273,12 @@ public class ShadowMappingFBO {
 
     }
 
-    private static void setUpCamera() {
-        camera = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), 100.0F, 50.0F, 200.0F);
-        camera.setRotation(15.51F, 328.96F, 0.0f);
-    }
-
     /**
      * Sets up a display.
      */
     private static void setUpDisplay() {
         try {
-            Display.setDisplayMode(new DisplayMode(640, 480));
+            Display.setDisplayMode(DISPLAY_MODE);
             Display.setVSyncEnabled(true);
             Display.setTitle("Shadow Mapping Demo");
             Display.create();
@@ -445,21 +439,5 @@ public class ShadowMappingFBO {
         glDeleteFramebuffers(frameBuffer);
         glDeleteRenderbuffers(renderBuffer);
         Display.destroy();
-    }
-
-    /**
-     * Sets up the FloatBuffers to be used later on.
-     */
-    private static void setUpBufferValues() {
-        ambientLight.put(new float[]{0.2F, 0.2F, 0.2F, 1.0F});
-        ambientLight.flip();
-
-        diffuseLight.put(new float[]{0.7F, 0.7F, 0.7F, 1.0F});
-        diffuseLight.flip();
-
-        lightPosition
-                .put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
-        lightPosition
-                .flip();
     }
 }
