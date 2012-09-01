@@ -117,6 +117,9 @@ public class ShadowMappingFBO {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        glLight(GL_LIGHT0, GL_AMBIENT, ambientLight);
+        glLight(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
     }
 
     private static void checkCapabilities() {
@@ -246,6 +249,7 @@ public class ShadowMappingFBO {
 
         glClear(GL_DEPTH_BUFFER_BIT);
 
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
         // Set rendering states to the minimum required, for speed.
         glShadeModel(GL_FLAT);
         glDisable(GL_LIGHTING);
@@ -262,13 +266,8 @@ public class ShadowMappingFBO {
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // Setup the rendering states.
-        glShadeModel(GL_SMOOTH);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_COLOR_MATERIAL);
-        glEnable(GL_NORMALIZE);
-        glColorMask(true, true, true, true);
-        glDisable(GL_POLYGON_OFFSET_FILL);
+        glPopAttrib();
+        glViewport(0, 0, Display.getWidth(), Display.getHeight());
 
         lightProjectionTemp.load(lightProjection);
         lightModelViewTemp.load(lightModelView);
@@ -282,7 +281,6 @@ public class ShadowMappingFBO {
         Matrix4f.mul(tempMatrix, lightProjectionTemp, textureMatrix);
         Matrix4f.mul(textureMatrix, lightModelViewTemp, tempMatrix);
         Matrix4f.transpose(tempMatrix, textureMatrix);
-
     }
 
     /**
@@ -347,15 +345,7 @@ public class ShadowMappingFBO {
     private static void render() {
         glLoadIdentity();
         camera.applyTranslations();
-
-        glViewport(0, 0, Display.getWidth(), Display.getHeight());
-
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition
-        );
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        glLight(GL_LIGHT0, GL_AMBIENT, ambientLight);
-        glLight(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
 
         glEnable(GL_TEXTURE_2D);
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
