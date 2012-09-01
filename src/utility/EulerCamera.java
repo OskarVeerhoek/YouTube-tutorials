@@ -54,6 +54,18 @@ public final class EulerCamera {
     private final float zNear;
     private final float zFar;
 
+    public EulerCamera(Builder builder) {
+        this.x = builder.x;
+        this.y = builder.y;
+        this.z = builder.z;
+        this.pitch = builder.pitch;
+        this.yaw = builder.yaw;
+        this.roll = builder.roll;
+        this.aspectRatio = builder.aspectRatio;
+        this.zNear = builder.zNear;
+        this.zFar = builder.zFar;
+    }
+
     /**
      * Creates a new camera with the given aspect ratio.
      * It's located at [0 0 0] with the orientation [0 0 0]. It has a zNear of 0.3, a zFar of 100.0, and an fov of 90.
@@ -133,6 +145,29 @@ public final class EulerCamera {
         this.yaw = yaw;
         this.roll = roll;
     }
+    /**
+     * Creates a new camera with the given aspect ratio, location, zNear, zFar and orientation.
+     *
+     * @param aspectRatio the aspect ratio (width/height) of the camera
+     * @param x           the first location coordinate
+     * @param y           the second location coordinate
+     * @param z           the third location coordinate
+     * @param pitch       the pitch (rotation on the x-axis)
+     * @param yaw         the yaw (rotation on the y-axis)
+     * @param roll        the roll (rotation on the z-axis)
+     */
+    public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll, float zNear, float zFar) {
+        this.aspectRatio = aspectRatio;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.pitch = pitch;
+        this.yaw = yaw;
+        this.roll = roll;
+        this.zNear = zNear;
+        this.zFar = zFar;
+    }
+
 
     /**
      * Processes mouse input and converts it in to camera movement using the mouseSpeed value.
@@ -392,5 +427,44 @@ public final class EulerCamera {
                 + ", zFar=" + zFar + "]";
     }
 
+    public static class Builder {
+        // Required
+        private final float aspectRatio;
+        // Optional
+        private float x = 0,
+                 y = 0,
+                 z = 0,
+                 pitch = 0,
+                 yaw = 0,
+                 roll = 0;
+        private float zNear = 0.3f;
+        private float zFar = 100;
+        public Builder(float aspectRatio) {
+            this.aspectRatio = aspectRatio;
+        }
+        public Builder setzNear(float zNear) {
+            this.zNear = zNear;
+            return this;
+        }
+        public Builder setzFar(float zFar) {
+            this.zFar = zFar;
+            return this;
+        }
+        public Builder setPosition(float x, float y, float z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            return this;
+        }
+        public Builder setRotation(float pitch, float yaw, float roll) {
+            this.pitch = pitch;
+            this.yaw = yaw;
+            this.roll = roll;
+            return this;
+        }
+        public EulerCamera build() {
+            return new EulerCamera(this);
+        }
+    }
 
 }
