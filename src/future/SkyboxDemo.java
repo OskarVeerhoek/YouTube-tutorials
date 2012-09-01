@@ -67,7 +67,7 @@ public class SkyboxDemo {
     private static void input() {
         float delta = (float) timer.getElapsedTime();
         camera.processKeyboard(delta, 0.003f, 0.003f, 0.003f);
-        camera.processMouse(delta / 16, 80, -80);
+        camera.processMouse(delta, 1, 80, -80);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))

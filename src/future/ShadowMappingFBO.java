@@ -430,7 +430,7 @@ public class ShadowMappingFBO {
                 }
             }
         }
-        camera.processMouse(1.0f, 80, -80);
+        camera.processMouse(16, 1.0f, 80, -80);
         camera.processKeyboard(16.0f, 0.1f, 0.1f, 0.1f);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);

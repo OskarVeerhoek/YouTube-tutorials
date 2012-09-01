@@ -139,11 +139,12 @@ public final class EulerCamera {
     /**
      * Processes mouse input and converts it in to camera movement using the mouseSpeed value.
      *
-     * @param mouseSpeed  the speed (sensitivity) of the mouse
-     * @param maxLookUp   the maximum angle at which you can look up
-     * @param maxLookDown the maximum angle at which you can look down
+     * @param delta       the elapsed time since the last frame update in milliseconds (60fps -> 16)
+     * @param mouseSpeed  the speed (sensitivity) of the mouse, 1.0 should suffice
+     * @param maxLookUp   the maximum angle in degrees at which you can look up
+     * @param maxLookDown the maximum angle in degrees at which you can look down
      */
-    public void processMouse(float mouseSpeed, float maxLookUp, float maxLookDown) {
+    public void processMouse(float delta, float mouseSpeed, float maxLookUp, float maxLookDown) {
         if (!Mouse.isGrabbed()) return;
         float mouseDX = Mouse.getDX() * mouseSpeed * 0.16f;
         float mouseDY = Mouse.getDY() * mouseSpeed * 0.16f;
@@ -165,7 +166,7 @@ public final class EulerCamera {
     }
 
     /**
-     * @param delta  the elapsed time since the last frame update in seconds
+     * @param delta  the elapsed time since the last frame update in milliseconds
      * @param speedX the speed of the movement on the x-axis (normal = 0.003)
      * @param speedY the speed of the movement on the y-axis (normal = 0.003)
      * @param speedZ the speed of the movement on the z-axis (normal = 0.003)

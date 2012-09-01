@@ -83,7 +83,7 @@ public class MatricesDemo {
 
     private static void checkInput() {
         timer.update();
-        cam.processMouse((float) (timer.getElapsedTime() / 16), 80, -80);
+        cam.processMouse((float) timer.getElapsedTime(), 1, 80, -80);
         cam.processKeyboard((float) timer.getElapsedTime(), 0.003f, 0.003f, 0.003f);
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
