@@ -38,8 +38,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * Shows how to use OpenGL scissoring to render a specific part of the viewport.
- * Press the left mouse button to drag the bottom-left corner of scissoring area.
- * Press the right mouse button to drag the upper-right corner of scissoring area.
+ * Press the left mouse button to drag the bottom-left corner of the scissor box.
+ * Press the right mouse button to drag the upper-right corner of the scissor box.
  *
  * @author Oskar Veerhoek
  */
@@ -48,6 +48,13 @@ public class ScissorDemo {
     private static final String WINDOW_TITLE = "Scissoring!";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
+    /**
+     * The dimensions of the scissor box.
+     *  [0] is the left x-coordinate of the scissor box
+     *  [1] is the bottom y-coordinate of the scissor box
+     *  [2] is the right x-coordinate of the scissor box
+     *  [3] is the right y-coordinate of the scissor box
+     */
     private static int scissorBox[] = {0, 0, WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]};
     private static int mouseLocation[] = {0, 0};
     private static int mouseButtonPressed = -1;
