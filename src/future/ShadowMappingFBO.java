@@ -72,12 +72,12 @@ public class ShadowMappingFBO {
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final Sphere sphere = new Sphere();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
-//    private static final EulerCamera camera = new EulerCamera((float) DISPLAY_MODE.getWidth() / (float) DISPLAY_MODE.getHeight(), 100.0F, 50.0F, 200.0F, 15.51F, 328.96F, 0.0f);
     private static final EulerCamera camera = new EulerCamera.Builder((float) DISPLAY_MODE.getWidth() / (float) DISPLAY_MODE.getHeight())
         .setPosition(100.0F, 50.0F, 200.0F)
         .setRotation(15.51F, 328.96F, 0.0f)
-        .setzNear(0.3f)
-        .setzFar(100)
+        .setzNear(10)
+        .setzFar(400)
+        .setFov(45)
         .build();
 
     public static void main(String[] args) {
@@ -85,6 +85,7 @@ public class ShadowMappingFBO {
         checkCapabilities();
         setUpStates();
         setUpFBOs();
+        setUpCamera();
         while (!Display.isCloseRequested()) {
             render();
             input();
@@ -93,6 +94,11 @@ public class ShadowMappingFBO {
         }
         cleanUp();
         System.exit(0);
+    }
+
+    private static void setUpCamera() {
+        camera.applyPerspectiveMatrix();
+        camera.applyOptimalStates();
     }
 
     private static void setUpStates() {
@@ -339,10 +345,6 @@ public class ShadowMappingFBO {
     }
 
     private static void render() {
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(40, (float) Display.getWidth() / (float) Display.getHeight(), 1.0F, 1000.0F);
-        glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         camera.applyTranslations();
 
