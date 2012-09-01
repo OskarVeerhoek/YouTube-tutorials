@@ -92,7 +92,7 @@ public class PerPixelLighting {
 
     private static void checkInput() {
         timer.update();
-        camera.processMouse((float) timer.getElapsedTime(), 1, 80, -80);
+        camera.processMouse(1, 80, -80);
         camera.processKeyboard((float) timer.getElapsedTime(), 0.003f, 0.003f, 0.003f);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);

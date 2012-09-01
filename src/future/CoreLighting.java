@@ -88,7 +88,7 @@ public class CoreLighting {
     }
 
     private static void checkInput() {
-        cam.processMouse(16, 1, 80, -80);
+        cam.processMouse(1, 80, -80);
         cam.processKeyboard(16, 0.003f, 0.003f, 0.003f);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
