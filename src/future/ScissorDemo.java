@@ -56,8 +56,22 @@ public class ScissorDemo {
      *  [3] is the right y-coordinate of the scissor box
      */
     private static int scissorBox[] = {0, 0, WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]};
+    /**
+     * The location of the mouse cursor relative to the application window.
+     *  [0] is the x-coordinate of the mouse cursor (0 is left)
+     *  [1] is the y-coordinate of the mouse cursor (0 is bottom)
+     */
     private static int mouseLocation[] = {0, 0};
+    /**
+     * The mouse button which is being pressed.
+     *  -1 stands for no mouse button
+     *   0 stands for the left mouse button
+     *   1 stands for the right mouse button
+     */
     private static int mouseButtonPressed = -1;
+    /**
+     * If the width and height of the scissor box are negative.
+     */
     private static boolean scissorInverted = false;
 
     public static void main(String[] args) {
