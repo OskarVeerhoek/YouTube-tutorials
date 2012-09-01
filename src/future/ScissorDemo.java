@@ -37,7 +37,7 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Put description here.
+ * Shows how to use OpenGL scissoring to render a specific part of the viewport.
  *
  * @author Oskar Veerhoek
  */
