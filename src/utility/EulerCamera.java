@@ -202,6 +202,50 @@ public final class EulerCamera {
 
     /**
      * @param delta  the elapsed time since the last frame update in milliseconds
+     * @param speed the speed of the movement on the three axes (normal = 1.0)
+     */
+    public void processKeyboard(float delta, float speed) {
+        boolean keyUp = Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_W);
+        boolean keyDown = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || Keyboard.isKeyDown(Keyboard.KEY_S);
+        boolean keyLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_A);
+        boolean keyRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || Keyboard.isKeyDown(Keyboard.KEY_D);
+        boolean flyUp = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
+        boolean flyDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+
+        if (keyUp && keyRight && !keyLeft && !keyDown) {
+            moveFromLook(speed * delta * 0.003f, 0, -speed * delta * 0.003f);
+        }
+        if (keyUp && keyLeft && !keyRight && !keyDown) {
+            moveFromLook(-speed * delta * 0.003f, 0, -speed * delta * 0.003f);
+        }
+        if (keyUp && !keyLeft && !keyRight && !keyDown) {
+            moveFromLook(0, 0, -speed * delta * 0.003f);
+        }
+        if (keyDown && keyLeft && !keyRight && !keyUp) {
+            moveFromLook(-speed * delta * 0.003f, 0, speed * delta * 0.003f);
+        }
+        if (keyDown && keyRight && !keyLeft && !keyUp) {
+            moveFromLook(speed * delta * 0.003f, 0, speed * delta * 0.003f);
+        }
+        if (keyDown && !keyUp && !keyLeft && !keyRight) {
+            moveFromLook(0, 0, speed * delta * 0.003f);
+        }
+        if (keyLeft && !keyRight && !keyUp && !keyDown) {
+            moveFromLook(-speed * delta * 0.003f, 0, 0);
+        }
+        if (keyRight && !keyLeft && !keyUp && !keyDown) {
+            moveFromLook(speed * delta * 0.003f, 0, 0);
+        }
+        if (flyUp && !flyDown) {
+            y += speed * delta * 0.003f;
+        }
+        if (flyDown && !flyUp) {
+            y -= speed * delta * 0.003f;
+        }
+    }
+
+    /**
+     * @param delta  the elapsed time since the last frame update in milliseconds
      * @param speedX the speed of the movement on the x-axis (normal = 1.0)
      * @param speedY the speed of the movement on the y-axis (normal = 1.0)
      * @param speedZ the speed of the movement on the z-axis (normal = 1.0)

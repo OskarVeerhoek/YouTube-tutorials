@@ -78,7 +78,7 @@ public class ShadowMappingFBO {
         .setRotation(15.51F, 328.96F, 0.0f)
         .setzNear(10)
         .setzFar(400)
-        .setFov(45)
+        .setFov(60)
         .build();
 
     public static void main(String[] args) {
@@ -421,10 +421,13 @@ public class ShadowMappingFBO {
                 if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
                     System.out.println(camera);
                 }
+                if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+                    cleanUp();
+                }
             }
         }
         camera.processMouse(1.0f, 80, -80);
-        camera.processKeyboard(16.0f, 15, 15, 15);
+        camera.processKeyboard(16.0f, 15);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
