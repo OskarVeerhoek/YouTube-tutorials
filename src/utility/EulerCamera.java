@@ -338,6 +338,7 @@ public final class EulerCamera {
         int previousMatrixMode = glGetInteger(GL_MATRIX_MODE);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
+        // TODO: Add aspect ratio handling for glOrtho
         glOrtho(-1, 1, -1, 1, 0, 10000);
         glMatrixMode(previousMatrixMode);
     }
