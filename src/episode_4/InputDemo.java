@@ -42,6 +42,7 @@ import java.util.Random;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
+ * TODO: Investigate necessity of Thread.sleep() in Box class, thanks Fabien!
  * Shows how to use input coupled with threads to achieve cool results.
  *
  * @author Oskar
