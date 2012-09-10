@@ -73,7 +73,7 @@ public class ShaderDemo {
 
         EulerCamera cam = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
-        cam.setFov(60);
+        cam.setFieldOfView(60);
         cam.applyPerspectiveMatrix();
 
         setUpShaders();

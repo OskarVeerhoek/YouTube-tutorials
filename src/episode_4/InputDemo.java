@@ -51,8 +51,15 @@ public class InputDemo {
 
     private static List<Box> shapes = new ArrayList<Box>(16);
     private static boolean somethingIsSelected = false;
-    // Disregard Eclipse's whining - this variable is being used!
-    private static volatile boolean randomColorCooldown = false;
+    private static boolean randomColorCooldown = false;
+
+    private static synchronized void setRandomColorCooldown(boolean value) {
+        randomColorCooldown = value;
+    }
+
+    private static synchronized boolean getRandomColorCooldown() {
+        return randomColorCooldown;
+    }
 
     public static void main(String args[]) {
         try {
@@ -80,28 +87,39 @@ public class InputDemo {
                 Display.destroy();
                 System.exit(0);
             }
-            for (Box box : shapes) {
+            for (final Box box : shapes) {
                 if (Mouse.isButtonDown(0) && box.inBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
                     somethingIsSelected = true;
                     box.selected = true;
                 }
                 if (Mouse.isButtonDown(2) && box.inBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
-                    box.randomizeColors();
-                    randomColorCooldown = true;
-                    new Thread(new Runnable() {
+                    if (getRandomColorCooldown() == false) {
+                        setRandomColorCooldown(true);
+                    } else {
+                        new Thread(new Runnable() {
 
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(200);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } finally {
-                                randomColorCooldown = false;
+                            @Override
+                            public void run() {
+                                if (getRandomColorCooldown() == true) {
+                                    try {
+                                        System.out.println("HEY!");
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    box.randomizeColors();
+                                    randomColorCooldown = false;
+                                }
+
                             }
-
-                        }
-                    }).run();
+                        }).start();
+                        //try {
+                        //    Thread.sleep(500);
+                        //} catch (InterruptedException e) {
+                        //    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        //}
+                        //randomColorCooldown = false;
+                    }
                 }
                 if (Mouse.isButtonDown(1)) {
                     box.selected = false;

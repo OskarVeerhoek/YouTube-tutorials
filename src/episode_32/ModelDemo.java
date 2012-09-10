@@ -140,7 +140,7 @@ public class ModelDemo {
                 / (float) Display.getHeight(), -1.38f, 1.36f, 7.95f);
         cam.setPitch(-1.12f);
         cam.setYaw(0.16f);
-        cam.setFov(70);
+        cam.setFieldOfView(70);
         cam.applyPerspectiveMatrix();
     }
 

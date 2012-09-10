@@ -76,9 +76,9 @@ public class ShadowMappingFBO {
         (float) DISPLAY_MODE.getWidth() / (float) DISPLAY_MODE.getHeight())
         .setPosition(100.0F, 50.0F, 200.0F)
         .setRotation(15.51F, 328.96F, 0.0f)
-        .setzNear(10)
-        .setzFar(400)
-        .setFov(60)
+        .setNearClippingPane(10)
+        .setFarClippingPane(400)
+        .setFieldOfView(60)
         .build();
 
     public static void main(String[] args) {
