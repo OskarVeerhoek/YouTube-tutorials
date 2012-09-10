@@ -45,7 +45,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class HappyEaster {
 
-    private static EulerCamera cam;
+    private static Camera camera;
     private static float[] lightPosition = {-2.19f, 1.36f, 11.45f, 1f};
     private static int bunnyDisplayList;
 
@@ -104,11 +104,11 @@ public class HappyEaster {
     }
 
     private static void checkInput() {
-        cam.processMouse(1, 80, -80);
-        cam.processKeyboard(16, 1, 1, 1);
+        camera.processMouse(1, 80, -80);
+        camera.processKeyboard(16, 1, 1, 1);
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(lightPosition));
         if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-            lightPosition = new float[]{cam.x(), cam.y(), cam.z(), 1};
+            lightPosition = new float[]{camera.x(), camera.y(), camera.z(), 1};
         }
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
@@ -124,7 +124,7 @@ public class HappyEaster {
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
-        cam.applyTranslations();
+        camera.applyTranslations();
         glCallList(bunnyDisplayList);
     }
 
@@ -144,10 +144,13 @@ public class HappyEaster {
     }
 
     private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
-        cam.setFieldOfView(70);
-        cam.applyPerspectiveMatrix();
+        camera = new EulerCamera.Builder()
+                .setAspectRatio((float) Display.getWidth() / Display.getHeight())
+                .setPosition(-2.19f, 1.36f, 11.45f)
+                .setFieldOfView(70)
+                .build();
+        camera.applyOptimalStates();
+        camera.applyPerspectiveMatrix();
     }
 
     private static void setUpDisplay() {
