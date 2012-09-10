@@ -52,7 +52,7 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
  */
 public class MatricesDemo {
 
-    private static EulerCamera cam;
+    private static EulerCamera camera;
     private static int shaderProgram;
     private static int vboVertexHandle;
     private static int vboNormalHandle;
@@ -83,16 +83,16 @@ public class MatricesDemo {
 
     private static void checkInput() {
         timer.update();
-        cam.processMouse(1, 80, -80);
-        cam.processKeyboard((float) timer.getElapsedTime(), 1, 1, 1);
+        camera.processMouse(1, 80, -80);
+        camera.processKeyboard((float) timer.getElapsedTime(), 1, 1, 1);
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 switch (Keyboard.getEventKey()) {
                     case Keyboard.KEY_O:
-                        cam.applyOrthographicMatrix();
+                        camera.applyOrthographicMatrix();
                         break;
                     case Keyboard.KEY_P:
-                        cam.applyPerspectiveMatrix();
+                        camera.applyPerspectiveMatrix();
                         break;
                 }
             }
@@ -113,9 +113,9 @@ public class MatricesDemo {
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
-        cam.applyTranslations();
+        camera.applyTranslations();
         glUseProgram(shaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(camera.x(), camera.y(), camera.z(), 1));
         glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
         glVertexPointer(3, GL_FLOAT, 0, 0L);
         glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
@@ -169,10 +169,11 @@ public class MatricesDemo {
     }
 
     private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth()
+        camera = new EulerCamera((float) Display.getWidth()
                 / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
-        cam.setFieldOfView(70);
-        cam.applyPerspectiveMatrix();
+        camera.setFieldOfView(70);
+        camera.applyOptimalStates();
+        camera.applyPerspectiveMatrix();
     }
 
     private static void setUpDisplay() {

@@ -34,10 +34,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
-import utility.EulerCamera;
-import utility.Face;
-import utility.Model;
-import utility.OBJLoader;
+import utility.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -52,7 +49,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ModelDemo {
 
-    private static EulerCamera cam;
+    private static Camera camera;
     private static int bunnyDisplayList;
 
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
@@ -108,8 +105,8 @@ public class ModelDemo {
     }
 
     private static void checkInput() {
-        cam.processMouse(1, 80, -80);
-        cam.processKeyboard(16, 1, 1, 1);
+        camera.processMouse(1, 80, -80);
+        camera.processKeyboard(16, 1, 1, 1);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
@@ -124,18 +121,19 @@ public class ModelDemo {
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
-        cam.applyTranslations();
+        camera.applyTranslations();
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         glCallList(bunnyDisplayList);
     }
 
     private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -1.38f, 1.36f, 7.95f);
-        cam.setPitch(-1.12f);
-        cam.setYaw(0.16f);
-        cam.setFieldOfView(70);
-        cam.applyPerspectiveMatrix();
+        camera = new EulerCamera.Builder()
+                .setRotation(-1.12f, 0.16f, 0f)
+                .setPosition(-1.38f, 1.36f, 7.95f)
+                .setFieldOfView(60)
+                .build();
+        camera.applyOptimalStates();
+        camera.applyPerspectiveMatrix();
     }
 
     private static void setUpDisplay() {
