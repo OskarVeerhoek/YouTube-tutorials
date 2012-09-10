@@ -526,7 +526,7 @@ public final class EulerCamera {
     /**
      * @return the x-coordinate of the camera
      */
-    public float getX() {
+    public float x() {
         return x;
     }
 
@@ -541,7 +541,7 @@ public final class EulerCamera {
     /**
      * @return y the y-coordinate of the camera
      */
-    public float getY() {
+    public float y() {
         return y;
     }
 
@@ -556,7 +556,7 @@ public final class EulerCamera {
     /**
      * @return the z-coordinate of the camera
      */
-    public float getZ() {
+    public float z() {
         return z;
     }
 
@@ -571,7 +571,7 @@ public final class EulerCamera {
     /**
      * @return the pitch of the camera in degrees
      */
-    public float getPitch() {
+    public float pitch() {
         return pitch;
     }
 
@@ -586,7 +586,7 @@ public final class EulerCamera {
     /**
      * @return the yaw of the camera in degrees
      */
-    public float getYaw() {
+    public float yaw() {
         return yaw;
     }
 
@@ -601,7 +601,7 @@ public final class EulerCamera {
     /**
      * @return the roll of the camera in degrees
      */
-    public float getRoll() {
+    public float roll() {
         return roll;
     }
 
@@ -632,7 +632,7 @@ public final class EulerCamera {
     /**
      * @return the aspect ratio of the camera
      */
-    public float getAspectRatio() {
+    public float aspectRatio() {
         return aspectRatio;
     }
 

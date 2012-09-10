@@ -108,7 +108,7 @@ public class HappyEaster {
         cam.processKeyboard(16, 1, 1, 1);
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(lightPosition));
         if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
-            lightPosition = new float[]{cam.getX(), cam.getY(), cam.getZ(), 1};
+            lightPosition = new float[]{cam.x(), cam.y(), cam.z(), 1};
         }
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);

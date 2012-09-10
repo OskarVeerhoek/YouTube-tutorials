@@ -90,7 +90,7 @@ public class TextDemo {
         glLoadIdentity();
         cam.applyTranslations();
         glUseProgram(shaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(cam.getX(), cam.getY(), cam.getZ(), 1));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
         glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
         glVertexPointer(3, GL_FLOAT, 0, 0L);
         glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
@@ -110,8 +110,8 @@ public class TextDemo {
         glPushMatrix();
         glLoadIdentity();
         glDisable(GL_LIGHTING);
-        font.drawString(10, 10, "EulerCamera: [x=" + formatter.format(cam.getX()) +
-                ",y=" + formatter.format(cam.getY()) + ",z=" + formatter.format(cam.getZ()) + "]");
+        font.drawString(10, 10, "EulerCamera: [x=" + formatter.format(cam.x()) +
+                ",y=" + formatter.format(cam.y()) + ",z=" + formatter.format(cam.z()) + "]");
         glEnable(GL_LIGHTING);
         glPopMatrix();
         glMatrixMode(GL_PROJECTION);
