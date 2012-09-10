@@ -72,14 +72,14 @@ public class ShadowMappingFBO {
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final Sphere sphere = new Sphere();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
-    private static final EulerCamera camera = new EulerCamera.Builder(
-        (float) DISPLAY_MODE.getWidth() / (float) DISPLAY_MODE.getHeight())
-        .setPosition(100.0F, 50.0F, 200.0F)
-        .setRotation(15.51F, 328.96F, 0.0f)
-        .setNearClippingPane(10)
-        .setFarClippingPane(400)
-        .setFieldOfView(60)
-        .build();
+    private static final EulerCamera camera = new EulerCamera.Builder()
+            .setAspectRatio((float) DISPLAY_MODE.getWidth() / DISPLAY_MODE.getHeight())
+            .setPosition(100.0F, 50.0F, 200.0F)
+            .setRotation(15.51F, 328.96F, 0.0f)
+            .setNearClippingPane(10)
+            .setFarClippingPane(400)
+            .setFieldOfView(60)
+            .build();
 
     public static void main(String[] args) {
         setUpDisplay();

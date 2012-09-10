@@ -44,8 +44,8 @@ import static org.lwjgl.opengl.GL11.*;
  * Example code:
  * <pre>
  // Initialisation Code
- private static final EulerCamera camera = new EulerCamera.Builder(
-    (float) DISPLAY_MODE.getWidth() / (float) DISPLAY_MODE.getHeight())
+ private static final EulerCamera camera = new EulerCamera.Builder()
+    .setAspectRatio(width/height)
     .setPosition(10, -5, 2)
     .setRotation(45, 10, 0)
     .setFieldOfView(60)
@@ -61,7 +61,7 @@ import static org.lwjgl.opengl.GL11.*;
  *
  * @author Oskar Veerhoek
  */
-public final class EulerCamera {
+public final class EulerCamera implements Camera {
 
     private float x = 0;
     private float y = 0;
@@ -70,7 +70,7 @@ public final class EulerCamera {
     private float yaw = 0;
     private float roll = 0;
     private float fov = 90;
-    private final float aspectRatio;
+    private float aspectRatio = 1;
     private final float zNear;
     private final float zFar;
 
@@ -85,6 +85,15 @@ public final class EulerCamera {
         this.zNear = builder.zNear;
         this.zFar = builder.zFar;
         this.fov = builder.fov;
+    }
+
+    /**
+     * Creates a new camera with the given aspect ratio.
+     * It's located at [0 0 0] with the orientation [0 0 0]. It has a zNear of 0.3, a zFar of 100.0, and an fov of 90.
+     */
+    public EulerCamera() {
+        this.zNear = 0.3f;
+        this.zFar = 100;
     }
 
     /**
@@ -488,13 +497,13 @@ public final class EulerCamera {
      * Applies the camera translations and rotations to GL_MODELVIEW.
      */
     public void applyTranslations() {
-        int previousMatrixMode = glGetInteger(GL_MATRIX_MODE);
+        glPushAttrib(GL_TRANSFORM_BIT);
         glMatrixMode(GL_MODELVIEW);
         glRotatef(pitch, 1, 0, 0);
         glRotatef(yaw, 0, 1, 0);
         glRotatef(roll, 0, 0, 1);
         glTranslatef(-x, -y, -z);
-        glMatrixMode(previousMatrixMode);
+        glPopAttrib();
     }
 
     /**
@@ -511,31 +520,10 @@ public final class EulerCamera {
     }
 
     /**
-     * Applies a translation to the camera.
-     *
-     * @param x the x-coordinate of the translation vector
-     * @param y the y-coordinate of the translation vector
-     * @param z the z-coordinate of the translation vector
-     */
-    public void translate(float x, float y, float z) {
-        this.x += x;
-        this.y += y;
-        this.z += z;
-    }
-
-    /**
      * @return the x-coordinate of the camera
      */
     public float x() {
         return x;
-    }
-
-    /**
-     * Sets the x-coordinate of the camera.
-     * @param x the x-coordinate of the camera
-     */
-    public void setX(float x) {
-        this.x = x;
     }
 
     /**
@@ -546,26 +534,10 @@ public final class EulerCamera {
     }
 
     /**
-     * Sets the y-coordinate of the camera.
-     * @param y the y-coordinate of the camera
-     */
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    /**
      * @return the z-coordinate of the camera
      */
     public float z() {
         return z;
-    }
-
-    /**
-     * Sets the z-coordinate of the camera.
-     * @param z the z-coordinate of the camera
-     */
-    public void setZ(float z) {
-        this.z = z;
     }
 
     /**
@@ -576,14 +548,6 @@ public final class EulerCamera {
     }
 
     /**
-     * Sets the pitch in degrees of the camera.
-     * @param pitch the pitch of the camera in degrees
-     */
-    public void setPitch(float pitch) {
-        this.pitch = pitch;
-    }
-
-    /**
      * @return the yaw of the camera in degrees
      */
     public float yaw() {
@@ -591,26 +555,10 @@ public final class EulerCamera {
     }
 
     /**
-     * Sets the yaw in degrees of the camera.
-     * @param yaw the yaw in degrees of the camera
-     */
-    public void setYaw(float yaw) {
-        this.yaw = yaw;
-    }
-
-    /**
      * @return the roll of the camera in degrees
      */
     public float roll() {
         return roll;
-    }
-
-    /**
-     * Sets the roll in degrees of the camera.
-     * @param roll the roll of the camera in degrees
-     */
-    public void setRoll(float roll) {
-        this.roll = roll;
     }
 
     /**
@@ -662,9 +610,7 @@ public final class EulerCamera {
      * A builder helper class for the EulerCamera class.
      */
     public static class Builder {
-        // Required
-        private final float aspectRatio;
-        // Optional
+        private float aspectRatio = 1;
         private float x = 0,
                  y = 0,
                  z = 0,
@@ -674,22 +620,20 @@ public final class EulerCamera {
         private float zNear = 0.3f;
         private float zFar = 100;
         private float fov = 90;
-        private Builder() {
-            throw new AssertionError();
+        public Builder() {
+
         }
         /**
-         * Creates a new camera with the given aspect ratio.
-         * It's located at [0 0 0] with the orientation [0 0 0]. It has a zNear of 0.3, a zFar of 100.0, and an fov of 90.
-         *
-         * @param aspectRatio the aspect ratio (width/height) of the camera
-         *
-         * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0
+         * Sets the aspect ratio of the camera.
+         * @param aspectRatio the aspect ratio of the camera (window width / window height)
+         * @return this
          */
-        public Builder(float aspectRatio) {
+        public Builder setAspectRatio(float aspectRatio) {
             if (aspectRatio <= 0) {
                 throw new IllegalArgumentException("aspectRatio " + aspectRatio + " was 0 or was smaller than 0");
             }
             this.aspectRatio = aspectRatio;
+            return this;
         }
 
         /**
