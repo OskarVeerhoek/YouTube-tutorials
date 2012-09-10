@@ -154,6 +154,14 @@ public interface Camera {
      * @param fov the field of view angle in degrees in the y direction
      */
     public void setFieldOfView(float fov);
+
+    /**
+     * Sets the aspect ratio of the camera. Note that, to see any effect, you must call applyPerspectiveMatrix
+     * or applyOrthographicMatrix.
+     * @param aspectRatio the aspect ratio of the camera
+     * @throws IllegalArgumentException if aspectRatio is 0 or less
+     */
+    public void setAspectRatio(float aspectRatio);
     /**
      * @return the aspect ratio of the camera
      */
