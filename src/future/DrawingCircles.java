@@ -30,6 +30,7 @@
 package future;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
@@ -43,22 +44,59 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class DrawingCircles {
 
-    private static void glCircle3f(float radius) {
+    /**
+     * Draws a circle at [0 0 0] with the given radius.
+     * @param radius the radius of the circle
+     */
+    private static void drawCirclef(float radius) {
         glBegin(GL_TRIANGLE_FAN);
-        glVertex2f(0, 0);
         for (float angle = 0; angle < 360; angle += 0.5) {
             glVertex2d(Math.sin(angle) * radius, Math.cos(angle) * radius);
         }
         glEnd();
     }
 
+    /**
+     * Draws a circle at [0 0 0] with the given radius and precision.
+     * @param radius the radius of the circle
+     * @param precision the precision of the circle (1.0 is normal, lower is higher precision)
+     */
+    private static void drawCircleWithPrecisionf(float radius, float precision) {
+        glBegin(GL_TRIANGLE_FAN);
+        for (float angle = 0; angle < 360; angle += precision) {
+            glVertex2d(Math.sin(angle) * radius, Math.cos(angle) * radius);
+        }
+        glEnd();
+    }
+
+    private static float step = 3;
+    private static float speed = 0.0001f;
+
     private static void render() {
-        glCircle3f(1);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        String error = GLU.gluErrorString(glGetError());
+        if (!error.equals("No error")) {
+            System.err.println(error);
+        }
+        if (step < 0.001f) {
+            step = 180;
+        } else {
+//            step *= 0.9999f;
+            step -= speed;
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+            speed += 0.0000001f;
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+            speed -= 0.0000001f;
+        }
+        System.out.println(speed);
+        drawCircleWithPrecisionf(1, step);
     }
 
     public static void main(String[] args) {
         try {
-            Display.setDisplayMode(new DisplayMode(640, 640));
+//            Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
+            Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setVSyncEnabled(true);
             Display.setTitle("Drawing Circles");
             Display.create();
@@ -68,11 +106,15 @@ public class DrawingCircles {
             System.exit(1);
         }
         glMatrixMode(GL_PROJECTION);
-        glOrtho(1, -1, 1, -1, 1, -1);
+        glOrtho(-1.7, 1.7, -1, 1, -1, 1);
         glMatrixMode(GL_MODELVIEW);
+        glClear(GL_COLOR_BUFFER_BIT);
         while (!Display.isCloseRequested()) {
-            glClear(GL_COLOR_BUFFER_BIT);
-            glCircle3f(1);
+           glClear(GL_COLOR_BUFFER_BIT);
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+                Display.destroy();
+            }
+            render();
             Display.update();
             Display.sync(60);
         }
