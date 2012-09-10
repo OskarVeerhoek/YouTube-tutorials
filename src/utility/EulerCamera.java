@@ -458,8 +458,7 @@ public final class EulerCamera {
         glPushAttrib(GL_TRANSFORM_BIT);
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        // TODO: Add aspect ratio handling for glOrtho
-        glOrtho(-1, 1, -1, 1, 0, zFar);
+        glOrtho(-aspectRatio, aspectRatio, -1, 1, 0, zFar);
         glPopAttrib();
     }
 
@@ -675,6 +674,9 @@ public final class EulerCamera {
         private float zNear = 0.3f;
         private float zFar = 100;
         private float fov = 90;
+        private Builder() {
+            throw new AssertionError();
+        }
         /**
          * Creates a new camera with the given aspect ratio.
          * It's located at [0 0 0] with the orientation [0 0 0]. It has a zNear of 0.3, a zFar of 100.0, and an fov of 90.
