@@ -394,7 +394,7 @@ public final class EulerCamera {
     }
 
     /**
-     * Applies the camera translations along the three axes to GL_MODELVIEW.
+     * Applies the camera translations and rotations to GL_MODELVIEW.
      */
     public void applyTranslations() {
         int previousMatrixMode = glGetInteger(GL_MATRIX_MODE);
@@ -407,7 +407,7 @@ public final class EulerCamera {
     }
 
     /**
-     * Sets the rotation of the camera in euler angles.
+     * Sets the rotation of the camera.
      *
      * @param pitch the rotation around the x-axis in degrees
      * @param yaw   the rotation around the y-axis in degrees
@@ -420,7 +420,7 @@ public final class EulerCamera {
     }
 
     /**
-     * Applies a translation of [x y z] to the camera.
+     * Applies a translation to the camera.
      *
      * @param x the x-coordinate of the translation vector
      * @param y the y-coordinate of the translation vector
@@ -432,75 +432,128 @@ public final class EulerCamera {
         this.z += z;
     }
 
+    /**
+     * @return the x-coordinate of the camera
+     */
     public float getX() {
         return x;
     }
 
+    /**
+     * Sets the x-coordinate of the camera.
+     * @param x the x-coordinate of the camera
+     */
     public void setX(float x) {
         this.x = x;
     }
 
+    /**
+     * @return y the y-coordinate of the camera
+     */
     public float getY() {
         return y;
     }
 
+    /**
+     * Sets the y-coordinate of the camera.
+     * @param y the y-coordinate of the camera
+     */
     public void setY(float y) {
         this.y = y;
     }
 
+    /**
+     * @return the z-coordinate of the camera
+     */
     public float getZ() {
         return z;
     }
 
+    /**
+     * Sets the z-coordinate of the camera.
+     * @param z the z-coordinate of the camera
+     */
     public void setZ(float z) {
         this.z = z;
     }
 
+    /**
+     * @return the pitch of the camera in degrees
+     */
     public float getPitch() {
         return pitch;
     }
 
+    /**
+     * Sets the pitch in degrees of the camera.
+     * @param pitch the pitch of the camera in degrees
+     */
     public void setPitch(float pitch) {
         this.pitch = pitch;
     }
 
+    /**
+     * @return the yaw of the camera in degrees
+     */
     public float getYaw() {
         return yaw;
     }
 
+    /**
+     * Sets the yaw in degrees of the camera.
+     * @param yaw the yaw in degrees of the camera
+     */
     public void setYaw(float yaw) {
         this.yaw = yaw;
     }
 
+    /**
+     * @return the roll of the camera in degrees
+     */
     public float getRoll() {
         return roll;
     }
 
+    /**
+     * Sets the roll in degrees of the camera.
+     * @param roll the roll of the camera in degrees
+     */
     public void setRoll(float roll) {
         this.roll = roll;
     }
 
+    /**
+     * @return the fov of the camera in degrees in the y direction
+     */
     public float getFov() {
         return fov;
     }
 
     /**
      * Sets the field of view angle in degrees in the y direction.
-     *
      * @param fov the field of view angle in degrees in the y direction
      */
     public void setFov(float fov) {
         this.fov = fov;
     }
 
+    /**
+     * @return the aspect ratio of the camera
+     */
     public float getAspectRatio() {
         return aspectRatio;
     }
 
+    /**
+     * @return the z-near value of the camera
+     */
     public float getzNear() {
         return zNear;
     }
 
+    /**
+     * @return the z-far value of the camera
+     */
     public float getzFar() {
         return zFar;
     }
