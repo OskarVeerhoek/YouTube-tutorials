@@ -40,6 +40,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 /**
  * A camera set in 3D perspective. The camera uses Euler angles internally, so a gimble lock could occur.
+ * // TODO: http://www.youtube.com/watch?v=aV3gKoS_DAg&lc=qh6Nrm78F36_ANdW5-rIfk8b8RPDqVfQLNVQRiwKRT4&feature=inbox
  *
  * @author Oskar Veerhoek
  */
