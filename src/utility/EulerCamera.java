@@ -41,24 +41,6 @@ import static org.lwjgl.opengl.GL11.*;
 /**
  * A camera set in 3D perspective. The camera uses Euler angles internally, so beware of a gimbal lock.
  *
- * Example code:
- * <pre>
- // Initialisation Code
- private static final EulerCamera camera = new EulerCamera.Builder()
-    .setAspectRatio(width/height)
-    .setPosition(10, -5, 2)
-    .setRotation(45, 10, 0)
-    .setFieldOfView(60)
-    .build();
- camera.applyPerspectiveMatrix();
- // Render Code
- GL11.glLoadIdentity();
- camera.applyTranslations();
- // Input Code
- camera.processMouse(1);
- camera.processKeyboard(16, 1);
- * </pre>
- *
  * @author Oskar Veerhoek
  */
 public final class EulerCamera implements Camera {
