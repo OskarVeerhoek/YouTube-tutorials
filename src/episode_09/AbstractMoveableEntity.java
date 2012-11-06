@@ -27,14 +27,40 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_8;
+package episode_09;
 
-public interface MoveableEntity extends Entity {
-    public double getDX();
+public abstract class AbstractMoveableEntity extends AbstractEntity implements
+        MoveableEntity {
 
-    public double getDY();
+    protected double dx, dy;
 
-    public void setDX(double dx);
+    public AbstractMoveableEntity(double x, double y, double width,
+                                  double height) {
+        super(x, y, width, height);
+        this.dx = 0;
+        this.dy = 0;
+    }
 
-    public void setDY(double dy);
+    @Override
+    public void update(int delta) {
+        this.x += delta * dx;
+        this.y += delta * dy;
+    }
+
+    public double getDX() {
+        return dx;
+    }
+
+    public double getDY() {
+        return dy;
+    }
+
+    public void setDX(double dx) {
+        this.dx = dx;
+    }
+
+    public void setDY(double dy) {
+        this.dy = dy;
+    }
+
 }

@@ -27,40 +27,72 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_9;
+package episode_09;
 
-public abstract class AbstractMoveableEntity extends AbstractEntity implements
-        MoveableEntity {
+import java.awt.*;
 
-    protected double dx, dy;
+public abstract class AbstractEntity implements Entity {
 
-    public AbstractMoveableEntity(double x, double y, double width,
-                                  double height) {
-        super(x, y, width, height);
-        this.dx = 0;
-        this.dy = 0;
+    protected double x, y, width, height;
+    protected Rectangle hitbox = new Rectangle();
+
+    public AbstractEntity(double x, double y, double width, double height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     @Override
-    public void update(int delta) {
-        this.x += delta * dx;
-        this.y += delta * dy;
+    public void setLocation(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
-    public double getDX() {
-        return dx;
+    @Override
+    public void setX(double x) {
+        this.x = x;
     }
 
-    public double getDY() {
-        return dy;
+    @Override
+    public void setY(double y) {
+        this.y = y;
     }
 
-    public void setDX(double dx) {
-        this.dx = dx;
+    @Override
+    public void setWidth(double width) {
+        this.width = width;
     }
 
-    public void setDY(double dy) {
-        this.dy = dy;
+    @Override
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    @Override
+    public double getX() {
+        return x;
+    }
+
+    @Override
+    public double getY() {
+        return y;
+    }
+
+    @Override
+    public double getHeight() {
+        return height;
+    }
+
+    @Override
+    public double getWidth() {
+        return width;
+    }
+
+    @Override
+    public boolean intersects(Entity other) {
+        hitbox.setBounds((int) x, (int) y, (int) width, (int) height);
+        return hitbox.intersects(other.getX(), other.getY(), other.getWidth(), other.getHeight());
     }
 
 }
