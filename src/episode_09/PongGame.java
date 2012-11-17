@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_9;
+package episode_09;
 
 
 import org.lwjgl.LWJGLException;

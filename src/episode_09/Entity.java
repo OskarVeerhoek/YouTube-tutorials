@@ -27,72 +27,31 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_9;
+package episode_09;
 
-import java.awt.*;
+public interface Entity {
+    public void draw();
 
-public abstract class AbstractEntity implements Entity {
+    // See episode 7
+    public void update(int delta);
 
-    protected double x, y, width, height;
-    protected Rectangle hitbox = new Rectangle();
+    public void setLocation(double x, double y);
 
-    public AbstractEntity(double x, double y, double width, double height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
+    public void setX(double x);
 
-    @Override
-    public void setLocation(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
+    public void setY(double y);
 
-    @Override
-    public void setX(double x) {
-        this.x = x;
-    }
+    public void setWidth(double width);
 
-    @Override
-    public void setY(double y) {
-        this.y = y;
-    }
+    public void setHeight(double height);
 
-    @Override
-    public void setWidth(double width) {
-        this.width = width;
-    }
+    public double getX();
 
-    @Override
-    public void setHeight(double height) {
-        this.height = height;
-    }
+    public double getY();
 
-    @Override
-    public double getX() {
-        return x;
-    }
+    public double getHeight();
 
-    @Override
-    public double getY() {
-        return y;
-    }
+    public double getWidth();
 
-    @Override
-    public double getHeight() {
-        return height;
-    }
-
-    @Override
-    public double getWidth() {
-        return width;
-    }
-
-    @Override
-    public boolean intersects(Entity other) {
-        hitbox.setBounds((int) x, (int) y, (int) width, (int) height);
-        return hitbox.intersects(other.getX(), other.getY(), other.getWidth(), other.getHeight());
-    }
-
+    public boolean intersects(Entity other);
 }

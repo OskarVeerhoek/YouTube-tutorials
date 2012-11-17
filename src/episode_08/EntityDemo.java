@@ -27,21 +27,22 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_7;
+package episode_08;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Shows framerate-independent movement
+ * Shows the use of an entity driven game engine
  *
  * @author Oskar
  */
-public class TimerDemo {
+public class EntityDemo {
 
     private static long lastFrame;
 
@@ -49,17 +50,48 @@ public class TimerDemo {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
-    private static double getDelta() {
+    private static int getDelta() {
         long currentTime = getTime();
-        double delta = (double) (currentTime - lastFrame);
+        int delta = (int) (currentTime - lastFrame);
         lastFrame = getTime();
         return delta;
+    }
+
+    private static class Box extends AbstractMoveableEntity {
+        public Box(double x, double y, double width, double height) {
+            super(x, y, width, height);
+        }
+
+        @Override
+        public void draw() {
+            glRectd(x, y, x + width, y + height);
+        }
+
+    }
+
+    private static class Point extends AbstractEntity {
+
+        public Point(double x, double y) {
+            super(x, y, 1, 1);
+        }
+
+        @Override
+        public void draw() {
+            glBegin(GL_POINTS);
+            glVertex2d(x, y);
+            glEnd();
+        }
+
+        @Override
+        public void update(int delta) {
+            // Do nothing
+        }
     }
 
     public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
-            Display.setTitle("Timer Demo");
+            Display.setTitle("Entity Demo");
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
@@ -67,10 +99,9 @@ public class TimerDemo {
             System.exit(1);
         }
 
-        int x = 100;
-        int y = 100;
-        int dx = 1;
-        int dy = 1;
+        // Initialization code Entities
+        MoveableEntity box = new Box(100, 100, 50, 50);
+        Entity point = new Point(10, 10);
 
         // Initialization code OpenGL
         glMatrixMode(GL_PROJECTION);
@@ -83,13 +114,20 @@ public class TimerDemo {
         while (!Display.isCloseRequested()) {
             // Render
 
+            point.setLocation(Mouse.getX(), 480 - Mouse.getY() - 1);
+
             glClear(GL_COLOR_BUFFER_BIT);
 
-            double delta = getDelta();
-            x += delta * dx * 0.1;
-            y += delta * dy * 0.1;
+            int delta = getDelta();
+            box.update(delta);
+            point.update(delta);
 
-            glRecti(x, y, x + 30, y + 30);
+            if (box.intersects(point)) {
+                box.setDX(0.2);
+            }
+
+            point.draw();
+            box.draw();
 
             Display.update();
             Display.sync(60);
@@ -97,91 +135,5 @@ public class TimerDemo {
 
         Display.destroy();
         System.exit(0);
-    }
-}
-
-interface Entity2D {
-    public float getX();
-
-    public float getY();
-
-    public void setX(float x);
-
-    public void setY(float y);
-
-    public void setLocation(float x, float y);
-
-    public void setUp();
-
-    public void destroy();
-
-    public void draw();
-}
-
-abstract class AbstractEntity2D implements Entity2D {
-    protected float x;
-    protected float y;
-
-    public float getX() {
-        return x;
-    }
-
-    public float getY() {
-        return y;
-    }
-
-    public void setX(float x) {
-        this.x = x;
-    }
-
-    public void setY(float y) {
-        this.y = y;
-    }
-
-    public void setLocation(float x, float y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public abstract void setUp();
-
-    public abstract void destroy();
-
-    public abstract void draw();
-}
-
-class Box2D extends AbstractEntity2D {
-    protected float size;
-
-    public Box2D(float x, float y, float size) {
-        this.x = x;
-        this.y = y;
-        this.size = size;
-    }
-
-    public Box2D() {
-        this.x = this.y = this.size = 0;
-    }
-
-    @Override
-    public void setUp() {
-        // We don't need anything here for a box
-    }
-
-    @Override
-    public void destroy() {
-        // We don't need anything here for a box
-    }
-
-    @Override
-    public void draw() {
-        glBegin(GL_TRIANGLES);
-        glVertex2f(x + size / 2, y + size / 2);
-        glVertex2f(x + size / 2, y - size / 2);
-        glVertex2f(x - size / 2, y - size / 2);
-        glVertex2f(x - size / 2, y - size / 2);
-        glVertex2f(x - size / 2, y + size / 2);
-        glVertex2f(x + size / 2, y + size / 2);
-        glEnd();
     }
 }

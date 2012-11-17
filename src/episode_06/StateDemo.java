@@ -27,113 +27,93 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_8;
+package episode_06;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.Sys;
-import org.lwjgl.input.Mouse;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Shows the use of an entity driven game engine
+ * Shows the use of different game states.
  *
  * @author Oskar
  */
-public class EntityDemo {
+public class StateDemo {
 
-    private static long lastFrame;
-
-    private static long getTime() {
-        return (Sys.getTime() * 1000) / Sys.getTimerResolution();
+    private static enum State {
+        INTRO, MAIN_MENU, GAME;
     }
 
-    private static int getDelta() {
-        long currentTime = getTime();
-        int delta = (int) (currentTime - lastFrame);
-        lastFrame = getTime();
-        return delta;
-    }
+    private static State state = State.INTRO;
 
-    private static class Box extends AbstractMoveableEntity {
-        public Box(double x, double y, double width, double height) {
-            super(x, y, width, height);
-        }
-
-        @Override
-        public void draw() {
-            glRectd(x, y, x + width, y + height);
-        }
-
-    }
-
-    private static class Point extends AbstractEntity {
-
-        public Point(double x, double y) {
-            super(x, y, 1, 1);
-        }
-
-        @Override
-        public void draw() {
-            glBegin(GL_POINTS);
-            glVertex2d(x, y);
-            glEnd();
-        }
-
-        @Override
-        public void update(int delta) {
-            // Do nothing
-        }
-    }
-
-    public static void main(String[] args) {
+    public static void main(String args[]) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
-            Display.setTitle("Entity Demo");
+            Display.setTitle("State Demo");
             Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
             Display.destroy();
             System.exit(1);
         }
-
-        // Initialization code Entities
-        MoveableEntity box = new Box(100, 100, 50, 50);
-        Entity point = new Point(10, 10);
-
-        // Initialization code OpenGL
         glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
         glOrtho(0, 640, 480, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW);
-
-        lastFrame = getTime();
-
         while (!Display.isCloseRequested()) {
-            // Render
-
-            point.setLocation(Mouse.getX(), 480 - Mouse.getY() - 1);
-
-            glClear(GL_COLOR_BUFFER_BIT);
-
-            int delta = getDelta();
-            box.update(delta);
-            point.update(delta);
-
-            if (box.intersects(point)) {
-                box.setDX(0.2);
-            }
-
-            point.draw();
-            box.draw();
-
+            checkInput();
+            render();
             Display.update();
             Display.sync(60);
         }
 
         Display.destroy();
-        System.exit(0);
+    }
+
+    private static void render() {
+        glClear(GL_COLOR_BUFFER_BIT);
+        switch (state) {
+            case INTRO:
+                glColor3f(1.0f, 0f, 0f);
+                glRectf(0, 0, 640, 480);
+                break;
+            case GAME:
+                glColor3f(0f, 1.0f, 0f);
+                glRectf(0, 0, 640, 480);
+                break;
+            case MAIN_MENU:
+                glColor3f(0f, 0f, 1.0f);
+                glRectf(0, 0, 640, 480);
+                break;
+        }
+    }
+
+    private static void checkInput() {
+        switch (state) {
+            case INTRO:
+                if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+                    state = State.MAIN_MENU;
+                }
+                if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+                    Display.destroy();
+                    System.exit(0);
+                }
+                break;
+            case GAME:
+                if (Keyboard.isKeyDown(Keyboard.KEY_BACK)) {
+                    state = State.MAIN_MENU;
+                }
+                break;
+            case MAIN_MENU:
+                if (Keyboard.isKeyDown(Keyboard.KEY_RETURN)) {
+                    state = State.GAME;
+                }
+                if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+                    state = State.INTRO;
+                }
+                break;
+        }
     }
 }

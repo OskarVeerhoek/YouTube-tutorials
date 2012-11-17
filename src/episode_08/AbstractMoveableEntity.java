@@ -27,31 +27,42 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package episode_8;
+package episode_08;
 
-public interface Entity {
-    public void draw();
+public abstract class AbstractMoveableEntity extends AbstractEntity implements
+        MoveableEntity {
 
-    // See episode 7
-    public void update(int delta);
+    protected double dx, dy;
 
-    public void setLocation(double x, double y);
+    public AbstractMoveableEntity(double x, double y, double width,
+                                  double height) {
+        super(x, y, width, height);
+        this.dx = 0;
+        this.dy = 0;
+    }
 
-    public void setX(double x);
+    @Override
+    public void update(int delta) {
+        this.x += delta * dx;
+        this.y += delta * dy;
+    }
 
-    public void setY(double y);
+    public double getDX() {
+        return dx;
+    }
 
-    public void setWidth(double width);
+    public double getDY() {
+        return dy;
+    }
 
-    public void setHeight(double height);
+    public void setDX(double dx) {
+        this.dx = dx;
+    }
 
-    public double getX();
+    public void setDY(double dy) {
+        this.dy = dy;
+    }
 
-    public double getY();
-
-    public double getHeight();
-
-    public double getWidth();
-
-    public boolean intersects(Entity other);
+    @Override
+    public abstract void draw();
 }
