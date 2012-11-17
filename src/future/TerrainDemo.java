@@ -29,6 +29,27 @@
 
 package future;
 
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_LIGHT0;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_LIGHT_MODEL_AMBIENT;
+import static org.lwjgl.opengl.GL11.GL_NORMALIZE;
+import static org.lwjgl.opengl.GL11.GL_POSITION;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glDisable;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glGetError;
+import static org.lwjgl.opengl.GL11.glLight;
+import static org.lwjgl.opengl.GL11.glLightModel;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glNormal3f;
+import static org.lwjgl.opengl.GL11.glScalef;
+import static org.lwjgl.opengl.GL11.glVertex3f;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -36,123 +57,124 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.PixelFormat;
 import org.lwjgl.util.glu.GLU;
+
 import utility.BufferTools;
 import utility.EulerCamera;
 import utility.ShaderLoader;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glLight;
-import static org.lwjgl.opengl.GL11.glLightModel;
-
 /**
  * Still in crude draft phase.
- *
+ * 
  * @author Oskar Veerhoek
  */
 public class TerrainDemo {
 
-    private static final String WINDOW_TITLE = "Terrain!";
-    private static final int[] WINDOW_DIMENSIONS = {1280, 720};
-    private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
-    private static final EulerCamera camera = new EulerCamera.Builder()
-            .setAspectRatio(ASPECT_RATIO)
-            .setFieldOfView(60)
-            .build();
-    private static int shaderProgram;
+	private static final String WINDOW_TITLE = "Terrain!";
+	private static final int WIDTH = 1280;
+	private static final int HEIGHT = 720;
+	private static final float ASPECT_RATIO = (float) WIDTH / (float) HEIGHT;
+	private static final EulerCamera camera = new EulerCamera.Builder()
+			.setAspectRatio(ASPECT_RATIO).setFieldOfView(60).build();
+	private static int shaderProgram;
 
-    private static void render() {
-        glLoadIdentity();
-        camera.applyTranslations();
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        GL20.glUseProgram(shaderProgram);
-        glScalef(3, 3, 3);
-        glBegin(GL_TRIANGLES);
-        glNormal3f(0, 0, 1);
-        glVertex3f(-1, +1, 0);
-        glNormal3f(0, 0, 1);
-        glVertex3f(+1, -1, 0);
-        glNormal3f(0, 0, 1);
-        glVertex3f(+1, +1, 0);
-        glEnd();
-    }
+	private static void render() {
+		glLoadIdentity();
+		camera.applyTranslations();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		GL20.glUseProgram(shaderProgram);
+		glScalef(3, 3, 3);
+		glBegin(GL_TRIANGLES);
+		glNormal3f(0, 0, 1);
+		glVertex3f(-1, +1, 0);
+		glNormal3f(0, 0, 1);
+		glVertex3f(+1, -1, 0);
+		glNormal3f(0, 0, 1);
+		glVertex3f(+1, +1, 0);
+		glEnd();
+	}
 
-    private static void logic() {
-        // Add logic code here
-    }
+	private static void logic() {
+		// Add logic code here
+	}
 
-    private static void input() {
-//        camera.setRoll(camera.roll() + 0.01f);
-//        Mouse.setGrabbed(true);
-        if (Mouse.isButtonDown(0))
-            Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
-            Mouse.setGrabbed(false);
-        if (Mouse.isGrabbed())
-            camera.processMouse(1, 80, -80);
-        camera.processKeyboard(16, 1);
-    }
+	private static void input() {
+		// camera.setRoll(camera.roll() + 0.01f);
+		// Mouse.setGrabbed(true);
+		if (Mouse.isButtonDown(0))
+			Mouse.setGrabbed(true);
+		else if (Mouse.isButtonDown(1))
+			Mouse.setGrabbed(false);
+		if (Mouse.isGrabbed())
+			camera.processMouse(1, 80, -80);
+		camera.processKeyboard(16, 1);
+	}
 
-    private static void cleanUp(boolean asCrash) {
-        System.err.println(GLU.gluErrorString(glGetError()));
-        Display.destroy();
-        System.exit(asCrash ? 1 : 0);
-    }
+	private static void cleanUp(boolean asCrash) {
+		System.err.println(GLU.gluErrorString(glGetError()));
+		Display.destroy();
+		System.exit(asCrash ? 1 : 0);
+	}
 
-    private static void setUpMatrices() {
-        camera.applyPerspectiveMatrix();
-    }
+	private static void setUpMatrices() {
+		camera.applyPerspectiveMatrix();
+	}
 
-    private static void setUpStates() {
-        camera.applyOptimalStates();
-        glEnable(GL_LIGHTING);
-        glDisable(GL_LIGHT0);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_NORMALIZE);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(
-                new float[]{1, 1, 1, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{camera.x(), camera.y(), camera.z(), 1}));
-    }
+	private static void setUpStates() {
+		camera.applyOptimalStates();
+		glEnable(GL_LIGHTING);
+		glDisable(GL_LIGHT0);
+		glEnable(GL_LIGHT0);
+		glEnable(GL_NORMALIZE);
+		glLightModel(GL_LIGHT_MODEL_AMBIENT,
+				BufferTools.asFlippedFloatBuffer(new float[] { 1, 1, 1, 1f }));
+		glLight(GL_LIGHT0,
+				GL_POSITION,
+				BufferTools.asFlippedFloatBuffer(new float[] { camera.x(),
+						camera.y(), camera.z(), 1 }));
+	}
 
-    private static void update() {
-        Display.update();
-        Display.sync(60);
-    }
+	private static void update() {
+		Display.update();
+		Display.sync(60);
+	}
 
-    private static void enterGameLoop() {
-        while (!Display.isCloseRequested()) {
-            // TODO: Remove: only for debugging
-            setUpStates();
-            render();
-            logic();
-            input();
-            update();
-        }
-    }
+	private static void enterGameLoop() {
+		while (!Display.isCloseRequested()) {
+			// TODO: Remove: only for debugging
+			setUpStates();
+			render();
+			logic();
+			input();
+			update();
+		}
+	}
 
-    private static void setUpDisplay() {
-        try {
-            Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
-            Display.setVSyncEnabled(true);
-            Display.setTitle(WINDOW_TITLE);
-            Display.create(new PixelFormat().withSamples(8));
-        } catch (LWJGLException e) {
-            e.printStackTrace();
-            cleanUp(true);
-        }
-    }
+	private static void setUpDisplay() {
+		try {
+			PixelFormat pFormat = new PixelFormat().withSamples(8);
+			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			Display.setVSyncEnabled(true);
+			Display.setTitle(WINDOW_TITLE);
+			Display.create(pFormat);
+		} catch (LWJGLException e) {
+			e.printStackTrace();
+			cleanUp(true);
+		}
+	}
 
-    private static void setUpShaders() {
-        shaderProgram = ShaderLoader.loadShaderPair("res/shaders/vertex_phong_lighting.vs", "res/shaders/vertex_phong_lighting.fs");
-    }
+	private static void setUpShaders() {
+		shaderProgram = ShaderLoader.loadShaderPair(
+				"res/shaders/vertex_phong_lighting.vs",
+				"res/shaders/vertex_phong_lighting.fs");
+	}
 
-    public static void main(String[] args) {
-        setUpDisplay();
-        setUpStates();
-        setUpMatrices();
-        setUpShaders();
-        enterGameLoop();
-        cleanUp(false);
-    }
+	public static void main(String[] args) {
+		setUpDisplay();
+		setUpStates();
+		setUpMatrices();
+		setUpShaders();
+		enterGameLoop();
+		cleanUp(false);
+	}
 
 }
