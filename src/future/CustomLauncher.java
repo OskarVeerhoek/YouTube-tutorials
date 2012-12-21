@@ -29,11 +29,7 @@
 
 package future;
 
-import java.io.EOFException;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,7 +65,7 @@ public class CustomLauncher {
 	/**
 	 * A list of which libraries are missing
 	 */
-	final private Map<String, Integer> missing = new HashMap<>();
+	final private Map<String, Integer> missing = new HashMap<String, Integer>();
 
 	private int totalDownloaded;
 	/**
@@ -119,7 +115,7 @@ public class CustomLauncher {
 			throw new RuntimeException("Can not create required folders.");
 		}
 		totalDownloadSize = 0;
-		dependencies = new HashMap<>();
+		dependencies = new HashMap<String, Integer>();
 		checkOS();
 	}
 
@@ -234,8 +230,6 @@ public class CustomLauncher {
 	/**
 	 * Grabs the list of natives from the OS enum and puts them into the
 	 * natives map.
-	 *
-	 * @see CustomLauncher#natives
 	 */
 	private void populateNatives() {
 		for (String nLib : os.natives.keySet()) {
@@ -257,7 +251,7 @@ public class CustomLauncher {
 		}
 
 		static public Map<String, Integer> linux() {
-			Map<String, Integer> map = new HashMap<>();
+			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("libjinput-linux.so", 13824);
 			map.put("libjinput-linux64.so", 14512);
 			map.put("liblwjgl.so", 374744);
@@ -268,7 +262,7 @@ public class CustomLauncher {
 		}
 
 		static public Map<String, Integer> osx() {
-			Map<String, Integer> map = new HashMap<>();
+			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("libjinput-osx.jnilib", 64608);
 			map.put("liblwjgl.jnilib", 1123272);
 			map.put("openal.dylib", 378384);
@@ -276,7 +270,7 @@ public class CustomLauncher {
 		}
 
 		static public Map<String, Integer> solaris() {
-			Map<String, Integer> map = new HashMap<>();
+			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("liblwjgl.so", 345460);
 			map.put("liblwjgl64.so", 539008);
 			map.put("libopenal.so", 328344);
@@ -285,7 +279,7 @@ public class CustomLauncher {
 		}
 
 		static public Map<String, Integer> windows() {
-			Map<String, Integer> map = new HashMap<>();
+			Map<String, Integer> map = new HashMap<String, Integer>();
 			map.put("jinput-dx8.dll", 61952);
 			map.put("jinput-dx8_64.dll", 65024);
 			map.put("jinput-raw.dll", 59392);
