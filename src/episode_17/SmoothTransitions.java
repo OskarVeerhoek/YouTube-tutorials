@@ -60,7 +60,7 @@ public class SmoothTransitions {
          * The state where the rectangle is shown without transparency. If the
          * user presses enter the state is set to intro.
          */
-        MAIN;
+        MAIN
     }
 
     /**

@@ -158,11 +158,7 @@ public class InputDemo {
         }
 
         boolean inBounds(int mousex, int mousey) {
-            if (mousex > x && mousex < x + 50 && mousey > y && mousey < y + 50) {
-                return true;
-            } else {
-                return false;
-            }
+            return mousex > x && mousex < x + 50 && mousey > y && mousey < y + 50;
         }
 
         void update(int dx, int dy) {

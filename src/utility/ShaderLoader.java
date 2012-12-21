@@ -67,7 +67,7 @@ public class ShaderLoader {
                 try {
                     vertexShaderFileReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
         }
@@ -87,24 +87,24 @@ public class ShaderLoader {
                 try {
                     fragmentShaderFileReader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
         }
         glShaderSource(vertexShader, vertexShaderSource);
         glCompileShader(vertexShader);
-        if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
+        if (glGetShaderi(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
             System.err
                     .println("Vertex shader wasn't able to be compiled correctly. Error log:");
-            System.err.println(glGetShaderInfoLog(vertexShader, glGetProgram(shaderProgram, GL_INFO_LOG_LENGTH)));
+            System.err.println(glGetShaderInfoLog(vertexShader, glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH)));
             return -1;
         }
         glShaderSource(fragmentShader, fragmentShaderSource);
         glCompileShader(fragmentShader);
-        if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
+        if (glGetShaderi(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
             System.err
                     .println("Fragment shader wasn't able to be compiled correctly. Error log:");
-            System.err.println(glGetShaderInfoLog(fragmentShader, glGetProgram(shaderProgram, GL_INFO_LOG_LENGTH)));
+            System.err.println(glGetShaderInfoLog(fragmentShader, glGetProgrami(shaderProgram, GL_INFO_LOG_LENGTH)));
         }
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);

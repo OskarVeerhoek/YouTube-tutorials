@@ -56,7 +56,7 @@ public class AdvancedRendering {
      * All the different render modes
      */
     private static enum RenderMode {
-        IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS;
+        IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS
     }
 
     private static RenderMode mode;

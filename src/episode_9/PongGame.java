@@ -138,7 +138,7 @@ public class PongGame {
         }
     }
 
-    private static class Bat extends AbstractMoveableEntity {
+    private static class Bat extends AbstractMovableEntity {
 
         public Bat(double x, double y, double width, double height) {
             super(x, y, width, height);
@@ -150,7 +150,7 @@ public class PongGame {
         }
     }
 
-    private static class Ball extends AbstractMoveableEntity {
+    private static class Ball extends AbstractMovableEntity {
 
         public Ball(double x, double y, double width, double height) {
             super(x, y, width, height);
