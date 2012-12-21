@@ -93,7 +93,7 @@ public class InputDemo {
                     box.selected = true;
                 }
                 if (Mouse.isButtonDown(2) && box.inBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
-                    if (getRandomColorCooldown() == false) {
+                    if (!getRandomColorCooldown()) {
                         setRandomColorCooldown(true);
                     } else {
                         new Thread(new Runnable() {

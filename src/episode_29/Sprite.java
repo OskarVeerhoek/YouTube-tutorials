@@ -83,7 +83,7 @@ public final class Sprite {
     }
 
     public String getName() {
-        return new String(name);
+        return name;
     }
 
     public int getX() {

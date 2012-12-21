@@ -76,7 +76,7 @@ public class ShaderDemo {
                 try {
                     reader.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
         }
@@ -96,18 +96,18 @@ public class ShaderDemo {
                 try {
                     reader2.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    e.printStackTrace();
                 }
             }
         }
         glShaderSource(vertexShader, vertexShaderSource);
         glCompileShader(vertexShader);
-        if (glGetShader(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
+        if (glGetShaderi(vertexShader, GL_COMPILE_STATUS) == GL_FALSE) {
             System.err.println("Vertex shader wasn't able to be compiled correctly.");
         }
         glShaderSource(fragmentShader, fragmentShaderSource);
         glCompileShader(fragmentShader);
-        if (glGetShader(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
+        if (glGetShaderi(fragmentShader, GL_COMPILE_STATUS) == GL_FALSE) {
             System.err.println("Fragment shader wasn't able to be compiled correctly.");
         }
         glAttachShader(shaderProgram, vertexShader);

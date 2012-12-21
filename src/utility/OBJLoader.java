@@ -32,7 +32,10 @@ package utility;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -70,8 +73,7 @@ public class OBJLoader {
     }
 
     private static FloatBuffer reserveData(int size) {
-        FloatBuffer data = BufferUtils.createFloatBuffer(size);
-        return data;
+        return BufferUtils.createFloatBuffer(size);
     }
 
     private static float[] asFloats(Vector3f v) {
@@ -103,7 +105,7 @@ public class OBJLoader {
         return new int[]{vboVertexHandle, vboNormalHandle};
     }
 
-    public static Model loadModel(File f) throws FileNotFoundException, IOException {
+    public static Model loadModel(File f) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(f));
         Model m = new Model();
         String line;

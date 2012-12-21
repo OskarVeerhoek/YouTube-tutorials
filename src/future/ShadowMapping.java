@@ -115,7 +115,7 @@ public class ShadowMapping {
     /**
      * This is where anything you want rendered into your world should go.
      *
-     * @param drawGround
+     * @param drawGround whether to draw the ground
      */
     private static void renderObjects(boolean drawGround) {
         if (drawGround) {

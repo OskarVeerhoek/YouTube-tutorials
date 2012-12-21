@@ -142,9 +142,7 @@ public final class EulerCamera implements Camera {
      * @param yaw         the yaw (rotation on the y-axis)
      * @param roll        the roll (rotation on the z-axis)
      *
-     * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0
-     * @throws IllegalArgumentException if zNear is 0 or smaller than 0
-     * @throws IllegalArgumentException if zFar is the same or smaller than zNear
+     * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0 or if zNear is 0 or smaller than 0 or if zFar is the same or smaller than zNear
      */
     public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll, float zNear, float zFar) {
         if (aspectRatio <= 0) {

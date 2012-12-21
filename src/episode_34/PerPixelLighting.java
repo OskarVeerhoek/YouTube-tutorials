@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package future;
+package episode_34;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;

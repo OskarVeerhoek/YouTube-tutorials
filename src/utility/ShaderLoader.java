@@ -109,7 +109,7 @@ public class ShaderLoader {
         glAttachShader(shaderProgram, vertexShader);
         glAttachShader(shaderProgram, fragmentShader);
         glLinkProgram(shaderProgram);
-        if (glGetProgram(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
+        if (glGetProgrami(shaderProgram, GL_LINK_STATUS) == GL_FALSE) {
             System.err.println("Shader program wasn't linked correctly.");
             System.err.println(glGetProgramInfoLog(shaderProgram, 1024));
             return -1;

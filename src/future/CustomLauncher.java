@@ -55,12 +55,12 @@ public class CustomLauncher {
 	/**
 	 * Base folder for all external libraries
 	 */
-	static final File LIB_FOLDER = new File("download");
+	private static final File LIB_FOLDER = new File("download");
 	/**
 	 * The download folder of my personal web-site where I'm hosting all the
 	 * jars and natives.
 	 */
-	static final String BASE_URL = "http://ryanporterfield.com/downloads/";
+	private static final String BASE_URL = "http://ryanporterfield.com/downloads/";
 
 	/**
 	 * A list of which libraries are missing

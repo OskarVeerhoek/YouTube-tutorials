@@ -73,7 +73,7 @@ public class MineFront {
 * Defines if the application is running. Set to false to terminate the
 * program.
 */
-    public static volatile boolean running = true;
+    private static volatile boolean running = true;
     /**
      * The position of the player as a 3D vector (xyz).
      */

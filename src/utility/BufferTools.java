@@ -117,8 +117,7 @@ public class BufferTools {
      * @return an empty FloatBuffer with a set amount of elements
      */
     public static FloatBuffer reserveData(int amountOfElements) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(amountOfElements);
-        return buffer;
+        return BufferUtils.createFloatBuffer(amountOfElements);
     }
 
     /**
