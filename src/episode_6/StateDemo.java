@@ -44,7 +44,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class StateDemo {
 
     private static enum State {
-        INTRO, MAIN_MENU, GAME;
+        INTRO, MAIN_MENU, GAME
     }
 
     private static State state = State.INTRO;
