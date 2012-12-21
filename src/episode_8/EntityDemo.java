@@ -57,7 +57,7 @@ public class EntityDemo {
         return delta;
     }
 
-    private static class Box extends AbstractMoveableEntity {
+    private static class Box extends AbstractMovableEntity {
         public Box(double x, double y, double width, double height) {
             super(x, y, width, height);
         }
