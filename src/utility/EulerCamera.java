@@ -83,7 +83,6 @@ public final class EulerCamera implements Camera {
      * It's located at [0 0 0] with the orientation [0 0 0]. It has a zNear of 0.3, a zFar of 100.0, and an fov of 90.
      *
      * @param aspectRatio the aspect ratio (width/height) of the camera
-     *
      * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0
      */
     public EulerCamera(float aspectRatio) {
@@ -102,7 +101,6 @@ public final class EulerCamera implements Camera {
      * @param x           the first location coordinate
      * @param y           the second location coordinate
      * @param z           the third location coordinate
-     *
      * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0
      */
     public EulerCamera(float aspectRatio, float x, float y, float z) {
@@ -122,7 +120,6 @@ public final class EulerCamera implements Camera {
      * @param pitch       the pitch (rotation on the x-axis)
      * @param yaw         the yaw (rotation on the y-axis)
      * @param roll        the roll (rotation on the z-axis)
-     *
      * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0
      */
     public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll) {
@@ -131,6 +128,7 @@ public final class EulerCamera implements Camera {
         this.yaw = yaw;
         this.roll = roll;
     }
+
     /**
      * Creates a new camera with the given aspect ratio, location, zNear, zFar and orientation.
      *
@@ -141,7 +139,6 @@ public final class EulerCamera implements Camera {
      * @param pitch       the pitch (rotation on the x-axis)
      * @param yaw         the yaw (rotation on the y-axis)
      * @param roll        the roll (rotation on the z-axis)
-     *
      * @throws IllegalArgumentException if aspectRatio is 0 or smaller than 0 or if zNear is 0 or smaller than 0 or if zFar is the same or smaller than zNear
      */
     public EulerCamera(float aspectRatio, float x, float y, float z, float pitch, float yaw, float roll, float zNear, float zFar) {
@@ -193,7 +190,7 @@ public final class EulerCamera implements Camera {
     /**
      * Processes mouse input and converts it in to camera movement.
      *
-     * @param mouseSpeed  the speed (sensitivity) of the mouse, 1.0 should suffice
+     * @param mouseSpeed the speed (sensitivity) of the mouse, 1.0 should suffice
      */
     public void processMouse(float mouseSpeed) {
         final float MAX_LOOK_UP = 90;
@@ -247,7 +244,7 @@ public final class EulerCamera implements Camera {
     /**
      * Processes keyboard input and converts into camera movement.
      *
-     * @param delta  the elapsed time since the last frame update in milliseconds
+     * @param delta the elapsed time since the last frame update in milliseconds
      * @throws IllegalArgumentException if delta is 0 or delta is smaller than 0
      */
     public void processKeyboard(float delta) {
@@ -297,9 +294,8 @@ public final class EulerCamera implements Camera {
     /**
      * Processes keyboard input and converts into camera movement.
      *
-     * @param delta  the elapsed time since the last frame update in milliseconds
+     * @param delta the elapsed time since the last frame update in milliseconds
      * @param speed the speed of the movement (normal = 1.0)
-     *
      * @throws IllegalArgumentException if delta is 0 or delta is smaller than 0
      */
     public void processKeyboard(float delta, float speed) {
@@ -353,7 +349,6 @@ public final class EulerCamera implements Camera {
      * @param speedX the speed of the movement on the x-axis (normal = 1.0)
      * @param speedY the speed of the movement on the y-axis (normal = 1.0)
      * @param speedZ the speed of the movement on the z-axis (normal = 1.0)
-     *
      * @throws IllegalArgumentException if delta is 0 or delta is smaller than 0
      */
     public void processKeyboard(float delta, float speedX, float speedY, float speedZ) {
@@ -453,7 +448,7 @@ public final class EulerCamera implements Camera {
 
     /**
      * Enables or disables OpenGL states that will enhance the camera appearance.
-     *
+     * <p/>
      * Enable GL_DEPTH_CLAMP if ARB_depth_clamp is supported
      */
     public void applyOptimalStates() {
@@ -551,6 +546,7 @@ public final class EulerCamera implements Camera {
     /**
      * Sets the field of view angle in degrees in the y direction. Note that
      * this.applyPerspectiveMatrix() must be applied in order to see any difference.
+     *
      * @param fov the field of view angle in degrees in the y direction
      */
     public void setFieldOfView(float fov) {
@@ -600,19 +596,22 @@ public final class EulerCamera implements Camera {
     public static class Builder {
         private float aspectRatio = 1;
         private float x = 0,
-                 y = 0,
-                 z = 0,
-                 pitch = 0,
-                 yaw = 0,
-                 roll = 0;
+                y = 0,
+                z = 0,
+                pitch = 0,
+                yaw = 0,
+                roll = 0;
         private float zNear = 0.3f;
         private float zFar = 100;
         private float fov = 90;
+
         public Builder() {
 
         }
+
         /**
          * Sets the aspect ratio of the camera.
+         *
          * @param aspectRatio the aspect ratio of the camera (window width / window height)
          * @return this
          */
@@ -626,6 +625,7 @@ public final class EulerCamera implements Camera {
 
         /**
          * Sets the distance from the camera to the near clipping pane.
+         *
          * @param nearClippingPane the distance from the camera to the near clipping pane
          * @return this
          * @throws IllegalArgumentException if nearClippingPane is 0 or less
@@ -640,6 +640,7 @@ public final class EulerCamera implements Camera {
 
         /**
          * Sets the distance from the camera to the far clipping pane.
+         *
          * @param farClippingPane the distance from the camera to the far clipping pane
          * @return this
          * @throws IllegalArgumentException if farClippingPane is 0 or less
@@ -654,6 +655,7 @@ public final class EulerCamera implements Camera {
 
         /**
          * Sets the field of view angle in degrees in the y direction.
+         *
          * @param fov the field of view angle in degrees in the y direction
          * @return this
          */
@@ -664,6 +666,7 @@ public final class EulerCamera implements Camera {
 
         /**
          * Sets the position of the camera.
+         *
          * @param x the x-coordinate of the camera
          * @param y the y-coordinate of the camera
          * @param z the z-coordinate of the camera
@@ -692,8 +695,9 @@ public final class EulerCamera implements Camera {
 
         /**
          * Constructs an instance of EulerCamera from this builder helper class.
-         * @throws IllegalArgumentException if farClippingPane is the same or less than nearClippingPane
+         *
          * @return an instance of EulerCamera
+         * @throws IllegalArgumentException if farClippingPane is the same or less than nearClippingPane
          */
         public EulerCamera build() {
             if (zFar <= zNear) {

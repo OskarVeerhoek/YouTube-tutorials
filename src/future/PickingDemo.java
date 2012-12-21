@@ -49,10 +49,10 @@ public class PickingDemo {
     private static final String WINDOW_TITLE = "Picking Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
-    private static final FloatBuffer pickingTriangleColour      = BufferTools.asFloatBuffer(1, 0, 0);
+    private static final FloatBuffer pickingTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
     private static final FloatBuffer pickingOtherTriangleColour = BufferTools.asFloatBuffer(0, 1, 0);
-    private static final FloatBuffer realTriangleColour         = BufferTools.asFloatBuffer(1, 0, 0);
-    private static final FloatBuffer realOtherTriangleColour    = BufferTools.asFloatBuffer(0, 0, 1);
+    private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
+    private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
 
     /**
      * The frame-buffer object that will contain our custom render buffer

@@ -170,14 +170,14 @@ public class ShadowMapping {
         float sceneBoundingRadius = 95.0F;
 
         lightToSceneDistance = (float) Math.sqrt(lightPosition
-    .get(0)
+                .get(0)
                 * lightPosition
-    .get(0) + lightPosition
-    .get(1) * lightPosition
-    .get(1)
+                .get(0) + lightPosition
+                .get(1) * lightPosition
+                .get(1)
                 + lightPosition
-    .get(2) * lightPosition
-    .get(2));
+                .get(2) * lightPosition
+                .get(2));
 
         nearPlane = lightToSceneDistance - sceneBoundingRadius;
 
@@ -192,9 +192,9 @@ public class ShadowMapping {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         gluLookAt(lightPosition
-    .get(0), lightPosition
-    .get(1), lightPosition
-    .get(2), 0.0F,
+                .get(0), lightPosition
+                .get(1), lightPosition
+                .get(2), 0.0F,
                 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
         glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
         glViewport(0, 0, shadowWidth, shadowHeight);
@@ -264,7 +264,7 @@ public class ShadowMapping {
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
 
         glLight(GL_LIGHT0, GL_POSITION, lightPosition
-    );
+        );
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (showShadowMap) {
@@ -522,8 +522,8 @@ public class ShadowMapping {
         cameraPosition.flip();
 
         lightPosition
-    .put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
+                .put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
         lightPosition
-    .flip();
+                .flip();
     }
 }

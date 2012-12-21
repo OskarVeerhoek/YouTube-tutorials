@@ -41,8 +41,6 @@ import utility.EulerCamera;
 import utility.ShaderLoader;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glLight;
-import static org.lwjgl.opengl.GL11.glLightModel;
 
 /**
  * Still in crude draft phase.

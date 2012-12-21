@@ -46,6 +46,7 @@ public class DrawingCircles {
 
     /**
      * Draws a circle at [0 0 0] with the given radius.
+     *
      * @param radius the radius of the circle
      */
     private static void drawCirclef(float radius) {
@@ -58,7 +59,8 @@ public class DrawingCircles {
 
     /**
      * Draws a circle at [0 0 0] with the given radius and precision.
-     * @param radius the radius of the circle
+     *
+     * @param radius    the radius of the circle
      * @param precision the precision of the circle (1.0 is normal, lower is higher precision)
      */
     private static void drawCircleWithPrecisionf(float radius, float precision) {
@@ -110,7 +112,7 @@ public class DrawingCircles {
         glMatrixMode(GL_MODELVIEW);
         glClear(GL_COLOR_BUFFER_BIT);
         while (!Display.isCloseRequested()) {
-           glClear(GL_COLOR_BUFFER_BIT);
+            glClear(GL_COLOR_BUFFER_BIT);
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                 Display.destroy();
             }

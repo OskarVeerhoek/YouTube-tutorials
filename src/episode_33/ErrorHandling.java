@@ -33,7 +33,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.util.glu.GLU.*;
+import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 /**
  * OpenGL error handling using glGetError and gluErrorString

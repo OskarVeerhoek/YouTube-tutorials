@@ -38,6 +38,7 @@ import org.lwjgl.opengl.GL11;
 
 /**
  * Checks whether the EulerCamera class works.
+ *
  * @author Oskar Veerhoek
  */
 public class CameraTest {
@@ -47,7 +48,7 @@ public class CameraTest {
         Display.setResizable(true);
         Display.create();
         EulerCamera camera = new EulerCamera.Builder()
-                .setAspectRatio(640f/480f)
+                .setAspectRatio(640f / 480f)
                 .setFieldOfView(60)
                 .build();
         camera.applyPerspectiveMatrix();

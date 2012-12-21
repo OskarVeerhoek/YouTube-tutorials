@@ -64,8 +64,8 @@ public class ShadowMappingFBO {
     private static int frameBuffer;
     private static int renderBuffer;
 
-    private static final FloatBuffer ambientLight  = BufferTools.asFlippedFloatBuffer(0.2F, 0.2F, 0.2F, 1.0F);
-    private static final FloatBuffer diffuseLight  = BufferTools.asFlippedFloatBuffer(0.7F, 0.7F, 0.7F, 1.0F);
+    private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.2F, 0.2F, 0.2F, 1.0F);
+    private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(0.7F, 0.7F, 0.7F, 1.0F);
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(100.0F, 300.0F, 100.0F, 1.0F);
     private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
 
