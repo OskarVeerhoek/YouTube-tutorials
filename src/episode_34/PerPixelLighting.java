@@ -30,167 +30,115 @@
 package episode_34;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.ARBDepthClamp;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GLContext;
-import utility.*;
+import utility.BufferTools;
+import utility.EulerCamera;
+import utility.OBJLoader;
+import utility.ShaderLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
 /**
- * Shows per pixel lighting. Press 'P' for per pixel lighting and 'V' for per vertex.
+ * Uses the Phong lighting model to display a tasty chocolate bunny.
+ *
+ * @author Oskar Veerhoek
  */
 public class PerPixelLighting {
 
-    private static EulerCamera camera;
-    private static LWJGLTimer timer;
-    private static int perPixelShaderProgram;
-    private static int perVertexShaderProgram;
-    private static int currentShaderProgram;
-    private static int vboVertexHandle;
-    private static int vboNormalHandle;
+    private static int shaderProgram, bunny;
 
-    private static Model model;
-
-    private static final String MODEL_LOCATION = "res/models/bunny.obj";
-    private static final String VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_phong_lighting.vs";
-    private static final String VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/vertex_phong_lighting.vs";
-    private static final String FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION = "res/shaders/pixel_phong_lighting.fs";
-    private static final String FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION = "res/shaders/vertex_phong_lighting.fs";
+    public static final String MODEL_LOCATION = "res/models/bunny.obj";
+    public static final String VERTEX_SHADER_LOCATION = "res/shaders/pixel_phong_lighting.vs";
+    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/pixel_phong_lighting.fs";
 
     public static void main(String[] args) {
-        setUpDisplay();
-        setUpVBOs();
-        setUpCamera();
-        setUpShaders();
-        setUpStates();
-        setUpTimer();
-        while (!Display.isCloseRequested()) {
-            render();
-            checkInput();
-            Display.update();
-            Display.sync(60);
-        }
-        cleanUp();
-        System.exit(0);
-    }
-
-    private static void setUpTimer() {
-        timer = new LWJGLTimer();
-        timer.initialize();
-    }
-
-    private static void checkInput() {
-        timer.update();
-        camera.processMouse(1, 80, -80);
-        camera.processKeyboard(16, 1, 1, 1);
-        if (Mouse.isButtonDown(0))
-            Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
-            Mouse.setGrabbed(false);
-        while (Keyboard.next()) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
-                currentShaderProgram = perPixelShaderProgram;
-            } else if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
-                currentShaderProgram = perVertexShaderProgram;
-            }
-        }
-    }
-
-    private static void cleanUp() {
-        glDeleteProgram(perPixelShaderProgram);
-        glDeleteProgram(perVertexShaderProgram);
-        glDeleteBuffers(vboVertexHandle);
-        glDeleteBuffers(vboNormalHandle);
-        Display.destroy();
-    }
-
-    private static void render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glLoadIdentity();
-        camera.applyTranslations();
-        glUseProgram(currentShaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(camera.x(), camera.y(), camera.z(), 1));
-        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
-    }
-
-    private static void setUpStates() {
-        glShadeModel(GL_SMOOTH);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
-                0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
-        glColor3f(0.4f, 0.27f, 0.17f);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
-        if (GLContext.getCapabilities().GL_ARB_depth_clamp) {
-            glEnable(ARBDepthClamp.GL_DEPTH_CLAMP);
-        }
-    }
-
-    private static void setUpVBOs() {
-        int[] vbos;
-        try {
-            model = OBJLoader.loadModel(new File(MODEL_LOCATION));
-            vbos = OBJLoader.createVBO(model);
-            vboVertexHandle = vbos[0];
-            vboNormalHandle = vbos[1];
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            cleanUp();
-            System.exit(1);
-        } catch (IOException e) {
-            e.printStackTrace();
-            cleanUp();
-            System.exit(1);
-        }
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-        glVertexPointer(3, GL_FLOAT, 0, 0L);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-        glNormalPointer(GL_FLOAT, 0, 0L);
-    }
-
-    private static void setUpShaders() {
-        perPixelShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION, FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION);
-        perVertexShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION, FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION);
-        currentShaderProgram = perPixelShaderProgram;
-    }
-
-    private static void setUpCamera() {
-        camera = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
-        camera.setFieldOfView(70);
-        camera.applyPerspectiveMatrix();
-    }
-
-    private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setVSyncEnabled(true);
-            Display.setTitle("Per Pixel Lighting Demo");
+            Display.setTitle("Shader Demo");
             Display.create();
         } catch (LWJGLException e) {
             System.err.println("The display wasn't initialized correctly. :(");
             Display.destroy();
             System.exit(1);
         }
+
+        EulerCamera cam = new EulerCamera((float) Display.getWidth()
+                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        cam.setFieldOfView(60);
+        cam.applyPerspectiveMatrix();
+
+        setUpShaders();
+        setUpLighting();
+        setUpDisplayLists();
+
+        while (!Display.isCloseRequested()) {
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+            glLoadIdentity();
+            cam.applyTranslations();
+
+            glUseProgram(shaderProgram);
+            glCallList(bunny);
+            glUseProgram(0);
+
+            cam.processMouse(1, 80, -80);
+            cam.processKeyboard(16, 1, 1, 1);
+
+            if (Mouse.isButtonDown(0))
+                Mouse.setGrabbed(true);
+            else if (Mouse.isButtonDown(1))
+                Mouse.setGrabbed(false);
+
+            Display.update();
+            Display.sync(60);
+        }
+        glDeleteProgram(shaderProgram);
+        glDeleteLists(bunny, 1);
+        Display.destroy();
+        System.exit(0);
+    }
+
+    private static void setUpDisplayLists() {
+        try {
+            bunny = OBJLoader.createDisplayList(OBJLoader.loadModel(new File(MODEL_LOCATION)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            glDeleteProgram(shaderProgram);
+            glDeleteLists(bunny, 1);
+            Display.destroy();
+            System.exit(1);
+        } catch (IOException e) {
+            e.printStackTrace();
+            glDeleteProgram(shaderProgram);
+            glDeleteLists(bunny, 1);
+            Display.destroy();
+            System.exit(1);
+        }
+    }
+
+    private static void setUpLighting() {
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    }
+
+    private static void setUpShaders() {
+        shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
     }
 }
