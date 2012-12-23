@@ -38,7 +38,7 @@ varying vec4 varyingVertex;
 
 void main() {
     vec3 vertexPosition = (gl_ModelViewMatrix * varyingVertex).xyz;
-    vec3 surfaceNormal = (gl_NormalMatrix * varyingNormal).xyz;
+    vec3 surfaceNormal = normalize((gl_NormalMatrix * varyingNormal).xyz);
     vec3 lightDirection = normalize(gl_LightSource[0].position.xyz - vertexPosition);
     float diffuseLightIntensity = max(0, dot(surfaceNormal, lightDirection));
     gl_FragColor.rgb = diffuseLightIntensity * varyingColour.rgb;
