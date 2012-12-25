@@ -56,31 +56,43 @@ public class TerrainDemo {
             .setAspectRatio(ASPECT_RATIO)
             .setFieldOfView(60)
             .build();
-    private static int shaderProgram;
+    /**
+     * [] is z
+     * [][] is x
+     */
+    private static float[][] heights = new float[4][4];
 
     private static void render() {
         glLoadIdentity();
         camera.applyTranslations();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        GL20.glUseProgram(shaderProgram);
-        glScalef(3, 3, 3);
-        glBegin(GL_TRIANGLES);
-        glNormal3f(0, 0, 1);
-        glVertex3f(-1, +1, 0);
-        glNormal3f(0, 0, 1);
-        glVertex3f(+1, -1, 0);
-        glNormal3f(0, 0, 1);
-        glVertex3f(+1, +1, 0);
+        glColor3f(0.5f, 0.5f, 0.5f);
+        glBegin(GL_QUADS);
+        glVertex3f(-10, 0, -10);
+        glVertex3f(-10, 0, 10);
+        glVertex3f(10, 0, 10);
+        glVertex3f(10, 0, -10);
         glEnd();
+        for (int z = 0; z < heights.length - 1; z++) {
+        glBegin(GL_TRIANGLE_STRIP);
+            for (int x = 0; x < heights[z].length; x++) {
+                glColor3f(heights[z][x]/5, heights[z][x]/5, heights[z][x]/5);
+                glVertex3f(x, heights[z][x], z);
+                glColor3f(heights[z+1][x]/5, heights[z+1][x]/5, heights[z+1][x]/5);
+                glVertex3f(x, heights[z+1][x], z+1);
+            }
+        glEnd();
+        }
     }
 
     private static void logic() {
-        // Add logic code here
+        heights[0] = new float[] {0, 1, 0, 1};
+        heights[1] = new float[] {1, 0, 1, 0};
+        heights[2] = new float[] {0, 1, 1, 1};
+        heights[3] = new float[] {1, 2, 0, 1};
     }
 
     private static void input() {
-//        camera.setRoll(camera.roll() + 0.01f);
-//        Mouse.setGrabbed(true);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
@@ -102,14 +114,8 @@ public class TerrainDemo {
 
     private static void setUpStates() {
         camera.applyOptimalStates();
-        glEnable(GL_LIGHTING);
-        glDisable(GL_LIGHT0);
-        glEnable(GL_LIGHT0);
+        glEnable(GL_DEPTH_TEST);
         glEnable(GL_NORMALIZE);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(
-                new float[]{1, 1, 1, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{camera.x(), camera.y(), camera.z(), 1}));
     }
 
     private static void update() {
@@ -119,8 +125,6 @@ public class TerrainDemo {
 
     private static void enterGameLoop() {
         while (!Display.isCloseRequested()) {
-            // TODO: Remove: only for debugging
-            setUpStates();
             render();
             logic();
             input();
@@ -133,22 +137,17 @@ public class TerrainDemo {
             Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
             Display.setVSyncEnabled(true);
             Display.setTitle(WINDOW_TITLE);
-            Display.create(new PixelFormat().withSamples(8));
+            Display.create();
         } catch (LWJGLException e) {
             e.printStackTrace();
             cleanUp(true);
         }
     }
 
-    private static void setUpShaders() {
-        shaderProgram = ShaderLoader.loadShaderPair("res/shaders/vertex_phong_lighting.vs", "res/shaders/vertex_phong_lighting.fs");
-    }
-
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
         setUpMatrices();
-        setUpShaders();
         enterGameLoop();
         cleanUp(false);
     }
