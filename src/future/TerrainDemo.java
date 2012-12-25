@@ -30,6 +30,7 @@
 package future;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
@@ -59,6 +60,8 @@ public class TerrainDemo {
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
     private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
     private static final EulerCamera camera = new EulerCamera.Builder()
+            .setPosition(-2.7f, 9.6f, 16.6f)
+            .setRotation(30, 61, 0)
             .setAspectRatio(ASPECT_RATIO)
             .setFieldOfView(60)
             .build();
@@ -68,18 +71,15 @@ public class TerrainDemo {
      * [][] is x
      */
     private static float[][] heights = new float[200][200];
-    private static Vector3f[][] normals = new Vector3f[heights.length][heights[0].length];
 
     private static void render() {
         glLoadIdentity();
         camera.applyTranslations();
-        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{camera.x(), camera.y(), camera.z(), 1}));
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glCallList(heightmapDisplayList);
     }
 
     private static void logic() {
-
     }
 
     private static void input() {
@@ -106,14 +106,9 @@ public class TerrainDemo {
         camera.applyOptimalStates();
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_NORMALIZE);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
     }
 
     private static void setUpLighting() {
-        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
     }
 
     private static void update() {
@@ -133,58 +128,9 @@ public class TerrainDemo {
     private static void setUpHeightmap() {
         try {
             BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmap.bmp"));
-            int pixel = (heightmapImage.getRGB(0, 0) >> 16) & 0xff;
             for (int z = 0; z < heights.length; z++) {
                 for (int x = 0; x < heights[z].length; x++) {
                     heights[z][x] = ((heightmapImage.getRGB(z, x) >> 16) & 0xff);
-                }
-            }
-            // http://stackoverflow.com/questions/2499545/getting-greyscale-pixel-value-from-rgb-colourspace-in-java-using-bufferedimage
-            for (int z = 0; z < heights.length; z++) {
-                for (int x = 0; x < heights[z].length; x++) {
-                    // http://www.videotutorialsrock.com/opengl_tutorial/terrain/text.php
-                    Vector3f sum = new Vector3f(0, 0, 0);
-                    Vector3f out = new Vector3f(0, 0, 0);
-                    if (z > 0) {
-                        out = new Vector3f(0, heights[z - 1][x], -1);
-                    }
-                    Vector3f in = new Vector3f(0, 0, 0);
-                    if (z < 1 - heights.length) {
-                        in = new Vector3f(0, heights[z + 1][x] - heights[z][x], 1);
-                    }
-                    Vector3f left = new Vector3f(0, 0, 0);
-                    if (x > 0) {
-                        left = new Vector3f(-1, heights[z][x - 1] - heights[z][x], 0);
-                    }
-                    Vector3f right = new Vector3f(0, 0, 0);
-                    if (x < heights[z].length - 1) {
-                        right = new Vector3f(1, heights[z][x + 1], 0);
-                    }
-                    if (x > 0 && z > 0) {
-                        Vector3f outcrossleft = new Vector3f();
-                        Vector3f.cross(out, left, outcrossleft);
-                        if (outcrossleft.length() != 0)
-                            Vector3f.add((Vector3f) outcrossleft.normalise(), sum, sum);
-                    }
-                    if (x > 0 && z < heights.length - 1) {
-                        Vector3f leftcrossin = new Vector3f();
-                        Vector3f.cross(left, in, leftcrossin);
-                        if (leftcrossin.length() != 0)
-                            Vector3f.add((Vector3f) leftcrossin.normalise(), sum, sum);
-                    }
-                    if (x < heights[z].length - 1 && z < 1 - heights.length) {
-                        Vector3f incrossright = new Vector3f();
-                        Vector3f.cross(in, right, incrossright);
-                        if (incrossright.length() != 0)
-                            Vector3f.add((Vector3f) incrossright.normalise(), sum, sum);
-                    }
-                    if (x < heights[z].length - 1 && z > 0) {
-                        Vector3f rightcrossout = new Vector3f();
-                        Vector3f.cross(right, out, rightcrossout);
-                        if (rightcrossout.length() != 0)
-                            Vector3f.add((Vector3f) rightcrossout.normalise(), sum, sum);
-                    }
-                    normals[z][x] = sum;
                 }
             }
         } catch (IOException e) {
@@ -197,10 +143,8 @@ public class TerrainDemo {
             glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < heights[z].length; x++) {
                 glColor3f(heights[z][x]/255, heights[z][x]/255, heights[z][x]/255);
-                glNormal3f(normals[z][x].x, normals[z][x].y, normals[z][x].z);
                 glVertex3f(x, heights[z][x], z);
                 glColor3f(heights[z + 1][x] / 255, heights[z + 1][x] / 255, heights[z + 1][x] / 255);
-                glNormal3f(normals[z + 1][x].x, normals[z + 1][x].y, normals[z + 1][x].z);
                 glVertex3f(x, heights[z+1][x], z+1);
             }
             glEnd();
