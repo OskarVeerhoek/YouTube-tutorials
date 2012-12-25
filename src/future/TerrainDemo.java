@@ -40,6 +40,11 @@ import utility.BufferTools;
 import utility.EulerCamera;
 import utility.ShaderLoader;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -60,25 +65,19 @@ public class TerrainDemo {
      * [] is z
      * [][] is x
      */
-    private static float[][] heights = new float[4][4];
+    private static float[][] heights = new float[200][200];
 
     private static void render() {
         glLoadIdentity();
         camera.applyTranslations();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glColor3f(0.5f, 0.5f, 0.5f);
-        glBegin(GL_QUADS);
-        glVertex3f(-10, 0, -10);
-        glVertex3f(-10, 0, 10);
-        glVertex3f(10, 0, 10);
-        glVertex3f(10, 0, -10);
-        glEnd();
+        glScalef(0.1f, 0.01f, 0.1f);
         for (int z = 0; z < heights.length - 1; z++) {
         glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < heights[z].length; x++) {
-                glColor3f(heights[z][x]/5, heights[z][x]/5, heights[z][x]/5);
+                glColor3f(heights[z][x]/255, heights[z][x]/255, heights[z][x]/255);
                 glVertex3f(x, heights[z][x], z);
-                glColor3f(heights[z+1][x]/5, heights[z+1][x]/5, heights[z+1][x]/5);
+                glColor3f(heights[z + 1][x] / 255, heights[z + 1][x] / 255, heights[z + 1][x] / 255);
                 glVertex3f(x, heights[z+1][x], z+1);
             }
         glEnd();
@@ -86,10 +85,7 @@ public class TerrainDemo {
     }
 
     private static void logic() {
-        heights[0] = new float[] {0, 1, 0, 1};
-        heights[1] = new float[] {1, 0, 1, 0};
-        heights[2] = new float[] {0, 1, 1, 1};
-        heights[3] = new float[] {1, 2, 0, 1};
+
     }
 
     private static void input() {
@@ -132,6 +128,23 @@ public class TerrainDemo {
         }
     }
 
+    private static void setUpHeightmap() {
+        try {
+            BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmap.bmp"));
+            int pixel = (heightmapImage.getRGB(0, 0) >> 16) & 0xff;
+            for (int z = 0; z < heights.length; z++) {
+                for (int x = 0; x < heights[z].length; x++) {
+                    heights[z][x] = ((heightmapImage.getRGB(z, x) >> 16) & 0xff);
+                }
+            }
+            // http://stackoverflow.com/questions/2499545/getting-greyscale-pixel-value-from-rgb-colourspace-in-java-using-bufferedimage
+            System.out.println(pixel);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
@@ -147,6 +160,7 @@ public class TerrainDemo {
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
+        setUpHeightmap();
         setUpMatrices();
         enterGameLoop();
         cleanUp(false);
