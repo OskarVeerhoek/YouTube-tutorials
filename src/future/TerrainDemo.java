@@ -70,7 +70,7 @@ public class TerrainDemo {
      * [] is z
      * [][] is x
      */
-    private static float[][] heights = new float[200][200];
+    private static float[][] heights;
 
     private static void render() {
         glLoadIdentity();
@@ -105,6 +105,8 @@ public class TerrainDemo {
     private static void setUpStates() {
         camera.applyOptimalStates();
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
         glEnable(GL_NORMALIZE);
     }
 
@@ -128,6 +130,7 @@ public class TerrainDemo {
     private static void setUpHeightmap() {
         try {
             BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmap.bmp"));
+            heights = new float[heightmapImage.getWidth()][heightmapImage.getHeight()];
             for (int z = 0; z < heights.length; z++) {
                 for (int x = 0; x < heights[z].length; x++) {
                     heights[z][x] = ((heightmapImage.getRGB(z, x) >> 16) & 0xff);
@@ -142,9 +145,33 @@ public class TerrainDemo {
         for (int z = 0; z < heights.length - 1; z++) {
             glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < heights[z].length; x++) {
-                glColor3f(heights[z][x]/255, heights[z][x]/255, heights[z][x]/255);
+                float height1 = heights[z][x]/255;
+                if (height1 < 0.25f) {
+                    glColor3f(0, 0, 1);
+                } else if (height1 < 0.28f) {
+                    glColor3f(1, 1, 0);
+                } else if (height1 < 0.38f) {
+                    glColor3f(0, 1 - height1, 0);
+                } else if (height1 < 0.5f) {
+                    glColor3f(height1 * 1.2f, height1 * 1.2f, height1 * 1.2f);
+                } else {
+                    glColor3f(height1 * 1.7f, height1 * 1.7f, height1 * 1.7f);
+                }
+//                glColor3f(heights[z][x]/255, heights[z][x]/255, heights[z][x]/255);
                 glVertex3f(x, heights[z][x], z);
-                glColor3f(heights[z + 1][x] / 255, heights[z + 1][x] / 255, heights[z + 1][x] / 255);
+                float height2 = heights[z + 1][x]/255;
+                if (height2 < 0.25f) {
+                    glColor3f(0, 0, 1);
+                } else if (height2 < 0.28f) {
+                    glColor3f(1, 1, 0);
+                } else if (height2 < 0.38f) {
+                    glColor3f(0, 1 - height2, 0);
+                } else if (height2 < 0.5f) {
+                    glColor3f(height2 * 1.2f, height2 * 1.2f, height2 * 1.2f);
+                } else {
+                    glColor3f(height2 * 1.7f, height2 * 1.7f, height2 * 1.7f);
+                }
+//                glColor3f(heights[z + 1][x] / 255, heights[z + 1][x] / 255, heights[z + 1][x] / 255);
                 glVertex3f(x, heights[z+1][x], z+1);
             }
             glEnd();
