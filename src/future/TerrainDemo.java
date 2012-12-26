@@ -158,7 +158,7 @@ public class TerrainDemo {
 
     private static void setUpHeightmap() {
         try {
-            BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmaphighres.bmp"));
+            BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmap.bmp"));
             heights = new float[heightmapImage.getWidth()][heightmapImage.getHeight()];
             for (int z = 0; z < heights.length; z++) {
                 for (int x = 0; x < heights[z].length; x++) {
