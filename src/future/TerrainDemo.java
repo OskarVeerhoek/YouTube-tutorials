@@ -29,15 +29,15 @@
 
 package future;
 
+import de.matthiasmann.twl.utils.PNGDecoder;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.PixelFormat;
+import org.lwjgl.opengl.*;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Vector3f;
+import org.newdawn.slick.opengl.TextureLoader;
 import utility.BufferTools;
 import utility.EulerCamera;
 import utility.ShaderLoader;
@@ -45,9 +45,13 @@ import utility.ShaderLoader;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glTexImage2D;
+import static org.lwjgl.opengl.GL20.*;
 
 /**
  * Still in crude draft phase.
@@ -65,6 +69,8 @@ public class TerrainDemo {
             .setAspectRatio(ASPECT_RATIO)
             .setFieldOfView(60)
             .build();
+    private static int shaderProgram;
+    private static int heightmapinfo;
     private static int heightmapDisplayList;
     /**
      * [] is z
@@ -83,6 +89,18 @@ public class TerrainDemo {
     }
 
     private static void input() {
+        while (Keyboard.next()) {
+            if (Keyboard.getEventKeyState()) {
+                if (Keyboard.getEventKey() == Keyboard.KEY_L) {
+                    glUseProgram(0);
+                    glDeleteProgram(shaderProgram);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+                    glDeleteTextures(heightmapinfo);
+                    setUpShaders();
+                    setUpHeightmap();
+                }
+            }
+        }
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
         else if (Mouse.isButtonDown(1))
@@ -93,6 +111,11 @@ public class TerrainDemo {
     }
 
     private static void cleanUp(boolean asCrash) {
+        glUseProgram(0);
+        glDeleteProgram(shaderProgram);
+        glDeleteLists(heightmapDisplayList, 1);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDeleteTextures(heightmapinfo);
         System.err.println(GLU.gluErrorString(glGetError()));
         Display.destroy();
         System.exit(asCrash ? 1 : 0);
@@ -100,6 +123,12 @@ public class TerrainDemo {
 
     private static void setUpMatrices() {
         camera.applyPerspectiveMatrix();
+    }
+
+    private static void setUpShaders() {
+        shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape.vs", "res/shaders/landscape.fs");
+        glUseProgram(shaderProgram);
+        glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
     }
 
     private static void setUpStates() {
@@ -136,6 +165,17 @@ public class TerrainDemo {
                     heights[z][x] = ((heightmapImage.getRGB(z, x) >> 16) & 0xff);
                 }
             }
+            FileInputStream heightmapinfoInputStream = new FileInputStream("res/images/heightmapinfo.png");
+            PNGDecoder decoder = new PNGDecoder(heightmapinfoInputStream);
+            ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
+            decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
+            heightmapinfoInputStream.close();
+            buffer.flip();
+            GL13.glActiveTexture(GL13.GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, heightmapinfo);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -145,32 +185,32 @@ public class TerrainDemo {
         for (int z = 0; z < heights.length - 1; z++) {
             glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < heights[z].length; x++) {
-                float height1 = heights[z][x]/255;
-                if (height1 < 0.25f) {
-                    glColor3f(0, 0, 1);
-                } else if (height1 < 0.28f) {
-                    glColor3f(1, 1, 0);
-                } else if (height1 < 0.38f) {
-                    glColor3f(0, 1 - height1, 0);
-                } else if (height1 < 0.5f) {
-                    glColor3f(height1 * 1.2f, height1 * 1.2f, height1 * 1.2f);
-                } else {
-                    glColor3f(height1 * 1.7f, height1 * 1.7f, height1 * 1.7f);
-                }
+//                float height1 = heights[z][x]/255;
+//                if (height1 < 0.25f) {
+//                    glColor3f(0, 0, 1);
+//                } else if (height1 < 0.28f) {
+//                    glColor3f(1, 1, 0);
+//                } else if (height1 < 0.38f) {
+//                    glColor3f(0, 1 - height1, 0);
+//                } else if (height1 < 0.5f) {
+//                    glColor3f(height1 * 1.2f, height1 * 1.2f, height1 * 1.2f);
+//                } else {
+//                    glColor3f(height1 * 1.7f, height1 * 1.7f, height1 * 1.7f);
+//                }
 //                glColor3f(heights[z][x]/255, heights[z][x]/255, heights[z][x]/255);
                 glVertex3f(x, heights[z][x], z);
-                float height2 = heights[z + 1][x]/255;
-                if (height2 < 0.25f) {
-                    glColor3f(0, 0, 1);
-                } else if (height2 < 0.28f) {
-                    glColor3f(1, 1, 0);
-                } else if (height2 < 0.38f) {
-                    glColor3f(0, 1 - height2, 0);
-                } else if (height2 < 0.5f) {
-                    glColor3f(height2 * 1.2f, height2 * 1.2f, height2 * 1.2f);
-                } else {
-                    glColor3f(height2 * 1.7f, height2 * 1.7f, height2 * 1.7f);
-                }
+//                float height2 = heights[z + 1][x]/255;
+//                if (height2 < 0.25f) {
+//                    glColor3f(0, 0, 1);
+//                } else if (height2 < 0.28f) {
+//                    glColor3f(1, 1, 0);
+//                } else if (height2 < 0.38f) {
+//                    glColor3f(0, 1 - height2, 0);
+//                } else if (height2 < 0.5f) {
+//                    glColor3f(height2 * 1.2f, height2 * 1.2f, height2 * 1.2f);
+//                } else {
+//                    glColor3f(height2 * 1.7f, height2 * 1.7f, height2 * 1.7f);
+//                }
 //                glColor3f(heights[z + 1][x] / 255, heights[z + 1][x] / 255, heights[z + 1][x] / 255);
                 glVertex3f(x, heights[z+1][x], z+1);
             }
@@ -194,6 +234,7 @@ public class TerrainDemo {
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
+        setUpShaders();
         setUpLighting();
         setUpHeightmap();
         setUpMatrices();
