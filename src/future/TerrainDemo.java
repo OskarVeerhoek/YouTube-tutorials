@@ -64,7 +64,7 @@ public class TerrainDemo {
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
     private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
     private static final EulerCamera camera = new EulerCamera.Builder()
-            .setPosition(-2.7f, 9.6f, 16.6f)
+            .setPosition(-5.4f, 19.2f, 33.2f)
             .setRotation(30, 61, 0)
             .setAspectRatio(ASPECT_RATIO)
             .setFieldOfView(60)
@@ -158,7 +158,7 @@ public class TerrainDemo {
 
     private static void setUpHeightmap() {
         try {
-            BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmap.bmp"));
+            BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmaphighres.bmp"));
             heights = new float[heightmapImage.getWidth()][heightmapImage.getHeight()];
             for (int z = 0; z < heights.length; z++) {
                 for (int x = 0; x < heights[z].length; x++) {
@@ -181,7 +181,7 @@ public class TerrainDemo {
         }
         heightmapDisplayList = glGenLists(1);
         glNewList(heightmapDisplayList, GL_COMPILE);
-        glScalef(0.1f, 0.03f, 0.1f);
+        glScalef(0.2f, 0.06f, 0.2f);
         for (int z = 0; z < heights.length - 1; z++) {
             glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < heights[z].length; x++) {
