@@ -68,9 +68,21 @@ public class TerrainDemo {
             .setAspectRatio(ASPECT_RATIO)
             .setFieldOfView(60)
             .build();
+    /**
+     * The shader program that will use the lookup texture and the heightmap's vertex data to draw the terrain.
+     */
     private static int shaderProgram;
-    private static int heightmapinfo = 1;
+    /**
+     * The texture that will be used to find out which colours correspond to which heights.
+     */
+    private static int lookupTexture;
+    /**
+     * The display list that will contain the heightmap's vertex data.
+     */
     private static int heightmapDisplayList;
+    /**
+     * The points of the height. The first dimension represents the z-coordinate. The second dimension represents the x-coordinate. The float value represents the height.
+     */
     private static float[][] data;
 
     private static void render() {
@@ -84,14 +96,16 @@ public class TerrainDemo {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 if (Keyboard.getEventKey() == Keyboard.KEY_L) {
+                    // Reload the shaders and the heightmap data.
                     glUseProgram(0);
                     glDeleteProgram(shaderProgram);
                     glBindTexture(GL_TEXTURE_2D, 0);
-                    glDeleteTextures(heightmapinfo);
+                    glDeleteTextures(lookupTexture);
                     setUpShaders();
                     setUpHeightmap();
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_P) {
+                    // Switch between normal mode and wireframe mode.
                     int polygonMode = glGetInteger(GL_POLYGON_MODE);
                     if (polygonMode == GL_LINE) {
                         glPolygonMode(GL_FRONT, GL_FILL);
@@ -115,7 +129,7 @@ public class TerrainDemo {
         glDeleteProgram(shaderProgram);
         glDeleteLists(heightmapDisplayList, 1);
         glBindTexture(GL_TEXTURE_2D, 0);
-        glDeleteTextures(heightmapinfo);
+        glDeleteTextures(lookupTexture);
         System.err.println(GLU.gluErrorString(glGetError()));
         Display.destroy();
         System.exit(asCrash ? 1 : 0);
@@ -162,13 +176,13 @@ public class TerrainDemo {
                     data[z][x] = ((heightmapImage.getRGB(z, x) >> 16) & 0xff);
                 }
             }
-            FileInputStream heightmapinfoInputStream = new FileInputStream("res/images/heightmapinfo.png");
+            FileInputStream heightmapinfoInputStream = new FileInputStream("res/images/heightmap_lookup.png");
             PNGDecoder decoder = new PNGDecoder(heightmapinfoInputStream);
             ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
             decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
             heightmapinfoInputStream.close();
             buffer.flip();
-            glBindTexture(GL_TEXTURE_2D, heightmapinfo);
+            glBindTexture(GL_TEXTURE_2D, lookupTexture);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -205,8 +219,8 @@ public class TerrainDemo {
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
-        setUpShaders();
         setUpHeightmap();
+        setUpShaders();
         setUpMatrices();
         enterGameLoop();
         cleanUp(false);
