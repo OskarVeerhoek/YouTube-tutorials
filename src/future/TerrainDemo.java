@@ -79,9 +79,6 @@ public class TerrainDemo {
         glCallList(heightmapDisplayList);
     }
 
-    private static void logic() {
-    }
-
     private static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
@@ -128,6 +125,7 @@ public class TerrainDemo {
     private static void setUpStates() {
         camera.applyOptimalStates();
         glEnable(GL_DEPTH_TEST);
+        glClearColor(0, 0.75f, 1, 1);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_NORMALIZE);
@@ -141,7 +139,6 @@ public class TerrainDemo {
     private static void enterGameLoop() {
         while (!Display.isCloseRequested()) {
             render();
-            logic();
             input();
             update();
         }
