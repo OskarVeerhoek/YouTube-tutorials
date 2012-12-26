@@ -53,6 +53,7 @@ import static org.lwjgl.opengl.GL20.*;
 
 /**
  * A 3D terrain loaded from a heightmap and a lookup texture.
+ * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal and wireframe mode.
  *
  * @author Oskar Veerhoek
  */
@@ -89,6 +90,14 @@ public class TerrainDemo {
                     glDeleteTextures(heightmapinfo);
                     setUpShaders();
                     setUpHeightmap();
+                }
+                if (Keyboard.getEventKey() == Keyboard.KEY_P) {
+                    int polygonMode = glGetInteger(GL_POLYGON_MODE);
+                    if (polygonMode == GL_LINE) {
+                        glPolygonMode(GL_FRONT, GL_FILL);
+                    } else if (polygonMode == GL_FILL) {
+                        glPolygonMode(GL_FRONT, GL_LINE);
+                    }
                 }
             }
         }
