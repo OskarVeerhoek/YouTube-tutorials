@@ -38,7 +38,7 @@ import org.lwjgl.util.glu.GLU;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Draws a circle.
+ * Draws a circle. Then I got carried away, and this happened. Try it!
  *
  * @author Oskar Veerhoek
  */
@@ -83,7 +83,6 @@ public class DrawingCircles {
         if (step < 0.001f) {
             step = 180;
         } else {
-//            step *= 0.9999f;
             step -= speed;
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
@@ -91,14 +90,12 @@ public class DrawingCircles {
         } else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
             speed -= 0.0000001f;
         }
-        System.out.println(speed);
         drawCircleWithPrecisionf(1, step);
     }
 
     public static void main(String[] args) {
         try {
-//            Display.setDisplayModeAndFullscreen(Display.getDesktopDisplayMode());
-            Display.setDisplayMode(new DisplayMode(640, 480));
+            Display.setDisplayMode(new DisplayMode(500, 500));
             Display.setVSyncEnabled(true);
             Display.setTitle("Drawing Circles");
             Display.create();
@@ -107,10 +104,6 @@ public class DrawingCircles {
             Display.destroy();
             System.exit(1);
         }
-        glMatrixMode(GL_PROJECTION);
-        glOrtho(-1.7, 1.7, -1, 1, -1, 1);
-        glMatrixMode(GL_MODELVIEW);
-        glClear(GL_COLOR_BUFFER_BIT);
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT);
             if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
