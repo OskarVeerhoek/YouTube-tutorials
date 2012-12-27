@@ -54,6 +54,7 @@ import static org.lwjgl.opengl.GL20.*;
 /**
  * A 3D terrain loaded from a heightmap and a lookup texture.
  * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal and wireframe mode.
+ * Click here for an image: https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
  *
  * @author Oskar Veerhoek
  */
