@@ -36,7 +36,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.util.glu.GLU;
 import utility.EulerCamera;
 import utility.ShaderLoader;
@@ -49,6 +48,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
@@ -149,10 +149,9 @@ public class TerrainDemo {
     private static void setUpStates() {
         camera.applyOptimalStates();
         glEnable(GL_DEPTH_TEST);
+        // Set the blue sky background.
         glClearColor(0, 0.75f, 1, 1);
         glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glEnable(GL_NORMALIZE);
     }
 
     private static void update() {
@@ -188,7 +187,8 @@ public class TerrainDemo {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        GL13.glActiveTexture(GL13.GL_TEXTURE0);
+        glActiveTexture(GL_TEXTURE0);
+        // Use GL_LINEAR for smooth terrain.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         heightmapDisplayList = glGenLists(1);
