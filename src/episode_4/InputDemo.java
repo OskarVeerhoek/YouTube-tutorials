@@ -42,8 +42,7 @@ import java.util.Random;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * TODO: Investigate necessity of Thread.sleep() in Box class, thanks Fabien!
- * Shows how to use input coupled with threads to achieve cool results.
+ * Shows how to use input to achieve cool results. Thanks to Azziplekkus1337 for the better way of handling the cool-down!
  *
  * @author Oskar
  */
@@ -51,15 +50,7 @@ public class InputDemo {
 
     private static List<Box> shapes = new ArrayList<Box>(16);
     private static boolean somethingIsSelected = false;
-    private static boolean randomColorCooldown = false;
-
-    private static synchronized void setRandomColorCooldown(boolean value) {
-        randomColorCooldown = value;
-    }
-
-    private static synchronized boolean getRandomColorCooldown() {
-        return randomColorCooldown;
-    }
+    private static long lastColourChange;
 
     public static void main(String args[]) {
         try {
@@ -88,39 +79,15 @@ public class InputDemo {
                 System.exit(0);
             }
             for (final Box box : shapes) {
-                if (Mouse.isButtonDown(0) && box.inBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
+                if (Mouse.isButtonDown(0) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
                     somethingIsSelected = true;
                     box.selected = true;
                 }
-                if (Mouse.isButtonDown(2) && box.inBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
-                    if (!getRandomColorCooldown()) {
-                        setRandomColorCooldown(true);
-                    } else {
-                        new Thread(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                if (getRandomColorCooldown() == true) {
-                                    try {
-                                        System.out.println("HEY!");
-                                        Thread.sleep(2000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    box.randomizeColors();
-                                    randomColorCooldown = false;
-                                }
-
-                            }
-                        }).start();
-                        //try {
-                        //    Thread.sleep(500);
-                        //} catch (InterruptedException e) {
-                        //    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                        //}
-                        //randomColorCooldown = false;
+                if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected)
+                    if ((System.currentTimeMillis() - lastColourChange) >= 200 /* milliseconds */) {
+                        box.randomiseColors();
+                        lastColourChange = System.currentTimeMillis();
                     }
-                }
                 if (Mouse.isButtonDown(1)) {
                     box.selected = false;
                     somethingIsSelected = false;
@@ -157,8 +124,8 @@ public class InputDemo {
             colorGreen = randomGenerator.nextFloat();
         }
 
-        boolean inBounds(int mousex, int mousey) {
-            return mousex > x && mousex < x + 50 && mousey > y && mousey < y + 50;
+        boolean isInBounds(int mouseX, int mouseY) {
+            return mouseX > x && mouseX < x + 50 && mouseY > y && mouseY < y + 50;
         }
 
         void update(int dx, int dy) {
@@ -166,7 +133,7 @@ public class InputDemo {
             y += dy;
         }
 
-        void randomizeColors() {
+        void randomiseColors() {
             Random randomGenerator = new Random();
             colorRed = randomGenerator.nextFloat();
             colorBlue = randomGenerator.nextFloat();
