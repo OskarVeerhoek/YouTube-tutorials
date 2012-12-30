@@ -99,8 +99,6 @@ public class VoxelTerrain {
                 float y = data[z][x];
                 glVertex3f(x, y, z);
                 glVertex3f(x, y, z + 1);
-//                glVertex3f(x, data[z][x], z);
-//                glVertex3f(x, data[z + 1][x], z + 1);
             }
             glEnd();
         }
@@ -110,8 +108,6 @@ public class VoxelTerrain {
                 float y = data[z][x];
                 glVertex3f(x, y, z);
                 glVertex3f(x, data[z-1][x], z);
-//                glVertex3f(x, data[z][x], z);
-//                glVertex3f(x, data[z + 1][x], z + 1);
             }
             glEnd();
         }
