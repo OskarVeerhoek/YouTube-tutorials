@@ -192,6 +192,7 @@ public class TerrainDemo {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         heightmapDisplayList = glGenLists(1);
+        // TODO: Add alternative VBO rendering for pseudo-compatibility with version 3 and higher.
         // Create a display list that will hold the position data of the height-map.
         glNewList(heightmapDisplayList, GL_COMPILE);
         glScalef(0.2f, 0.06f, 0.2f);
