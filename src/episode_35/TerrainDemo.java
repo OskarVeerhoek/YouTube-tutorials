@@ -192,9 +192,12 @@ public class TerrainDemo {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         heightmapDisplayList = glGenLists(1);
+        // Create a display list that will hold the position data of the height-map.
         glNewList(heightmapDisplayList, GL_COMPILE);
         glScalef(0.2f, 0.06f, 0.2f);
+        // Iterate over the 'strips' of height-map points.
         for (int z = 0; z < data.length - 1; z++) {
+            // Render a triangle strip for each 'strip'.
             glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < data[z].length; x++) {
                 glVertex3f(x, data[z][x], z);
