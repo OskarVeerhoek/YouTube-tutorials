@@ -51,7 +51,7 @@ public class SimpleOGLRenderer {
             // Sets the width of the display to 640 and the height to 480
             Display.setDisplayMode(new DisplayMode(640, 480));
             // Sets the title of the display to "Episode 2 - Display"
-            Display.setTitle("Episode 2 - Display");
+            Display.setTitle("Episode 3 - OpenGL Rendering");
             // Creates and shows the display
             Display.create();
         } catch (LWJGLException e) {
