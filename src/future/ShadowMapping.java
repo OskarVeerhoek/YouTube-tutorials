@@ -50,7 +50,7 @@ import static org.lwjgl.util.glu.GLU.gluLookAt;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 /**
- * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible.
+ * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible. Some code was modified by Oskar Veerhoek.
  *
  * @author Sam K.
  * @author Daniel W.

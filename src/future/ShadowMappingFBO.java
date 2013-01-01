@@ -52,7 +52,7 @@ import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 /**
- * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible.
+ * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible. Some code was modified by Oskar Veerhoek.
  *
  * @author Sam K.
  * @author Daniel W.
