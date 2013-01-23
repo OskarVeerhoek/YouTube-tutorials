@@ -46,12 +46,9 @@ public class BlockGrid {
 
     private Block[][] blocks = new Block[BLOCKS_WIDTH][BLOCKS_HEIGHT];
 
-    public BlockGrid(File loadFile) {
-    }
-
     public BlockGrid() {
-        for (int x = 0; x < BLOCKS_WIDTH - 1; x++) {
-            for (int y = 0; y < BLOCKS_HEIGHT - 1; y++) {
+        for (int x = 0; x < BLOCKS_WIDTH; x++) {
+            for (int y = 0; y < BLOCKS_HEIGHT; y++) {
                 blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y
                         * BLOCK_SIZE);
             }
@@ -82,8 +79,8 @@ public class BlockGrid {
         Document document = new Document();
         Element root = new Element("blocks");
         document.setRootElement(root);
-        for (int x = 0; x < BLOCKS_WIDTH - 1; x++) {
-            for (int y = 0; y < BLOCKS_HEIGHT - 1; y++) {
+        for (int x = 0; x < BLOCKS_WIDTH; x++) {
+            for (int y = 0; y < BLOCKS_HEIGHT; y++) {
                 Element block = new Element("block");
                 block.setAttribute("x", String.valueOf((int) (blocks[x][y].getX() / BLOCK_SIZE)));
                 block.setAttribute("y", String.valueOf((int) (blocks[x][y].getY() / BLOCK_SIZE)));
@@ -119,8 +116,8 @@ public class BlockGrid {
     }
 
     public void clear() {
-        for (int x = 0; x < BLOCKS_WIDTH - 1; x++) {
-            for (int y = 0; y < BLOCKS_HEIGHT - 1; y++) {
+        for (int x = 0; x < BLOCKS_WIDTH; x++) {
+            for (int y = 0; y < BLOCKS_HEIGHT; y++) {
                 blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
             }
         }

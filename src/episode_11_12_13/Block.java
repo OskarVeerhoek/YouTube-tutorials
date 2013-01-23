@@ -39,12 +39,12 @@ import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class Block {
+public final class Block {
 
-    private BlockType type = BlockType.AIR;
-    private Texture texture = null;
-    private float x;
-    private float y;
+    private final BlockType type;
+    private Texture texture;
+    private final float x;
+    private final float y;
 
     public Block(BlockType type, float x, float y) {
         this.type = type;
@@ -84,23 +84,11 @@ public class Block {
         return type;
     }
 
-    public void setType(BlockType type) {
-        this.type = type;
-    }
-
     public float getX() {
         return x;
     }
 
-    public void setX(float x) {
-        this.x = x;
-    }
-
     public float getY() {
         return y;
-    }
-
-    public void setY(float y) {
-        this.y = y;
     }
 }
