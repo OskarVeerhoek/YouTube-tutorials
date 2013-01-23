@@ -48,7 +48,8 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
@@ -182,6 +183,7 @@ public class TerrainDemo {
             decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
             heightmapinfoInputStream.close();
             buffer.flip();
+            lookupTexture = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, lookupTexture);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         } catch (IOException e) {
