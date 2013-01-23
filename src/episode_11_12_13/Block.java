@@ -64,8 +64,8 @@ public class Block {
     }
 
     public void draw() {
-        texture.bind();
-        glLoadIdentity();
+        glBindTexture(GL_TEXTURE_2D, texture.getTextureID());
+        glPushMatrix();
         glTranslatef(x, y, 0);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 0);
@@ -77,7 +77,7 @@ public class Block {
         glTexCoord2f(0, 1);
         glVertex2f(0, World.BLOCK_SIZE);
         glEnd();
-        glLoadIdentity();
+        glPopMatrix();
     }
 
     public BlockType getType() {
