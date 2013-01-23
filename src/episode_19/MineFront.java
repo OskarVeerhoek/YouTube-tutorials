@@ -394,15 +394,6 @@ public class MineFront {
             glVertex3d(-1, -.75, -4);
 
             glEnd();
-            // Here below if the dull old triangle, if you so desire.
-// glBegin(GL_TRIANGLES);
-// glColor4f(1, 0, 0, 0.9f);
-// glVertex3f(-0.75f, -0.75f, -5);
-// glColor4f(0, 1, 0, 0.9f);
-// glVertex3f(0.75f, -0.75f, -5);
-// glColor4f(0, 0, 1, 0.9f);
-// glVertex3f(0.75f, 0.75f, -5.5f);
-// glEnd();
             glColor4f(1, 1, 1, 1);
         }
         glEndList();
@@ -471,88 +462,88 @@ public class MineFront {
             if (keyUp && keyRight && !keyLeft && !keyDown) {
                 float angle = rotation.y + 45;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyUp && keyLeft && !keyRight && !keyDown) {
                 float angle = rotation.y - 45;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyUp && !keyLeft && !keyRight && !keyDown) {
                 float angle = rotation.y;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyDown && keyLeft && !keyRight && !keyUp) {
                 float angle = rotation.y - 135;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyDown && keyRight && !keyLeft && !keyUp) {
                 float angle = rotation.y + 135;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyDown && !keyUp && !keyLeft && !keyRight) {
                 float angle = rotation.y;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = -(walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = -(walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyLeft && !keyRight && !keyUp && !keyDown) {
                 float angle = rotation.y - 90;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
             if (keyRight && !keyLeft && !keyUp && !keyDown) {
                 float angle = rotation.y + 90;
                 Vector3f newPosition = new Vector3f(position);
-                float schuine = (walkingSpeed * 0.0002f) * delta;
-                float aanliggende = schuine * (float) Math.cos(Math.toRadians(angle));
-                float overstaande = (float) (Math.sin(Math.toRadians(angle)) * schuine);
-                newPosition.z += aanliggende;
-                newPosition.x -= overstaande;
+                float hypotenuse = (walkingSpeed * 0.0002f) * delta;
+                float adjacent = hypotenuse * (float) Math.cos(Math.toRadians(angle));
+                float opposite = (float) (Math.sin(Math.toRadians(angle)) * hypotenuse);
+                newPosition.z += adjacent;
+                newPosition.x -= opposite;
                 position.z = newPosition.z;
                 position.x = newPosition.x;
             }
