@@ -49,8 +49,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
-import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
@@ -151,33 +149,48 @@ public class TerrainDemo {
                     data[z][x] = colour.getRed();
                 }
             }
-            FileInputStream heightmapinfoInputStream = new FileInputStream("res/images/heightmap_lookup.png");
-            PNGDecoder decoder = new PNGDecoder(heightmapinfoInputStream);
+            // Create an input stream for the 'lookup texture', a texture that will used by the fragment shader to
+            // determine which colour matches which height on the heightmap
+            FileInputStream heightmapLookupInputStream = new FileInputStream("res/images/heightmap_lookup.png");
+            // Create a class that will give us information about the image file (width and height) and give us the
+            // texture data in an OpenGL-friendly manner
+            PNGDecoder decoder = new PNGDecoder(heightmapLookupInputStream);
+            // Create a ByteBuffer in which to store the contents of the texture. Its size is the width multiplied by
+            // the height and 4, which stands for the amount of bytes a float is in Java.
             ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
+            // 'Decode' the texture and store its data in the buffer we just created
             decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
-            heightmapinfoInputStream.close();
+            // Make the contents of the ByteBuffer readable to OpenGL (and unreadable to us)
             buffer.flip();
+            // Close the input stream for the heightmap 'lookup texture'
+            heightmapLookupInputStream.close();
+            // Generate a texture handle for the 'lookup texture'
             lookupTexture = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, lookupTexture);
+            // Hand the texture data to OpenGL
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        glActiveTexture(GL_TEXTURE0);
-        // Use GL_LINEAR for smooth terrain.
+        // Use the GL_NEAREST texture filter so that the sampled texel (texture pixel) is not smoothed out. Usually
+        // using GL_NEAREST will make the textured shape appear pixelated, but in this case using the alternative,
+        // GL_LINEAR, will make the sharp transitions between height-colours ugly.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        // Generate a display list handle for the display list that will store the heightmap vertex data
         heightmapDisplayList = glGenLists(1);
         // TODO: Add alternative VBO rendering for pseudo-compatibility with version 3 and higher.
-        // Create a display list that will hold the position data of the height-map.
         glNewList(heightmapDisplayList, GL_COMPILE);
+        // Scale back the display list so that its proportions are acceptable.
         glScalef(0.2f, 0.06f, 0.2f);
-        // Iterate over the 'strips' of height-map points.
+        // Iterate over the 'strips' of heightmap data.
         for (int z = 0; z < data.length - 1; z++) {
             // Render a triangle strip for each 'strip'.
             glBegin(GL_TRIANGLE_STRIP);
             for (int x = 0; x < data[z].length; x++) {
+                // Take a vertex from the current strip
                 glVertex3f(x, data[z][x], z);
+                // Take a vertex from the next strip
                 glVertex3f(x, data[z + 1][x], z + 1);
             }
             glEnd();
@@ -188,6 +201,7 @@ public class TerrainDemo {
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape.vs", "res/shaders/landscape.fs");
         glUseProgram(shaderProgram);
+        // The following call is redundant, but illustrates how you would use multiple textures
         glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
     }
 
@@ -208,9 +222,11 @@ public class TerrainDemo {
 
     private static void setUpStates() {
         camera.applyOptimalStates();
+        // Enable the sorting of shapes from far to near
         glEnable(GL_DEPTH_TEST);
-        // Set the blue sky background.
+        // Set the background to a blue sky colour
         glClearColor(0, 0.75f, 1, 1);
+        // Remove the back (bottom) faces of shapes for performance
         glEnable(GL_CULL_FACE);
     }
 
