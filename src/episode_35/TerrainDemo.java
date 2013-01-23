@@ -41,6 +41,7 @@ import utility.EulerCamera;
 import utility.ShaderLoader;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -88,9 +89,13 @@ public class TerrainDemo {
     private static float[][] data;
 
     private static void render() {
-        glLoadIdentity();
-        camera.applyTranslations();
+        // Clear the pixels on the screen and clear the contents of the depth buffer (3D contents of the scene)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Reset any translations the camera made last frame update
+        glLoadIdentity();
+        // Apply the camera position and orientation to the scene
+        camera.applyTranslations();
+        // Render the heightmap using the shaders that are being used
         glCallList(heightmapDisplayList);
     }
 
@@ -126,55 +131,24 @@ public class TerrainDemo {
         camera.processKeyboard(16, 1);
     }
 
-    private static void cleanUp(boolean asCrash) {
-        glUseProgram(0);
-        glDeleteProgram(shaderProgram);
-        glDeleteLists(heightmapDisplayList, 1);
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glDeleteTextures(lookupTexture);
-        System.err.println(GLU.gluErrorString(glGetError()));
-        Display.destroy();
-        System.exit(asCrash ? 1 : 0);
-    }
-
-    private static void setUpMatrices() {
-        camera.applyPerspectiveMatrix();
-    }
-
-    private static void setUpShaders() {
-        shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape.vs", "res/shaders/landscape.fs");
-        glUseProgram(shaderProgram);
-        glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
-    }
-
-    private static void setUpStates() {
-        camera.applyOptimalStates();
-        glEnable(GL_DEPTH_TEST);
-        // Set the blue sky background.
-        glClearColor(0, 0.75f, 1, 1);
-        glEnable(GL_CULL_FACE);
-    }
-
-    private static void update() {
-        Display.update();
-        Display.sync(60);
-    }
-
-    private static void enterGameLoop() {
-        while (!Display.isCloseRequested()) {
-            render();
-            input();
-            update();
-        }
-    }
-
     private static void setUpHeightmap() {
         try {
+            // Load the heightmap-image from its resource file
             BufferedImage heightmapImage = ImageIO.read(new File("res/images/heightmap.bmp"));
+            // Initialise the data array, which holds the heights of the heightmap-vertices, with the correct dimensions
             data = new float[heightmapImage.getWidth()][heightmapImage.getHeight()];
+            // Lazily initialise the convenience class for extracting the separate red, green, blue, or alpha channels
+            // an int in the default RGB color model and default sRGB colourspace.
+            Color colour;
+            // Iterate over the pixels in the image on the x-axis
             for (int z = 0; z < data.length; z++) {
+                // Iterate over the pixels in the image on the y-axis
                 for (int x = 0; x < data[z].length; x++) {
-                    data[z][x] = ((heightmapImage.getRGB(z, x) >> 16) & 0xff);
+                    // Retrieve the colour at the current x-location and y-location in the image
+                    colour = new Color(heightmapImage.getRGB(z, x));
+                    // Store the value of the red channel as the height of a heightmap-vertex in 'data'. The choice for
+                    // the red channel is arbitrary, since the heightmap-image itself only has white, gray, and black.
+                    data[z][x] = colour.getRed();
                 }
             }
             FileInputStream heightmapinfoInputStream = new FileInputStream("res/images/heightmap_lookup.png");
@@ -209,6 +183,48 @@ public class TerrainDemo {
             glEnd();
         }
         glEndList();
+    }
+
+    private static void setUpShaders() {
+        shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape.vs", "res/shaders/landscape.fs");
+        glUseProgram(shaderProgram);
+        glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
+    }
+
+    private static void cleanUp(boolean asCrash) {
+        glUseProgram(0);
+        glDeleteProgram(shaderProgram);
+        glDeleteLists(heightmapDisplayList, 1);
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDeleteTextures(lookupTexture);
+        System.err.println(GLU.gluErrorString(glGetError()));
+        Display.destroy();
+        System.exit(asCrash ? 1 : 0);
+    }
+
+    private static void setUpMatrices() {
+        camera.applyPerspectiveMatrix();
+    }
+
+    private static void setUpStates() {
+        camera.applyOptimalStates();
+        glEnable(GL_DEPTH_TEST);
+        // Set the blue sky background.
+        glClearColor(0, 0.75f, 1, 1);
+        glEnable(GL_CULL_FACE);
+    }
+
+    private static void update() {
+        Display.update();
+        Display.sync(60);
+    }
+
+    private static void enterGameLoop() {
+        while (!Display.isCloseRequested()) {
+            render();
+            input();
+            update();
+        }
     }
 
     private static void setUpDisplay() {
