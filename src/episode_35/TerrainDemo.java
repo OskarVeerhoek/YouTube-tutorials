@@ -52,8 +52,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
- * A 3D terrain loaded from a heightmap and a lookup texture.
- * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal and wireframe mode.
+ * A 3D terrain loaded from a height-map and a lookup texture.
+ * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal, point, and wire-frame mode.
  * Click here for an image: https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
  *
  * @author Oskar Veerhoek
@@ -61,7 +61,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class TerrainDemo {
 
     private static final String WINDOW_TITLE = "Terrain!";
-    private static final int[] WINDOW_DIMENSIONS = {1280, 720};
+    private static final int[] WINDOW_DIMENSIONS = {640, 480};
     private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
     private static final EulerCamera camera = new EulerCamera.Builder()
             .setPosition(-5.4f, 19.2f, 33.2f)
@@ -70,7 +70,7 @@ public class TerrainDemo {
             .setFieldOfView(60)
             .build();
     /**
-     * The shader program that will use the lookup texture and the heightmap's vertex data to draw the terrain.
+     * The shader program that will use the lookup texture and the height-map's vertex data to draw the terrain.
      */
     private static int shaderProgram;
     /**
@@ -78,7 +78,7 @@ public class TerrainDemo {
      */
     private static int lookupTexture;
     /**
-     * The display list that will contain the heightmap's vertex data.
+     * The display list that will contain the height-map's vertex data.
      */
     private static int heightmapDisplayList;
     /**
@@ -110,11 +110,13 @@ public class TerrainDemo {
                     setUpHeightmap();
                 }
                 if (Keyboard.getEventKey() == Keyboard.KEY_P) {
-                    // Switch between normal mode and wireframe mode.
+                    // Switch between normal mode, point mode, and wire-frame mode.
                     int polygonMode = glGetInteger(GL_POLYGON_MODE);
                     if (polygonMode == GL_LINE) {
                         glPolygonMode(GL_FRONT, GL_FILL);
                     } else if (polygonMode == GL_FILL) {
+                        glPolygonMode(GL_FRONT, GL_POINT);
+                    } else if (polygonMode == GL_POINT) {
                         glPolygonMode(GL_FRONT, GL_LINE);
                     }
                 }
@@ -201,7 +203,7 @@ public class TerrainDemo {
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape.vs", "res/shaders/landscape.fs");
         glUseProgram(shaderProgram);
-        // The following call is redundant, but illustrates how you would use multiple textures
+        // The following call is redundant because the default value is already 0, but illustrates how you would use multiple textures
         glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
     }
 
