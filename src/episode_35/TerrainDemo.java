@@ -36,6 +36,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
 import utility.EulerCamera;
 import utility.ShaderLoader;
@@ -53,7 +55,8 @@ import static org.lwjgl.opengl.GL20.*;
 
 /**
  * A 3D terrain loaded from a height-map and a lookup texture.
- * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal, point, and wire-frame mode.
+ * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal, point, and wire-frame mode. Press
+ * 'F' to flatten the terrain.
  * Click here for an image: https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
  *
  * @author Oskar Veerhoek
@@ -61,7 +64,7 @@ import static org.lwjgl.opengl.GL20.*;
 public class TerrainDemo {
 
     private static final String WINDOW_TITLE = "Terrain!";
-    private static final int[] WINDOW_DIMENSIONS = {640, 480};
+    private static final int[] WINDOW_DIMENSIONS = {1200, 650};
     private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
     private static final EulerCamera camera = new EulerCamera.Builder()
             .setPosition(-5.4f, 19.2f, 33.2f)
@@ -85,6 +88,10 @@ public class TerrainDemo {
      * The points of the height. The first dimension represents the z-coordinate. The second dimension represents the x-coordinate. The float value represents the height.
      */
     private static float[][] data;
+    /**
+     * Whether the terrain should vary in height or be displayed on a grid.
+     */
+    private static boolean flatten = false;
 
     private static void render() {
         // Clear the pixels on the screen and clear the contents of the depth buffer (3D contents of the scene)
@@ -93,6 +100,9 @@ public class TerrainDemo {
         glLoadIdentity();
         // Apply the camera position and orientation to the scene
         camera.applyTranslations();
+        if (flatten) {
+            glScalef(1, 0, 1);
+        }
         // Render the heightmap using the shaders that are being used
         glCallList(heightmapDisplayList);
     }
@@ -100,6 +110,9 @@ public class TerrainDemo {
     private static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
+                    flatten = !flatten;
+                }
                 if (Keyboard.getEventKey() == Keyboard.KEY_L) {
                     // Reload the shaders and the heightmap data.
                     glUseProgram(0);
@@ -224,6 +237,7 @@ public class TerrainDemo {
 
     private static void setUpStates() {
         camera.applyOptimalStates();
+        glPointSize(2);
         // Enable the sorting of shapes from far to near
         glEnable(GL_DEPTH_TEST);
         // Set the background to a blue sky colour
