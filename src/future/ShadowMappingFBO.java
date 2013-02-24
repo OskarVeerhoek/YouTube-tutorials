@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Sam K., Daniel W.
+ * Copyright (c) 2013, Oskar Veerhoek
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
