@@ -36,7 +36,6 @@ import org.lwjgl.opengl.*;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL11.glTexImage2D;
@@ -45,43 +44,17 @@ import static org.lwjgl.opengl.GL11.glTexImage2D;
 public class BitmapFonts {
 
     private static final String WINDOW_TITLE = "Bitmap Fonts";
-    private static final int[] WINDOW_DIMENSIONS = {1024, 512};
+    private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
+    private static StringBuilder renderString = new StringBuilder("Enter your text");
     private static int fontTexture;
-    private static char[][] renderString = new char[5][25];
-    private static int header = 0;
-    private static int line = 0;
-
-    static {
-        for (int lineNumber = 0; lineNumber < renderString.length; lineNumber++) {
-            for (int i = 0; i < 15; i++) {
-                renderString[lineNumber][i] = ' ';
-            }
-        }
-    }
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        renderStringAt(new String(renderString[0]), 60, 450, 980, 480);
-        renderStringAt(new String(renderString[1]), 60, 420, 980, 450);
-        renderStringAt(new String(renderString[2]), 60, 390, 980, 420);
-        renderStringAt(new String(renderString[3]), 60, 360, 980, 390);
-        renderStringAt(new String(renderString[4]), 60, 330, 980, 360);
+        renderString(renderString.toString(), -0.9f, 0, 0.3f, 0.225f);
     }
 
-    private static void renderStringAt(String string, int x, int y, int x2, int y2) {
-        // TODO: Remove unnecessary glBegin/glEnd
-        int length = (x2 - x) / string.length();
-        int height = y2 - y;
-        glPushMatrix();
-        glTranslatef(x, y, 0);
-        for (int i = 0; i < string.length(); i++) {
-            renderCharacterAt(string.charAt(i), length * i - length, 0, length * i, height);
-        }
-        glPopMatrix();
-    }
-
-    private static void renderCharacterAt(char character, int x, int y, int x2, int y2) {
+    private static void renderCharacter(char character, float x, float y, float sizeX, float sizeY) {
         int asciiCode = (int) character;
         final float cellSize = 1.0f / 16.0f;
         float cellX = asciiCode % 16 * cellSize;
@@ -90,30 +63,30 @@ public class BitmapFonts {
         glTexCoord2f(cellX, cellY + cellSize);
         glVertex2f(x, y);
         glTexCoord2f(cellX + cellSize, cellY + cellSize);
-        glVertex2f(x2, y);
+        glVertex2f(x + sizeX/2, y);
         glTexCoord2f(cellX + cellSize, cellY);
-        glVertex2f(x2, y2);
+        glVertex2f(x + sizeX/2, y + sizeY);
         glTexCoord2f(cellX, cellY);
-        glVertex2f(x, y2);
+        glVertex2f(x, y + sizeY);
         glEnd();
     }
 
-    private static void logic() {
-        // Add logic code here
+    private static void renderString(String string, float x, float y, float characterSizeX, float characterSizeY) {
+        glPushMatrix();
+        glTranslatef(x, y, 0);
+        for (int i = 0; i < string.length(); i++) {
+            renderCharacter(string.charAt(i), i * characterSizeX / 3, 0, characterSizeX, characterSizeY);
+        }
+        glPopMatrix();
     }
 
     private static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 if (Keyboard.getEventKey() != Keyboard.KEY_BACK) {
-                    renderString[line][header++] = Keyboard.getEventCharacter();
-                } else {
-                    renderString[line][header] = ' ';
-                    header = header -1 < 0 ? header : header - 1;
-                }
-                if (header == renderString[line].length) {
-                    header = 0;
-                    line = line == renderString.length - 1 ? 0 : line + 1;
+                    renderString.append(Keyboard.getEventCharacter());
+                } else if (renderString.length() > 0) {
+                    renderString.setLength(renderString.length() - 1);
                 }
             }
         }
@@ -125,12 +98,6 @@ public class BitmapFonts {
         System.exit(asCrash ? 1 : 0);
     }
 
-    private static void setUpMatrices() {
-        glMatrixMode(GL_PROJECTION);
-        glOrtho(0, 1024, 0, 512, 1, -1);
-        glMatrixMode(GL_MODELVIEW);
-    }
-
     private static void setUpTextures() throws IOException {
         fontTexture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, fontTexture);
@@ -139,13 +106,16 @@ public class BitmapFonts {
         decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
         buffer.flip();
         glBindTexture(GL_TEXTURE_2D, fontTexture);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
     }
 
     private static void setUpStates() {
         glEnable(GL_TEXTURE_2D);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE, GL_ONE);
+        glClearColor(0, 0.3f, 0, 1);
     }
 
     private static void update() {
@@ -156,7 +126,6 @@ public class BitmapFonts {
     private static void enterGameLoop() {
         while (!Display.isCloseRequested()) {
             render();
-            logic();
             input();
             update();
         }
@@ -181,7 +150,6 @@ public class BitmapFonts {
             e.printStackTrace();
             cleanUp(true);
         }
-        setUpMatrices();
         setUpStates();
         enterGameLoop();
         cleanUp(false);
