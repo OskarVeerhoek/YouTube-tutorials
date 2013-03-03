@@ -43,6 +43,7 @@ import utility.BufferTools;
 import utility.EulerCamera;
 
 import java.nio.FloatBuffer;
+import java.util.Arrays;
 
 import static org.lwjgl.opengl.ARBFramebufferObject.*;
 import static org.lwjgl.opengl.ARBShadowAmbient.GL_TEXTURE_COMPARE_FAIL_VALUE_ARB;
@@ -66,7 +67,7 @@ public class ShadowMappingFBO {
 
     private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.2F, 0.2F, 0.2F, 1.0F);
     private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(0.7F, 0.7F, 0.7F, 1.0F);
-    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(100.0F, 300.0F, 100.0F, 1.0F);
+    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200.0F, 250.0F, 200.0F, 1.0F);
     private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
 
     private static final Matrix4f textureMatrix = new Matrix4f();
@@ -83,12 +84,13 @@ public class ShadowMappingFBO {
 
     public static void main(String[] args) {
         setUpDisplay();
-        checkCapabilities();
         setUpStates();
-        setUpFBOs();
+        setUpFramebufferObject();
+        setUpShadowMap();
         setUpCamera();
         while (!Display.isCloseRequested()) {
             render();
+            logic();
             input();
             Display.update();
             Display.sync(60);
@@ -123,27 +125,10 @@ public class ShadowMappingFBO {
         glLight(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
     }
 
-    private static void checkCapabilities() {
-        if (!GLContext.getCapabilities().OpenGL14
-                && !GLContext.getCapabilities().GL_ARB_shadow) {
-            System.out
-                    .println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
-            Display.destroy();
-            System.exit(1);
-        }
-
-        if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
-            System.err
-                    .println("GL_ARB_shadow_ambient extension not available.");
-            Display.destroy();
-            System.exit(1);
-        }
-    }
-
     /**
      * Sets up the OpenGL states.
      */
-    public static void setUpFBOs() {
+    public static void setUpFramebufferObject() {
         int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
         int maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
 
@@ -201,13 +186,12 @@ public class ShadowMappingFBO {
         }
 
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        generateShadowMap();
     }
 
     /**
      * Generate the shadow map.
      */
-    private static void generateShadowMap() {
+    private static void setUpShadowMap() {
         float lightToSceneDistance, nearPlane, fieldOfView;
         FloatBuffer lightModelView = BufferUtils.createFloatBuffer(16);
         FloatBuffer lightProjection = BufferUtils.createFloatBuffer(16);
@@ -232,11 +216,13 @@ public class ShadowMappingFBO {
                 .atan(sceneBoundingRadius / lightToSceneDistance));
 
         glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
         glLoadIdentity();
         gluPerspective(fieldOfView, 1.0F, nearPlane, nearPlane
                 + (2.0F * sceneBoundingRadius));
         glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
         glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
         glLoadIdentity();
         gluLookAt(lightPosition
                 .get(0), lightPosition
@@ -265,6 +251,10 @@ public class ShadowMappingFBO {
         glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
                 shadowMapWidth, shadowMapHeight, 0);
 
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
         glPopAttrib();
@@ -295,6 +285,20 @@ public class ShadowMappingFBO {
             Display.create();
         } catch (LWJGLException e) {
             System.err.println("Couldn't set up the display");
+            Display.destroy();
+            System.exit(1);
+        }
+        if (!GLContext.getCapabilities().OpenGL14
+                && !GLContext.getCapabilities().GL_ARB_shadow) {
+            System.out
+                    .println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
+            Display.destroy();
+            System.exit(1);
+        }
+
+        if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
+            System.err
+                    .println("GL_ARB_shadow_ambient extension not available.");
             Display.destroy();
             System.exit(1);
         }
@@ -396,11 +400,24 @@ public class ShadowMappingFBO {
         glDisable(GL_TEXTURE_GEN_R);
         glDisable(GL_TEXTURE_GEN_Q);
 
+        setUpShadowMap();
 
         int errorFlag = glGetError();
         if (errorFlag != GL_NO_ERROR) {
             System.err.println("An OpenGL error occurred: " + gluErrorString(errorFlag));
         }
+    }
+
+    public static void logic() {
+        float[] lightPositionTemp = new float[4];
+        for (int i = 0; lightPosition.hasRemaining(); i++) {
+            lightPositionTemp[i] = lightPosition.get();
+        }
+        lightPosition.flip();
+        lightPosition.clear();
+        lightPositionTemp[0] += 1f;
+        lightPosition.put(lightPositionTemp);
+        lightPosition.flip();
     }
 
     /**
@@ -410,11 +427,11 @@ public class ShadowMappingFBO {
         //if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
         //    factor--;
         //    glPolygonOffset(factor, 0.0F);
-        //    generateShadowMap();
+        //    setUpShadowMap();
         //} else if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
         //    factor++;
         //    glPolygonOffset(factor, 10);
-        //    generateShadowMap();
+        //    setUpShadowMap();
         //}
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
@@ -426,7 +443,8 @@ public class ShadowMappingFBO {
                 }
             }
         }
-        camera.processMouse(1.0f, 80, -80);
+        if (Mouse.isGrabbed())
+            camera.processMouse(1.0f, 80, -80);
         camera.processKeyboard(16.0f, 15);
         if (Mouse.isButtonDown(0))
             Mouse.setGrabbed(true);
