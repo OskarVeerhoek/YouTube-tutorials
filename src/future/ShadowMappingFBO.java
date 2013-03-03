@@ -77,7 +77,6 @@ public class ShadowMappingFBO {
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200.0F, 250.0F, 200.0F, 1.0F);
     private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
     private static final Matrix4f textureMatrix = new Matrix4f();
-    private static final Sphere sphere = new Sphere();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
     private static final EulerCamera camera = new EulerCamera.Builder()
             .setAspectRatio((float) DISPLAY_MODE.getWidth() / DISPLAY_MODE.getHeight())
@@ -126,19 +125,16 @@ public class ShadowMappingFBO {
     }
 
     public static void setUpStates() {
-        glShadeModel(GL_SMOOTH);
+        // Enable, well, lighting
         glEnable(GL_LIGHTING);
+        // Have the submitted colours play a role in the lighting calculations
         glEnable(GL_COLOR_MATERIAL);
         glEnable(GL_NORMALIZE);
         glEnable(GL_LIGHT0);
-        glColorMask(true, true, true, true);
         glDisable(GL_POLYGON_OFFSET_FILL);
         glEnable(GL_DEPTH_TEST);
-        glDepthFunc(GL_LEQUAL);
-        glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
         glPolygonOffset(4.0F, 0.0F);
         glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
     }
 
     /**
@@ -333,10 +329,10 @@ public class ShadowMappingFBO {
         glDisable(GL_LIGHTING);
         glColor3f(0.3F, 0.6F, 0.3F);
         glBegin(GL_QUADS);
-        glVertex3f(-200.0F, -19.0F, -200.0F);
-        glVertex3f(-200.0F, -19.0F, +200.0F);
-        glVertex3f(+200.0F, -19.0F, +200.0F);
-        glVertex3f(+200.0F, -19.0F, -200.0F);
+        glVertex3f(-125.0F, -19.0F, -125.0F);
+        glVertex3f(-125.0F, -19.0F, +125.0F);
+        glVertex3f(+125.0F, -19.0F, +125.0F);
+        glVertex3f(+125.0F, -19.0F, -125.0F);
         glEnd();
         glPopAttrib();
     }
