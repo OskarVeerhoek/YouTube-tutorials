@@ -36,14 +36,11 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
-import org.lwjgl.util.glu.GLU;
-import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import utility.BufferTools;
 import utility.EulerCamera;
 import utility.OBJLoader;
-import utility.ShaderLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,8 +52,6 @@ import static org.lwjgl.opengl.ARBShadowAmbient.GL_TEXTURE_COMPARE_FAIL_VALUE_AR
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL14.*;
-import static org.lwjgl.opengl.GL20.glUseProgram;
-import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.util.glu.GLU.*;
 
 /**
@@ -118,6 +113,7 @@ public class ShadowMappingFBO {
             cleanUp();
         }
     }
+
     public static void setUpCamera() {
         camera.applyPerspectiveMatrix();
         camera.applyOptimalStates();

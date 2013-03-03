@@ -28,17 +28,19 @@
  */
 
 package future;
+
 import de.matthiasmann.twl.utils.PNGDecoder;
-import org.lwjgl.*;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.*;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.glTexImage2D;
 
 
 public class BitmapFonts {
@@ -63,9 +65,9 @@ public class BitmapFonts {
         glTexCoord2f(cellX, cellY + cellSize);
         glVertex2f(x, y);
         glTexCoord2f(cellX + cellSize, cellY + cellSize);
-        glVertex2f(x + sizeX/2, y);
+        glVertex2f(x + sizeX / 2, y);
         glTexCoord2f(cellX + cellSize, cellY);
-        glVertex2f(x + sizeX/2, y + sizeY);
+        glVertex2f(x + sizeX / 2, y + sizeY);
         glTexCoord2f(cellX, cellY);
         glVertex2f(x, y + sizeY);
         glEnd();

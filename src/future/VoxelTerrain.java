@@ -107,7 +107,7 @@ public class VoxelTerrain {
             for (int x = 0; x < data[z].length; x++) {
                 float y = data[z][x];
                 glVertex3f(x, y, z);
-                glVertex3f(x, data[z-1][x], z);
+                glVertex3f(x, data[z - 1][x], z);
             }
             glEnd();
         }
@@ -230,7 +230,7 @@ public class VoxelTerrain {
             for (int x = 0; x < data[z].length; x++) {
                 float y = data[z][x];
                 glVertex3f(x, y, z);
-                glVertex3f(x, data[z-1][x], z);
+                glVertex3f(x, data[z - 1][x], z);
 //                glVertex3f(x, data[z][x], z);
 //                glVertex3f(x, data[z + 1][x], z + 1);
             }
