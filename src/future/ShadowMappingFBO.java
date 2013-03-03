@@ -36,12 +36,18 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
+import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import utility.BufferTools;
 import utility.EulerCamera;
+import utility.OBJLoader;
+import utility.ShaderLoader;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.ARBFramebufferObject.*;
@@ -49,6 +55,8 @@ import static org.lwjgl.opengl.ARBShadowAmbient.GL_TEXTURE_COMPARE_FAIL_VALUE_AR
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL14.*;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.util.glu.GLU.*;
 
 /**
@@ -60,15 +68,14 @@ import static org.lwjgl.util.glu.GLU.*;
 public class ShadowMappingFBO {
     private static int shadowMapWidth;
     private static int shadowMapHeight;
-
     private static int frameBuffer;
     private static int renderBuffer;
+    private static int bunnyDisplayList;
 
-    private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.2F, 0.2F, 0.2F, 1.0F);
-    private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(0.7F, 0.7F, 0.7F, 1.0F);
+    private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F);
+    private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1.0F);
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200.0F, 250.0F, 200.0F, 1.0F);
     private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
-
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final Sphere sphere = new Sphere();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
@@ -80,13 +87,16 @@ public class ShadowMappingFBO {
             .setFarClippingPane(400)
             .setFieldOfView(60)
             .build();
+    public static final String MODEL_LOCATION = "res/models/bunny.obj";
 
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
         setUpFramebufferObject();
         setUpShadowMap();
+        setUpLighting();
         setUpCamera();
+        setUpModel();
         while (!Display.isCloseRequested()) {
             render();
             logic();
@@ -98,12 +108,24 @@ public class ShadowMappingFBO {
         System.exit(0);
     }
 
-    private static void setUpCamera() {
+    public static void setUpModel() {
+        try {
+            bunnyDisplayList = OBJLoader.createDisplayList(OBJLoader.loadModel(new File(MODEL_LOCATION)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            cleanUp();
+        } catch (IOException e) {
+            e.printStackTrace();
+            cleanUp();
+        }
+    }
+
+    public static void setUpCamera() {
         camera.applyPerspectiveMatrix();
         camera.applyOptimalStates();
     }
 
-    private static void setUpStates() {
+    public static void setUpStates() {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_LIGHTING);
         glEnable(GL_COLOR_MATERIAL);
@@ -114,14 +136,9 @@ public class ShadowMappingFBO {
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LEQUAL);
         glClearColor(0.0F, 0.0F, 0.0F, 1.0F);
-        glShadeModel(GL_SMOOTH);
         glPolygonOffset(4.0F, 0.0F);
-        glShadeModel(GL_SMOOTH);
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
-        glLight(GL_LIGHT0, GL_AMBIENT, ambientLight);
-        glLight(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
     }
 
     /**
@@ -273,6 +290,15 @@ public class ShadowMappingFBO {
         Matrix4f.transpose(tempMatrix, textureMatrix);
     }
 
+    public static void setUpLighting() {
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+        glLight(GL_LIGHT0, GL_AMBIENT, ambientLight);
+        glLight(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+    }
+
     /**
      * Sets up a display.
      */
@@ -303,45 +329,25 @@ public class ShadowMappingFBO {
     }
 
     private static void drawGround() {
-        glColor3f(0.0F, 0.0F, 0.9F);
-        glNormal3f(0.0F, 1.0F, 0.0F);
+        glPushAttrib(GL_LIGHTING_BIT);
+        glDisable(GL_LIGHTING);
+        glColor3f(0.3F, 0.6F, 0.3F);
         glBegin(GL_QUADS);
-        glVertex3f(-100.0F, -25.0F, -100.0F);
-        glVertex3f(-100.0F, -25.0F, 100.0F);
-        glVertex3f(100.0F, -25.0F, 100.0F);
-        glVertex3f(100.0F, -25.0F, -100.0F);
+        glVertex3f(-200.0F, -19.0F, -200.0F);
+        glVertex3f(-200.0F, -19.0F, +200.0F);
+        glVertex3f(+200.0F, -19.0F, +200.0F);
+        glVertex3f(+200.0F, -19.0F, -200.0F);
         glEnd();
+        glPopAttrib();
     }
 
     /**
      * This is where anything you want rendered into your world should go.
      */
     private static void drawObjects() {
-        glColor3f(1.0F, 0.0F / 10, 0.0F);
-        sphere.draw(12.0F, 50, 50);
-
-        glColor3f(0.0F, 1.0F, 0.0F);
         glPushMatrix();
-        glTranslatef(-60.0F, 0.0F, 0.0F);
-        sphere.draw(14.0F, 50, 50);
-        glPopMatrix();
-
-        glColor3f(1.0F, 1.0F, 0.0F);
-        glPushMatrix();
-        glTranslatef(-60.0F, 0.0F, -24.0F);
-        sphere.draw(15.0F, 50, 50);
-        glPopMatrix();
-
-        glColor3f(1.0F, 0.0F, 1.0F);
-        glPushMatrix();
-        glTranslatef(0.0F, 0.0F, 60.0F);
-        sphere.draw(16.0F, 50, 50);
-        glPopMatrix();
-
-        glColor3f(0.0F, 1.0F, 1.0F);
-        glPushMatrix();
-        glTranslatef(0.0F, 0.0F, -60.0F);
-        sphere.draw(22.0F, 50, 50);
+        glScalef(10, 10, 10);
+        glCallList(bunnyDisplayList);
         glPopMatrix();
     }
 
@@ -396,15 +402,7 @@ public class ShadowMappingFBO {
     }
 
     public static void logic() {
-        float[] lightPositionTemp = new float[4];
-        for (int i = 0; lightPosition.hasRemaining(); i++) {
-            lightPositionTemp[i] = lightPosition.get();
-        }
-        lightPosition.flip();
-        lightPosition.clear();
-        lightPositionTemp[0] += 1f;
-        lightPosition.put(lightPositionTemp);
-        lightPosition.flip();
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
     /**
@@ -428,6 +426,12 @@ public class ShadowMappingFBO {
                 if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                     cleanUp();
                 }
+                if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+                    lightPosition.flip();
+                    lightPosition.clear();
+                    lightPosition.put(new float[]{camera.x(), camera.y(), camera.z(), 1});
+                    lightPosition.flip();
+                }
             }
         }
         if (Mouse.isGrabbed())
@@ -444,6 +448,7 @@ public class ShadowMappingFBO {
      */
     private static void cleanUp() {
         glDeleteFramebuffers(frameBuffer);
+        glDeleteLists(bunnyDisplayList, 1);
         glDeleteRenderbuffers(renderBuffer);
         Display.destroy();
     }
