@@ -55,18 +55,19 @@ public class CustomLauncher {
     /**
      * Base folder for all external libraries
      */
-    private static final File LIB_FOLDER = new File("download");
+    private static final File libraryFolder = new File("download");
     /**
      * The download folder of my personal web-site where I'm hosting all the
      * jars and natives.
      */
-    private static final String BASE_URL = "http://ryanporterfield.com/downloads/";
-
+    private static final String baseURL = "http://ryanporterfield.com/downloads/";
     /**
-     * A list of which libraries are missing
+     * A list of the libraries that are are missing
      */
     final private Map<String, Integer> missing = new HashMap<String, Integer>();
-
+    /**
+     * Amount of bytes downloaded.
+     */
     private int totalDownloaded;
     /**
      * Total size <em>in bytes</em> that needs to be downloaded
@@ -82,12 +83,7 @@ public class CustomLauncher {
     private OS os;
 
     /**
-     * Main method. Self explanetory.
-     * <<<<<<< HEAD
-     * <p/>
-     * =======
-     * <p/>
-     * >>>>>>> master
+     * Main method. Self explanatory.
      *
      * @param args Command line arguments.
      */
@@ -111,8 +107,8 @@ public class CustomLauncher {
      * Constructor initializes the instance variables
      */
     public CustomLauncher() {
-        if (!LIB_FOLDER.exists() && !LIB_FOLDER.mkdirs()) {
-            throw new RuntimeException("Can not create required folders.");
+        if (!libraryFolder.exists() && !libraryFolder.mkdirs()) {
+            throw new RuntimeException("Cannot create required folders.");
         }
         totalDownloadSize = 0;
         dependencies = new HashMap<String, Integer>();
@@ -120,15 +116,15 @@ public class CustomLauncher {
     }
 
     private void check() {
-        File nativeFolder = new File(LIB_FOLDER, "/native");
+        File nativeFolder = new File(libraryFolder, "/native");
         if (!nativeFolder.exists() && !nativeFolder.mkdirs()) {
             throw new RuntimeException("Cannot create folders!");
         }
-        for (String lib : dependencies.keySet()) {
-            File flib = new File(LIB_FOLDER, lib);
-            if (!flib.exists()) {
-                int fileSize = dependencies.get(lib);
-                missing.put(lib, fileSize);
+        for (String libraryName : dependencies.keySet()) {
+            File libraryFile = new File(libraryFolder, libraryName);
+            if (!libraryFile.exists()) {
+                int fileSize = dependencies.get(libraryName);
+                missing.put(libraryName, fileSize);
                 totalDownloadSize = totalDownloadSize + fileSize;
             }
         }
@@ -162,11 +158,11 @@ public class CustomLauncher {
         }
     }
 
-    public void download(String source, String dest, int size) {
+    public void download(String source, String destination, int size) {
         // ten percent of the total download size
         int percent = totalDownloadSize / 10;
-        File ofile = new File(LIB_FOLDER, dest);
-        System.out.printf("\nDownloading\n\t%s\nTo\n\t%s\n", source, dest);
+        File ofile = new File(libraryFolder, destination);
+        System.out.printf("\nDownloading\n\t%s\nTo\n\t%s\n", source, destination);
         try {
             if (!ofile.createNewFile()) {
                 throw new IOException("Can't create " + ofile.getName());
@@ -198,7 +194,7 @@ public class CustomLauncher {
 
     public void downloadMissing() {
         for (String lib : missing.keySet()) {
-            String url = BASE_URL, file = lib;
+            String url = baseURL, file = lib;
             if (!lib.endsWith(".jar")) {
                 url = url + os.url;
                 file = "native/" + lib;

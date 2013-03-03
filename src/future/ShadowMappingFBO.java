@@ -118,7 +118,6 @@ public class ShadowMappingFBO {
             cleanUp();
         }
     }
-
     public static void setUpCamera() {
         camera.applyPerspectiveMatrix();
         camera.applyOptimalStates();
