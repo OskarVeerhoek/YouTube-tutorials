@@ -43,7 +43,6 @@ import utility.BufferTools;
 import utility.EulerCamera;
 
 import java.nio.FloatBuffer;
-import java.util.Arrays;
 
 import static org.lwjgl.opengl.ARBFramebufferObject.*;
 import static org.lwjgl.opengl.ARBShadowAmbient.GL_TEXTURE_COMPARE_FAIL_VALUE_ARB;
@@ -295,7 +294,6 @@ public class ShadowMappingFBO {
             Display.destroy();
             System.exit(1);
         }
-
         if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
             System.err
                     .println("GL_ARB_shadow_ambient extension not available.");
@@ -351,61 +349,50 @@ public class ShadowMappingFBO {
         glLoadIdentity();
         camera.applyTranslations();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        {
+            glEnable(GL_TEXTURE_2D);
+            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,
+                    GL_COMPARE_R_TO_TEXTURE);
+            glEnable(GL_TEXTURE_GEN_S);
+            glEnable(GL_TEXTURE_GEN_T);
+            glEnable(GL_TEXTURE_GEN_R);
+            glEnable(GL_TEXTURE_GEN_Q);
 
-        glEnable(GL_TEXTURE_2D);
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,
-                GL_COMPARE_R_TO_TEXTURE);
+            tempBuffer.put(0, textureMatrix.m00);
+            tempBuffer.put(1, textureMatrix.m01);
+            tempBuffer.put(2, textureMatrix.m02);
+            tempBuffer.put(3, textureMatrix.m03);
 
-        glEnable(GL_TEXTURE_GEN_S);
-        glEnable(GL_TEXTURE_GEN_T);
-        glEnable(GL_TEXTURE_GEN_R);
-        glEnable(GL_TEXTURE_GEN_Q);
+            glTexGen(GL_S, GL_EYE_PLANE, tempBuffer);
 
-        tempBuffer.put(0, textureMatrix.m00);
-        tempBuffer.put(1, textureMatrix.m01);
-        tempBuffer.put(2, textureMatrix.m02);
-        tempBuffer.put(3, textureMatrix.m03);
+            tempBuffer.put(0, textureMatrix.m10);
+            tempBuffer.put(1, textureMatrix.m11);
+            tempBuffer.put(2, textureMatrix.m12);
+            tempBuffer.put(3, textureMatrix.m13);
 
-        glTexGen(GL_S, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_T, GL_EYE_PLANE, tempBuffer);
 
-        tempBuffer.put(0, textureMatrix.m10);
-        tempBuffer.put(1, textureMatrix.m11);
-        tempBuffer.put(2, textureMatrix.m12);
-        tempBuffer.put(3, textureMatrix.m13);
+            tempBuffer.put(0, textureMatrix.m20);
+            tempBuffer.put(1, textureMatrix.m21);
+            tempBuffer.put(2, textureMatrix.m22);
+            tempBuffer.put(3, textureMatrix.m23);
 
-        glTexGen(GL_T, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_R, GL_EYE_PLANE, tempBuffer);
 
-        tempBuffer.put(0, textureMatrix.m20);
-        tempBuffer.put(1, textureMatrix.m21);
-        tempBuffer.put(2, textureMatrix.m22);
-        tempBuffer.put(3, textureMatrix.m23);
+            tempBuffer.put(0, textureMatrix.m30);
+            tempBuffer.put(1, textureMatrix.m31);
+            tempBuffer.put(2, textureMatrix.m32);
+            tempBuffer.put(3, textureMatrix.m33);
 
-        glTexGen(GL_R, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_Q, GL_EYE_PLANE, tempBuffer);
 
-        tempBuffer.put(0, textureMatrix.m30);
-        tempBuffer.put(1, textureMatrix.m31);
-        tempBuffer.put(2, textureMatrix.m32);
-        tempBuffer.put(3, textureMatrix.m33);
-
-        glTexGen(GL_Q, GL_EYE_PLANE, tempBuffer);
-
-        drawGround();
-        drawObjects();
-
-        glDisable(GL_ALPHA_TEST);
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_TEXTURE_GEN_S);
-        glDisable(GL_TEXTURE_GEN_T);
-        glDisable(GL_TEXTURE_GEN_R);
-        glDisable(GL_TEXTURE_GEN_Q);
-
-        setUpShadowMap();
-
-        int errorFlag = glGetError();
-        if (errorFlag != GL_NO_ERROR) {
-            System.err.println("An OpenGL error occurred: " + gluErrorString(errorFlag));
+            drawGround();
+            drawObjects();
+            setUpShadowMap();
         }
+        glPopAttrib();
     }
 
     public static void logic() {
