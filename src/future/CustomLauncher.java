@@ -36,6 +36,7 @@ import java.util.Map;
 
 /**
  * [Oskar]<br>
+ * Thanks to http://www.youtube.com/user/theanprocks/ : To download the files from the official servers, have a look at http://pastebin.com/DZLDVGYh
  * Shows a custom launcher application that automatically downloads the required
  * jar files.<br>
  * [/Oskar]<br>

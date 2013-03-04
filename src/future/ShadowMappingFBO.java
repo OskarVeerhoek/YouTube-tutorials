@@ -146,8 +146,8 @@ public class ShadowMappingFBO {
            * Check to see if the maximum texture size is bigger than 2048.
            * Performance drops too much if it much bigger than that.
            */
-        if (maxTextureSize > 2048) {
-            maxTextureSize = 2048;
+        if (maxTextureSize > 1024) {
+            maxTextureSize = 1024;
             if (maxRenderbufferSize < maxTextureSize) {
                 maxTextureSize = maxRenderbufferSize;
             }
