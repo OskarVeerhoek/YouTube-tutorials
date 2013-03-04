@@ -70,7 +70,6 @@ public class ShadowMappingFBO {
     private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F);
     private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1.0F);
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200.0F, 250.0F, 200.0F, 1.0F);
-    private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
     private static final EulerCamera camera = new EulerCamera.Builder()
@@ -207,7 +206,7 @@ public class ShadowMappingFBO {
         Matrix4f lightProjectionTemp = new Matrix4f();
         Matrix4f lightModelViewTemp = new Matrix4f();
 
-        float sceneBoundingRadius = 95.0F;
+        float sceneBoundingRadius = 150.0F;
 
         lightToSceneDistance = (float) Math.sqrt(lightPosition
                 .get(0)
@@ -274,13 +273,12 @@ public class ShadowMappingFBO {
         lightProjection.flip();
         lightModelView.flip();
 
-        Matrix4f tempMatrix = new Matrix4f();
-        tempMatrix.setIdentity();
-        tempMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
-        tempMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
-        Matrix4f.mul(tempMatrix, lightProjectionTemp, textureMatrix);
-        Matrix4f.mul(textureMatrix, lightModelViewTemp, tempMatrix);
-        Matrix4f.transpose(tempMatrix, textureMatrix);
+        textureMatrix.setIdentity();
+        textureMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
+        textureMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
+        Matrix4f.mul(textureMatrix, lightProjectionTemp, textureMatrix);
+        Matrix4f.mul(textureMatrix, lightModelViewTemp, textureMatrix);
+        Matrix4f.transpose(textureMatrix, textureMatrix);
     }
 
     public static void setUpLighting() {
@@ -359,33 +357,34 @@ public class ShadowMappingFBO {
             glEnable(GL_TEXTURE_GEN_R);
             glEnable(GL_TEXTURE_GEN_Q);
 
-            tempBuffer.put(0, textureMatrix.m00);
-            tempBuffer.put(1, textureMatrix.m01);
-            tempBuffer.put(2, textureMatrix.m02);
-            tempBuffer.put(3, textureMatrix.m03);
+            FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
+            textureBuffer.put(0, textureMatrix.m00);
+            textureBuffer.put(1, textureMatrix.m01);
+            textureBuffer.put(2, textureMatrix.m02);
+            textureBuffer.put(3, textureMatrix.m03);
 
-            glTexGen(GL_S, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_S, GL_EYE_PLANE, textureBuffer);
 
-            tempBuffer.put(0, textureMatrix.m10);
-            tempBuffer.put(1, textureMatrix.m11);
-            tempBuffer.put(2, textureMatrix.m12);
-            tempBuffer.put(3, textureMatrix.m13);
+            textureBuffer.put(0, textureMatrix.m10);
+            textureBuffer.put(1, textureMatrix.m11);
+            textureBuffer.put(2, textureMatrix.m12);
+            textureBuffer.put(3, textureMatrix.m13);
 
-            glTexGen(GL_T, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_T, GL_EYE_PLANE, textureBuffer);
 
-            tempBuffer.put(0, textureMatrix.m20);
-            tempBuffer.put(1, textureMatrix.m21);
-            tempBuffer.put(2, textureMatrix.m22);
-            tempBuffer.put(3, textureMatrix.m23);
+            textureBuffer.put(0, textureMatrix.m20);
+            textureBuffer.put(1, textureMatrix.m21);
+            textureBuffer.put(2, textureMatrix.m22);
+            textureBuffer.put(3, textureMatrix.m23);
 
-            glTexGen(GL_R, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_R, GL_EYE_PLANE, textureBuffer);
 
-            tempBuffer.put(0, textureMatrix.m30);
-            tempBuffer.put(1, textureMatrix.m31);
-            tempBuffer.put(2, textureMatrix.m32);
-            tempBuffer.put(3, textureMatrix.m33);
+            textureBuffer.put(0, textureMatrix.m30);
+            textureBuffer.put(1, textureMatrix.m31);
+            textureBuffer.put(2, textureMatrix.m32);
+            textureBuffer.put(3, textureMatrix.m33);
 
-            glTexGen(GL_Q, GL_EYE_PLANE, tempBuffer);
+            glTexGen(GL_Q, GL_EYE_PLANE, textureBuffer);
 
             drawGround();
             drawObjects();
@@ -402,23 +401,8 @@ public class ShadowMappingFBO {
      * Handles the keyboard and mouse input.
      */
     public static void input() {
-        //if (Keyboard.isKeyDown(Keyboard.KEY_V)) {
-        //    factor--;
-        //    glPolygonOffset(factor, 0.0F);
-        //    setUpShadowMap();
-        //} else if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
-        //    factor++;
-        //    glPolygonOffset(factor, 10);
-        //    setUpShadowMap();
-        //}
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
-                if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
-                    System.out.println(camera);
-                }
-                if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-                    cleanUp();
-                }
                 if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
                     lightPosition.flip();
                     lightPosition.clear();
