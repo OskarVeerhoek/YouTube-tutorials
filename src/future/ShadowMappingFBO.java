@@ -142,10 +142,11 @@ public class ShadowMappingFBO {
         System.out.println("Maximum texture size: " + maxTextureSize);
         System.out.println("Maximum renderbuffer size: " + maxRenderbufferSize);
 
-        /*
-           * Check to see if the maximum texture size is bigger than 2048.
-           * Performance drops too much if it much bigger than that.
-           */
+        /**
+         * Cap the maximum texture and renderbuffer size at 1024x1024 pixels. If you have a good
+         * graphics card, feel free to increase this value. The program will lag
+         * if I record and run the program at the same time with higher values.
+         */
         if (maxTextureSize > 1024) {
             maxTextureSize = 1024;
             if (maxRenderbufferSize < maxTextureSize) {
