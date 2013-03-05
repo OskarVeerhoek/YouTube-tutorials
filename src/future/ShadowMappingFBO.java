@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Oskar Veerhoek
+ * Copyright (c) 2013, Sam K., Daniel K.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -36,7 +36,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
-import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import utility.BufferTools;
@@ -330,30 +329,12 @@ public class ShadowMappingFBO {
         glVertex3f(-250.0F, -19.0F, +250.0F);
         glVertex3f(+250.0F, -19.0F, +250.0F);
         glVertex3f(+250.0F, -19.0F, -250.0F);
-        // North Wall
+        // Projection Screen
         glColor3f(0.7F, 0.7F, 0.7F);
         glVertex3f(-250.0F, -19.0F, -250.0F);
         glVertex3f(+250.0F, -19.0F, -250.0F);
-        glVertex3f(+250.0F, +80.0F, -250.0F);
-        glVertex3f(-250.0F, +80.0F, -250.0F);
-        // West Wall
-        glColor3f(0.7F, 0.7F, 0.7F);
-        glVertex3f(-250.0F, -19.0F, +250.0F);
-        glVertex3f(-250.0F, -19.0F, -250.0F);
-        glVertex3f(-250.0F, +80.0F, -250.0F);
-        glVertex3f(-250.0F, +80.0F, +250.0F);
-        // South Wall
-        glColor3f(0.7F, 0.7F, 0.7F);
-        glVertex3f(-250.0F, +80.0F, +250.0F);
-        glVertex3f(+250.0F, +80.0F, +250.0F);
-        glVertex3f(+250.0F, -19.0F, +250.0F);
-        glVertex3f(-250.0F, -19.0F, +250.0F);
-        // East Wall
-        glColor3f(0.7F, 0.7F, 0.7F);
-        glVertex3f(+250.0F, -19.0F, +250.0F);
-        glVertex3f(+250.0F, +80.0F, +250.0F);
-        glVertex3f(+250.0F, +80.0F, -250.0F);
-        glVertex3f(+250.0F, -19.0F, -250.0F);
+        glVertex3f(+250.0F, +150.0F, -250.0F);
+        glVertex3f(-250.0F, +150.0F, -250.0F);
         glEnd();
         glPopAttrib();
     }
