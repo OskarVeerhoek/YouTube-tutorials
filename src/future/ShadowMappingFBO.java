@@ -208,17 +208,12 @@ public class ShadowMappingFBO {
         Matrix4f lightProjectionTemp = new Matrix4f();
         Matrix4f lightModelViewTemp = new Matrix4f();
 
-        float sceneBoundingRadius = 150.0F;
+        float sceneBoundingRadius = 118.0F;
 
-        lightToSceneDistance = (float) Math.sqrt(lightPosition
-                .get(0)
-                * lightPosition
-                .get(0) + lightPosition
-                .get(1) * lightPosition
-                .get(1)
-                + lightPosition
-                .get(2) * lightPosition
-                .get(2));
+        lightToSceneDistance = (float) Math.sqrt(
+                lightPosition.get(0) * lightPosition.get(0) +
+                lightPosition.get(1) * lightPosition.get(1) +
+                lightPosition.get(2) * lightPosition.get(2));
 
         nearPlane = lightToSceneDistance - sceneBoundingRadius;
 
@@ -359,6 +354,9 @@ public class ShadowMappingFBO {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         {
             glEnable(GL_TEXTURE_2D);
+            // GL_BLEND: only shadowed area becomes visible
+            // GL_MODULATE:
+            // GL_ADD
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,
                     GL_COMPARE_R_TO_TEXTURE);
