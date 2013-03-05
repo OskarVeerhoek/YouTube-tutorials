@@ -36,6 +36,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GLContext;
+import org.lwjgl.util.glu.Sphere;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import utility.BufferTools;
@@ -76,8 +77,8 @@ public class ShadowMappingFBO {
             .setAspectRatio((float) DISPLAY_MODE.getWidth() / DISPLAY_MODE.getHeight())
             .setPosition(100.0F, 50.0F, 200.0F)
             .setRotation(15.51F, 328.96F, 0.0f)
-            .setNearClippingPane(10)
-            .setFarClippingPane(400)
+            .setNearClippingPane(20)
+            .setFarClippingPane(800)
             .setFieldOfView(60)
             .build();
     public static final String MODEL_LOCATION = "res/models/bunny.obj";
@@ -322,12 +323,37 @@ public class ShadowMappingFBO {
     private static void drawGround() {
         glPushAttrib(GL_LIGHTING_BIT);
         glDisable(GL_LIGHTING);
-        glColor3f(0.3F, 0.6F, 0.3F);
         glBegin(GL_QUADS);
-        glVertex3f(-125.0F, -19.0F, -125.0F);
-        glVertex3f(-125.0F, -19.0F, +125.0F);
-        glVertex3f(+125.0F, -19.0F, +125.0F);
-        glVertex3f(+125.0F, -19.0F, -125.0F);
+        // Ground
+        glColor3f(0.3F, 0.6F, 0.3F);
+        glVertex3f(-250.0F, -19.0F, -250.0F);
+        glVertex3f(-250.0F, -19.0F, +250.0F);
+        glVertex3f(+250.0F, -19.0F, +250.0F);
+        glVertex3f(+250.0F, -19.0F, -250.0F);
+        // North Wall
+        glColor3f(0.7F, 0.7F, 0.7F);
+        glVertex3f(-250.0F, -19.0F, -250.0F);
+        glVertex3f(+250.0F, -19.0F, -250.0F);
+        glVertex3f(+250.0F, +80.0F, -250.0F);
+        glVertex3f(-250.0F, +80.0F, -250.0F);
+        // West Wall
+        glColor3f(0.7F, 0.7F, 0.7F);
+        glVertex3f(-250.0F, -19.0F, +250.0F);
+        glVertex3f(-250.0F, -19.0F, -250.0F);
+        glVertex3f(-250.0F, +80.0F, -250.0F);
+        glVertex3f(-250.0F, +80.0F, +250.0F);
+        // South Wall
+        glColor3f(0.7F, 0.7F, 0.7F);
+        glVertex3f(-250.0F, +80.0F, +250.0F);
+        glVertex3f(+250.0F, +80.0F, +250.0F);
+        glVertex3f(+250.0F, -19.0F, +250.0F);
+        glVertex3f(-250.0F, -19.0F, +250.0F);
+        // East Wall
+        glColor3f(0.7F, 0.7F, 0.7F);
+        glVertex3f(+250.0F, -19.0F, +250.0F);
+        glVertex3f(+250.0F, +80.0F, +250.0F);
+        glVertex3f(+250.0F, +80.0F, -250.0F);
+        glVertex3f(+250.0F, -19.0F, -250.0F);
         glEnd();
         glPopAttrib();
     }
