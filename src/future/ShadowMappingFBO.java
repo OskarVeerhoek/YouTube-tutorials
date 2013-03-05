@@ -70,6 +70,7 @@ public class ShadowMappingFBO {
     private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F);
     private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1.0F);
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200.0F, 250.0F, 200.0F, 1.0F);
+    private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
     private static final EulerCamera camera = new EulerCamera.Builder()
@@ -115,6 +116,7 @@ public class ShadowMappingFBO {
 
     public static void setUpCamera() {
         camera.applyPerspectiveMatrix();
+        camera.applyTranslations();
         camera.applyOptimalStates();
     }
 
@@ -344,7 +346,8 @@ public class ShadowMappingFBO {
      */
     private static void drawObjects() {
         glPushMatrix();
-        glScalef(10, 10, 10);
+        glScalef(12, 12, 12);
+        glTranslatef(0, 0.32f, 0);
         glCallList(bunnyDisplayList);
         glPopMatrix();
     }
@@ -364,7 +367,7 @@ public class ShadowMappingFBO {
             glEnable(GL_TEXTURE_GEN_R);
             glEnable(GL_TEXTURE_GEN_Q);
 
-            FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
+            textureBuffer.clear();
             textureBuffer.put(0, textureMatrix.m00);
             textureBuffer.put(1, textureMatrix.m01);
             textureBuffer.put(2, textureMatrix.m02);
