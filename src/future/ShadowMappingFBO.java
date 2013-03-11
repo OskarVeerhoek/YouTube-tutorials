@@ -159,42 +159,52 @@ public class ShadowMappingFBO {
         shadowMapWidth = maxTextureSize;
         shadowMapHeight = maxTextureSize;
 
-        // Setup some texture states
+        // Clamps texture coordinates (e.g.: (2,0) becomes (1,0)) because we only want one shadow.
+        // Uses 'TO_EDGE' to prevent the texture boarders to affect the shadow map through linear texture filtering.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        // Enable bilinear texture filtering. This means that the colour will be
+        // a 'weighted value of the four texture elements that are closest to the center of the pixel being textured'
+        // (from OpenGL 2.1 References Pages).
+        // The alternative to linear texture filtering is nearest-neighbour texture filtering. Here the colour of
+        // the closest texel to the given texture coordinate (texture pixel) is taken. This, while being fast, may
+        // produce blockiness.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        // State that the texture holds nondescript 'intenstity' data.
         glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
-
+        // If the intensity of a given texel is lower than 0.5f, then the texture should not be sampled. In practice,
+        // the higher the value, the less of the shadow is visible, and the other way around.
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB,
                 0.5F);
 
+        // Set the automatic texture coordinate generation mode to eye linear. The texture coordinate is calculated
+        // with the inverse of the model-view matrix and a so-called 'object plane' (have yet to find out what that means).
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
-
         frameBuffer = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-
         renderBuffer = glGenRenderbuffers();
         glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
-
+        // Set the internal storage format of the render buffer to a depth component of 32 bits (4 bytes).
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32,
                 maxTextureSize, maxTextureSize);
-
+        // Attach the render buffer to the frame buffer.
         glFramebufferRenderbuffer(GL_FRAMEBUFFER,
                 GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
                 renderBuffer);
-
+        // OpenGL shall make no amendment to the colour or multisample buffer.
         glDrawBuffer(GL_NONE);
+        // Disable the colour buffer. I need to verify this.
         glReadBuffer(GL_NONE);
-
+        // Check for frame buffer errors.
         int FBOStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
         if (FBOStatus != GL_FRAMEBUFFER_COMPLETE) {
             System.err.println("Framebuffer error: " + gluErrorString(glGetError()));
         }
-
+        // Bind the default frame buffer.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
@@ -208,7 +218,7 @@ public class ShadowMappingFBO {
         Matrix4f lightProjectionTemp = new Matrix4f();
         Matrix4f lightModelViewTemp = new Matrix4f();
 
-        float sceneBoundingRadius = 118.0F;
+        float sceneBoundingRadius = 150.0F;
 
         lightToSceneDistance = (float) Math.sqrt(
                 lightPosition.get(0) * lightPosition.get(0) +
