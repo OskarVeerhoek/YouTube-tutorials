@@ -116,7 +116,6 @@ public class ShadowMappingFBO {
 
     public static void setUpCamera() {
         camera.applyPerspectiveMatrix();
-        camera.applyTranslations();
         camera.applyOptimalStates();
     }
 
