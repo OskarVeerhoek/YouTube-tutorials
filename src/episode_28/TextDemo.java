@@ -141,10 +141,8 @@ public class TextDemo {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
-                0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -190,8 +188,7 @@ public class TextDemo {
     }
 
     private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        cam = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         cam.setFieldOfView(70);
         cam.applyPerspectiveMatrix();
         glGetFloat(GL_PROJECTION_MATRIX, perspectiveProjectionMatrix);
@@ -219,10 +216,11 @@ public class TextDemo {
     private static void checkInput() {
         cam.processMouse(1, 80, -80);
         cam.processKeyboard(16, 1, 1, 1);
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
     }
 
     private static void cleanUp() {

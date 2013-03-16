@@ -38,9 +38,7 @@ import org.lwjgl.opengl.DisplayMode;
 
 import java.awt.*;
 
-/**
- * @author Oskar
- */
+/** @author Oskar */
 public class JInputDemo {
 
     private static volatile boolean running = true;
@@ -75,8 +73,7 @@ public class JInputDemo {
             System.out.println(c.getName());
         }
 
-        @SuppressWarnings("unused")
-        float dx = 0;
+        @SuppressWarnings("unused") float dx = 0;
 
         while (running) {
             joystick.poll();
@@ -89,7 +86,6 @@ public class JInputDemo {
                         Toolkit.getDefaultToolkit().beep();
                     }
                 }
-
             }
             running = !Display.isCloseRequested();
             Display.update();
@@ -97,6 +93,5 @@ public class JInputDemo {
         }
         Display.destroy();
         System.exit(0);
-
     }
 }

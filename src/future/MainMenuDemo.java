@@ -127,5 +127,4 @@ public class MainMenuDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

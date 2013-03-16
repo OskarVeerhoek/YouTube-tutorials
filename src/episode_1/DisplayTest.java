@@ -34,12 +34,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
 /**
- * If this application shows a blank and responsive window
- * and doesn't throw any errors, you know you have installed lwjgl correctly.
+ * If this application shows a blank and responsive window and doesn't throw any errors, you know you have installed
+ * lwjgl correctly.
  *
  * @author Oskar
  */
 public class DisplayTest {
+
     public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));

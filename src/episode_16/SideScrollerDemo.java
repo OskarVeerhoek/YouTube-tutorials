@@ -38,8 +38,7 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Show-cases a side-scroller application for 2D games using glPushMatrix and
- * glPopMatrix
+ * Show-cases a side-scroller application for 2D games using glPushMatrix and glPopMatrix
  *
  * @author Oskar
  */
@@ -57,7 +56,8 @@ public class SideScrollerDemo {
             System.exit(1);
         }
 
-        // Set-up an orthographic presentation where (0, 0) is the upper-left corner and (640, 480) is the bottom right one.
+        // Set-up an orthographic presentation where (0, 0) is the upper-left corner and (640,
+        // 480) is the bottom right one.
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         glOrtho(0, 640, 480, 0, -1, 1);
@@ -79,8 +79,7 @@ public class SideScrollerDemo {
 
             // If we're pressing the space-bar and the mouse is inside the window, increase/decrease our
             // translate_x by the dynamic x movement of the mouse.
-            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)
-                    && Mouse.getX() > 0 && Mouse.getX() < 639) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && Mouse.getX() > 0 && Mouse.getX() < 639) {
                 translate_x += Mouse.getDX();
             }
 

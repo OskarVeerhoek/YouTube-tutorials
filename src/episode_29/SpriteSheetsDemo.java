@@ -189,5 +189,4 @@ public class SpriteSheetsDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

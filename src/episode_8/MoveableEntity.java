@@ -30,6 +30,7 @@
 package episode_8;
 
 public interface MoveableEntity extends Entity {
+
     public double getDX();
 
     public double getDY();

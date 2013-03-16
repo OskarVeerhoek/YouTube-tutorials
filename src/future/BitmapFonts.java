@@ -42,7 +42,6 @@ import java.nio.ByteBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
 
-
 public class BitmapFonts {
 
     private static final String WINDOW_TITLE = "Bitmap Fonts";
@@ -110,7 +109,8 @@ public class BitmapFonts {
         glBindTexture(GL_TEXTURE_2D, fontTexture);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA,
+                GL_UNSIGNED_BYTE, buffer);
     }
 
     private static void setUpStates() {

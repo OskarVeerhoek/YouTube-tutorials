@@ -60,7 +60,7 @@ public class DrawingCircles {
     /**
      * Draws a circle at [0 0 0] with the given radius and precision.
      *
-     * @param radius    the radius of the circle
+     * @param radius the radius of the circle
      * @param precision the precision of the circle (1.0 is normal, lower is higher precision)
      */
     private static void drawCircleWithPrecisionf(float radius, float precision) {
@@ -117,5 +117,4 @@ public class DrawingCircles {
         Display.destroy();
         System.exit(0);
     }
-
 }

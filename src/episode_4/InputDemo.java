@@ -42,7 +42,8 @@ import java.util.Random;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Shows how to use input to achieve cool results. Thanks to Azziplekkus1337 for the better way of handling the cool-down!
+ * Shows how to use input to achieve cool results. Thanks to Azziplekkus1337 for the better way of handling the
+ * cool-down!
  *
  * @author Oskar
  */
@@ -83,11 +84,12 @@ public class InputDemo {
                     somethingIsSelected = true;
                     box.selected = true;
                 }
-                if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected)
+                if (Mouse.isButtonDown(2) && box.isInBounds(Mouse.getX(), 480 - Mouse.getY()) && !somethingIsSelected) {
                     if ((System.currentTimeMillis() - lastColourChange) >= 200 /* milliseconds */) {
                         box.randomiseColors();
                         lastColourChange = System.currentTimeMillis();
                     }
+                }
                 if (Mouse.isButtonDown(1)) {
                     box.selected = false;
                     somethingIsSelected = false;
@@ -106,7 +108,6 @@ public class InputDemo {
 
         Display.destroy();
     }
-
 
     private static class Box {
 

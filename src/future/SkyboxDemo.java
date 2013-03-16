@@ -39,8 +39,7 @@ import utility.LWJGLTimer;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * NOT DONE YET
- * Shows skyboxes.
+ * NOT DONE YET Shows skyboxes.
  *
  * @author Oskar Veerhoek
  */
@@ -68,10 +67,11 @@ public class SkyboxDemo {
         float delta = (float) timer.getElapsedTime();
         camera.processKeyboard(delta, 1, 1, 1);
         camera.processMouse(1, 80, -80);
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
     }
 
     private static void cleanUp(boolean asCrash) {
@@ -129,5 +129,4 @@ public class SkyboxDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

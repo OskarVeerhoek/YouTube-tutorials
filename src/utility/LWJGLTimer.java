@@ -30,33 +30,28 @@
 package utility;
 
 /**
- * A timer that uses System.nanoTime(). Call update() every iteration of the game loop and
- * then call getElapsedTime and use that as a factor for movement to create frame-rate independent movement.
+ * A timer that uses System.nanoTime(). Call update() every iteration of the game loop and then call getElapsedTime and
+ * use that as a factor for movement to create frame-rate independent movement.
  *
  * @author Oskar Veerhoek
  */
 public class LWJGLTimer {
+
     private long lastTime; // nanoseconds
     private double elapsedTime;
     private boolean firstRun = true;
 
-    /**
-     * Creates a timer.
-     */
+    /** Creates a timer. */
     public LWJGLTimer() {
     }
 
-    /**
-     * Initializes the timer. Call this just before entering the game loop.
-     */
+    /** Initializes the timer. Call this just before entering the game loop. */
     public void initialize() {
         lastTime = System.nanoTime();
         firstRun = false;
     }
 
-    /**
-     * @return the elapsed time since the the next to last update call
-     */
+    /** @return the elapsed time since the the next to last update call */
     public double getElapsedTime() {
         return elapsedTime;
     }
@@ -79,5 +74,4 @@ public class LWJGLTimer {
             return this.elapsedTime;
         }
     }
-
 }

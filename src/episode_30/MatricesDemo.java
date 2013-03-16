@@ -97,10 +97,11 @@ public class MatricesDemo {
                 }
             }
         }
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
     }
 
     private static void cleanUp() {
@@ -136,10 +137,8 @@ public class MatricesDemo {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
-                0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -169,8 +168,7 @@ public class MatricesDemo {
     }
 
     private static void setUpCamera() {
-        camera = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        camera = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         camera.setFieldOfView(70);
         camera.applyOptimalStates();
         camera.applyPerspectiveMatrix();

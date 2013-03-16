@@ -89,8 +89,7 @@ public class Boot {
         int y = selector_y * World.BLOCK_SIZE;
         int x2 = x + World.BLOCK_SIZE;
         int y2 = y + World.BLOCK_SIZE;
-        if (grid.getAt(selector_x, selector_y).getType() != BlockType.AIR
-                || selection == BlockType.AIR) {
+        if (grid.getAt(selector_x, selector_y).getType() != BlockType.AIR || selection == BlockType.AIR) {
             glBindTexture(GL_TEXTURE_2D, 0);
             glColor4f(1f, 1f, 1f, 0.5f);
             glBegin(GL_QUADS);
@@ -102,8 +101,7 @@ public class Boot {
             glColor4f(1f, 1f, 1f, 1f);
         } else {
             glColor4f(1f, 1f, 1f, 0.5f);
-            new Block(selection, selector_x * World.BLOCK_SIZE, selector_y
-                    * World.BLOCK_SIZE).draw();
+            new Block(selection, selector_x * World.BLOCK_SIZE, selector_y * World.BLOCK_SIZE).draw();
             glColor4f(1f, 1f, 1f, 1f);
         }
     }
@@ -121,29 +119,25 @@ public class Boot {
             }
         }
         while (Keyboard.next()) {
-            if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT
-                    && Keyboard.getEventKeyState()) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_RIGHT && Keyboard.getEventKeyState()) {
                 mouseEnabled = false;
                 if (!(selector_x + 1 > World.BLOCKS_WIDTH - 2)) {
                     selector_x += 1;
                 }
             }
-            if (Keyboard.getEventKey() == Keyboard.KEY_LEFT
-                    && Keyboard.getEventKeyState()) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_LEFT && Keyboard.getEventKeyState()) {
                 mouseEnabled = false;
                 if (!(selector_x - 1 < 0)) {
                     selector_x -= 1;
                 }
             }
-            if (Keyboard.getEventKey() == Keyboard.KEY_UP
-                    && Keyboard.getEventKeyState()) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_UP && Keyboard.getEventKeyState()) {
                 mouseEnabled = false;
                 if (!(selector_y - 1 < 0)) {
                     selector_y -= 1;
                 }
             }
-            if (Keyboard.getEventKey() == Keyboard.KEY_DOWN
-                    && Keyboard.getEventKeyState()) {
+            if (Keyboard.getEventKey() == Keyboard.KEY_DOWN && Keyboard.getEventKeyState()) {
                 mouseEnabled = false;
                 if (!(selector_y + 1 > World.BLOCKS_HEIGHT - 2)) {
                     selector_y += 1;

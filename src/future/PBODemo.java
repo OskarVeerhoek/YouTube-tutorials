@@ -40,8 +40,7 @@ import static org.lwjgl.opengl.GL15.glGenBuffers;
 import static org.lwjgl.opengl.GL21.GL_PIXEL_PACK_BUFFER;
 
 /**
- * NOT DONE YET
- * Shows the use of Pixel Buffer Objects.
+ * NOT DONE YET Shows the use of Pixel Buffer Objects.
  *
  * @author Oskar Veerhoek
  */
@@ -80,14 +79,13 @@ public class PBODemo {
         glBindBuffer(GL_PIXEL_PACK_BUFFER, pbo);
         glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
         glReadPixels(0, 0, WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1], GL_RGB, GL_UNSIGNED_BYTE, 0);
-
     }
 
     private static void setUpStates() {
-//        glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //        glEnable(GL_DEPTH_TEST);
+        //        glEnable(GL_LIGHTING);
+        //        glEnable(GL_BLEND);
+        //        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private static void update() {
@@ -123,5 +121,4 @@ public class PBODemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

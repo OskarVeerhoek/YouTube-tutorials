@@ -101,6 +101,7 @@ public class TimerDemo {
 }
 
 interface Entity2D {
+
     public float getX();
 
     public float getY();
@@ -119,6 +120,7 @@ interface Entity2D {
 }
 
 abstract class AbstractEntity2D implements Entity2D {
+
     protected float x;
     protected float y;
 
@@ -151,6 +153,7 @@ abstract class AbstractEntity2D implements Entity2D {
 }
 
 class Box2D extends AbstractEntity2D {
+
     protected float size;
 
     public Box2D(float x, float y, float size) {

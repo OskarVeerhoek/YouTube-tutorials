@@ -217,5 +217,4 @@ public class PhysicsDemoBonus {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

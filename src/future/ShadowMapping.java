@@ -50,12 +50,14 @@ import static org.lwjgl.util.glu.GLU.gluLookAt;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 /**
- * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible. Some code was modified by Oskar Veerhoek.
+ * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible. Some code was modified by Oskar
+ * Veerhoek.
  *
  * @author Sam K.
  * @author Daniel W.
  */
 public class ShadowMapping {
+
     // This represents if the clients computer has the ambient shadow extention
     private static boolean ambientShadowsAvailable;
     // Enable this if you want to see the depth texture for debugging purposes.
@@ -97,9 +99,7 @@ public class ShadowMapping {
         System.exit(0);
     }
 
-    /**
-     * Sets up a display.
-     */
+    /** Sets up a display. */
     private static void setUpDisplay() {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
@@ -157,9 +157,7 @@ public class ShadowMapping {
         glPopMatrix();
     }
 
-    /**
-     * Generate the shadow map.
-     */
+    /** Generate the shadow map. */
     private static void generateShadowMap() {
         float lightToSceneDistance, nearPlane, fieldOfView;
         FloatBuffer lightModelView = BufferUtils.createFloatBuffer(16);
@@ -169,33 +167,20 @@ public class ShadowMapping {
 
         float sceneBoundingRadius = 95.0F;
 
-        lightToSceneDistance = (float) Math.sqrt(lightPosition
-                .get(0)
-                * lightPosition
-                .get(0) + lightPosition
-                .get(1) * lightPosition
-                .get(1)
-                + lightPosition
-                .get(2) * lightPosition
-                .get(2));
+        lightToSceneDistance = (float) Math.sqrt(lightPosition.get(0) * lightPosition.get(0) + lightPosition.get(1) *
+                lightPosition.get(1) + lightPosition.get(2) * lightPosition.get(2));
 
         nearPlane = lightToSceneDistance - sceneBoundingRadius;
 
-        fieldOfView = (float) Math.toDegrees(2.0F * Math
-                .atan(sceneBoundingRadius / lightToSceneDistance));
+        fieldOfView = (float) Math.toDegrees(2.0F * Math.atan(sceneBoundingRadius / lightToSceneDistance));
 
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        gluPerspective(fieldOfView, 1.0F, nearPlane, nearPlane
-                + (2.0F * sceneBoundingRadius));
+        gluPerspective(fieldOfView, 1.0F, nearPlane, nearPlane + (2.0F * sceneBoundingRadius));
         glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(lightPosition
-                .get(0), lightPosition
-                .get(1), lightPosition
-                .get(2), 0.0F,
-                0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
+        gluLookAt(lightPosition.get(0), lightPosition.get(1), lightPosition.get(2), 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
         glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
         glViewport(0, 0, shadowWidth, shadowHeight);
 
@@ -216,8 +201,7 @@ public class ShadowMapping {
 
         renderObjects(false);
 
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
-                shadowWidth, shadowHeight, 0);
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, shadowWidth, shadowHeight, 0);
 
         // Unbind the framebuffer if we are using them.
         if (useFBO) {
@@ -244,27 +228,23 @@ public class ShadowMapping {
         Matrix4f.mul(tempMatrix, lightProjectionTemp, textureMatrix);
         Matrix4f.mul(textureMatrix, lightModelViewTemp, tempMatrix);
         Matrix4f.transpose(tempMatrix, textureMatrix);
-
     }
 
-    /**
-     * Render the scene, and then update.
-     */
+    /** Render the scene, and then update. */
     private static void render() {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
         gluPerspective(40, (float) Display.getWidth() / (float) Display.getHeight(), 1.0F, 1000.0F);
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-        gluLookAt(cameraPosition.get(0), cameraPosition.get(1), cameraPosition.get(2),
-                0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F);
+        gluLookAt(cameraPosition.get(0), cameraPosition.get(1), cameraPosition.get(2), 0.0F, 0.0F, 0.0F, 0.0F, 1.0F,
+                0.0F);
         // TODO Add cam.applyModelViewMatrix(true) here and remove the 2
         // lines above
 
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
 
-        glLight(GL_LIGHT0, GL_POSITION, lightPosition
-        );
+        glLight(GL_LIGHT0, GL_POSITION, lightPosition);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         if (showShadowMap) {
@@ -325,8 +305,7 @@ public class ShadowMapping {
 
             glEnable(GL_TEXTURE_2D);
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,
-                    GL_COMPARE_R_TO_TEXTURE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
 
             glEnable(GL_TEXTURE_GEN_S);
             glEnable(GL_TEXTURE_GEN_T);
@@ -376,28 +355,23 @@ public class ShadowMapping {
         }
     }
 
-    /**
-     * Sets up the OpenGL states.
-     */
+    /** Sets up the OpenGL states. */
     public static void setUpOpenGL() {
         int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE_EXT);
 
-        if (!GLContext.getCapabilities().OpenGL14
-                && GLContext.getCapabilities().GL_ARB_shadow) {
-            System.out
-                    .println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
+        if (!GLContext.getCapabilities().OpenGL14 && GLContext.getCapabilities().GL_ARB_shadow) {
+            System.out.println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
             System.exit(0);
         }
 
         if (GLContext.getCapabilities().GL_ARB_shadow_ambient) {
             ambientShadowsAvailable = true;
         } else {
-            System.out
-                    .println("GL_ARB_shadow_ambient extension not availible.\n An extra rendering pass will be required.");
+            System.out.println("GL_ARB_shadow_ambient extension not availible.\n An extra rendering pass will be " +
+                    "required.");
         }
 
-        if (GLContext.getCapabilities().OpenGL20
-                || GLContext.getCapabilities().GL_EXT_framebuffer_object) {
+        if (GLContext.getCapabilities().OpenGL20 || GLContext.getCapabilities().GL_EXT_framebuffer_object) {
             System.out.println("Higher quality shadows are availible.");
         }
 
@@ -443,8 +417,7 @@ public class ShadowMapping {
 
         // If ambient shadows are availible then we can skip a rendering pass.
         if (ambientShadowsAvailable) {
-            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB,
-                    0.5F);
+            glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB, 0.5F);
         }
 
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
@@ -460,11 +433,9 @@ public class ShadowMapping {
             renderBuffer = glGenRenderbuffersEXT();
             glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, renderBuffer);
 
-            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT32,
-                    maxTextureSize, maxTextureSize);
+            glRenderbufferStorageEXT(GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT32, maxTextureSize, maxTextureSize);
 
-            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT,
-                    GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
+            glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT,
                     renderBuffer);
 
             glDrawBuffer(GL_NONE);
@@ -480,12 +451,9 @@ public class ShadowMapping {
         generateShadowMap();
     }
 
-    /**
-     * Handles the keyboard and mouse input.
-     */
+    /** Handles the keyboard and mouse input. */
     public static void input() {
-        if (Keyboard.isKeyDown(Keyboard.KEY_F)
-                && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+        if (Keyboard.isKeyDown(Keyboard.KEY_F) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             factor--;
             glPolygonOffset(factor, 0.0F);
             generateShadowMap();
@@ -499,18 +467,14 @@ public class ShadowMapping {
         // TODO Add cam.handleKeyboard()
     }
 
-    /**
-     * Cleanup after the program.
-     */
+    /** Cleanup after the program. */
     private static void cleanUp() {
         glDeleteFramebuffersEXT(frameBuffer);
         glDeleteRenderbuffersEXT(renderBuffer);
         Display.destroy();
     }
 
-    /**
-     * Sets up the FloatBuffers to be used later on.
-     */
+    /** Sets up the FloatBuffers to be used later on. */
     private static void setUpBufferValues() {
         ambientLight.put(new float[]{0.2F, 0.2F, 0.2F, 1.0F});
         ambientLight.flip();
@@ -521,9 +485,7 @@ public class ShadowMapping {
         cameraPosition.put(new float[]{100.0F, 50.0F, 200.0F, 1.0F});
         cameraPosition.flip();
 
-        lightPosition
-                .put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
-        lightPosition
-                .flip();
+        lightPosition.put(new float[]{100.0F, 300.0F, 100.0F, 1.0F});
+        lightPosition.flip();
     }
 }

@@ -88,7 +88,6 @@ public class Background2D {
         glCallList(directBackgroundTextureDisplayList);
         glPopMatrix();
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
-
     }
 
     private static void logic() {
@@ -97,12 +96,14 @@ public class Background2D {
 
     private static void input() {
         if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-            if (cameraPosition[0] + speed + 640 < 2560)
+            if (cameraPosition[0] + speed + 640 < 2560) {
                 cameraPosition[0] += speed;
+            }
         }
         if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-            if (cameraPosition[0] - speed > 0)
+            if (cameraPosition[0] - speed > 0) {
                 cameraPosition[0] -= speed;
+            }
         }
     }
 
@@ -224,7 +225,8 @@ public class Background2D {
                 glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture);
                 glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+                glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0,
+                        GL_RGBA, GL_UNSIGNED_BYTE, buffer);
                 glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
             } catch (FileNotFoundException ex) {
                 ex.printStackTrace();
@@ -247,6 +249,5 @@ public class Background2D {
         glBindTexture(GL_TEXTURE_RECTANGLE_ARB, 0);
         return texture;
     }
-
 }
 

@@ -36,8 +36,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
 import org.lwjgl.util.glu.GLU;
 import utility.EulerCamera;
 import utility.ShaderLoader;
@@ -54,10 +52,9 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
- * A 3D terrain loaded from a height-map and a lookup texture.
- * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal, point, and wire-frame mode. Press
- * 'F' to flatten the terrain.
- * Click here for an image: https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
+ * A 3D terrain loaded from a height-map and a lookup texture. Press 'L' to reload the shader and texture files. Press
+ * 'P' to switch between normal, point, and wire-frame mode. Press 'F' to flatten the terrain. Click here for an image:
+ * https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
  *
  * @author Oskar Veerhoek
  */
@@ -66,31 +63,20 @@ public class TerrainDemo {
     private static final String WINDOW_TITLE = "Terrain!";
     private static final int[] WINDOW_DIMENSIONS = {1200, 650};
     private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
-    private static final EulerCamera camera = new EulerCamera.Builder()
-            .setPosition(-5.4f, 19.2f, 33.2f)
-            .setRotation(30, 61, 0)
-            .setAspectRatio(ASPECT_RATIO)
-            .setFieldOfView(60)
-            .build();
-    /**
-     * The shader program that will use the lookup texture and the height-map's vertex data to draw the terrain.
-     */
+    private static final EulerCamera camera = new EulerCamera.Builder().setPosition(-5.4f, 19.2f,
+            33.2f).setRotation(30, 61, 0).setAspectRatio(ASPECT_RATIO).setFieldOfView(60).build();
+    /** The shader program that will use the lookup texture and the height-map's vertex data to draw the terrain. */
     private static int shaderProgram;
-    /**
-     * The texture that will be used to find out which colours correspond to which heights.
-     */
+    /** The texture that will be used to find out which colours correspond to which heights. */
     private static int lookupTexture;
-    /**
-     * The display list that will contain the height-map's vertex data.
-     */
+    /** The display list that will contain the height-map's vertex data. */
     private static int heightmapDisplayList;
     /**
-     * The points of the height. The first dimension represents the z-coordinate. The second dimension represents the x-coordinate. The float value represents the height.
+     * The points of the height. The first dimension represents the z-coordinate. The second dimension represents the
+     * x-coordinate. The float value represents the height.
      */
     private static float[][] data;
-    /**
-     * Whether the terrain should vary in height or be displayed on a grid.
-     */
+    /** Whether the terrain should vary in height or be displayed on a grid. */
     private static boolean flatten = false;
 
     private static void render() {
@@ -135,12 +121,14 @@ public class TerrainDemo {
                 }
             }
         }
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
-        if (Mouse.isGrabbed())
+        }
+        if (Mouse.isGrabbed()) {
             camera.processMouse(1, 80, -80);
+        }
         camera.processKeyboard(16, 1);
     }
 
@@ -183,7 +171,8 @@ public class TerrainDemo {
             lookupTexture = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, lookupTexture);
             // Hand the texture data to OpenGL
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA,
+                    GL_UNSIGNED_BYTE, buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -216,7 +205,8 @@ public class TerrainDemo {
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape.vs", "res/shaders/landscape.fs");
         glUseProgram(shaderProgram);
-        // The following call is redundant because the default value is already 0, but illustrates how you would use multiple textures
+        // The following call is redundant because the default value is already 0, but illustrates how you would use
+        // multiple textures
         glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
     }
 
@@ -280,5 +270,4 @@ public class TerrainDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

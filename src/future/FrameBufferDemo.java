@@ -42,10 +42,8 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.ARBFramebufferObject.*;
 import static org.lwjgl.opengl.GL11.*;
 
-
 /**
- * NOT DONE YET
- * Shows the use of a frame buffer.
+ * NOT DONE YET Shows the use of a frame buffer.
  *
  * @author Oskar Veerhoek
  */
@@ -78,10 +76,11 @@ public class FrameBufferDemo {
             int mouse_x = Mouse.getX();
             int mouse_y = Mouse.getY();
             for (int i = 0; i < 50; i++) {
-                if (mouse_x > 160 && mouse_x < 480 && mouse_y > 120 && mouse_y < 360)
+                if (mouse_x > 160 && mouse_x < 480 && mouse_y > 120 && mouse_y < 360) {
                     glColor3d(0.8, 0.8, 0);
-                else
+                } else {
                     glColor3f(1, 1, 1);
+                }
             }
         }
     }
@@ -128,10 +127,10 @@ public class FrameBufferDemo {
     }
 
     private static void setUpStates() {
-//        glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //        glEnable(GL_DEPTH_TEST);
+        //        glEnable(GL_LIGHTING);
+        //        glEnable(GL_BLEND);
+        //        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private static void update() {
@@ -168,5 +167,4 @@ public class FrameBufferDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

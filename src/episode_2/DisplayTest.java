@@ -39,6 +39,7 @@ import org.lwjgl.opengl.DisplayMode;
  * @author Oskar
  */
 public class DisplayTest {
+
     public static void main(String[] args) {
         try {
             // Sets the width of the display to 640 and the height to 480

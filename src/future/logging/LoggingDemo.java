@@ -46,8 +46,7 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.glClear;
 
 /**
- * NOT DONE YET
- * Shows logging functionality using the java.util.logging classes.
+ * NOT DONE YET Shows logging functionality using the java.util.logging classes.
  *
  * @author Oskar Veerhoek
  */

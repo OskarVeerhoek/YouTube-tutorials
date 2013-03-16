@@ -34,9 +34,7 @@ import org.lwjgl.util.vector.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Oskar
- */
+/** @author Oskar */
 public class Model {
 
     public List<Vector3f> vertices = new ArrayList<Vector3f>();

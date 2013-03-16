@@ -82,7 +82,8 @@ public class ThreeDeeDemo {
             // x = random between -50 and +50
             // y = random between -50 and +50
             // z = random between  0  and -200
-            points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f, random.nextInt(200) - 200);
+            points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f,
+                    random.nextInt(200) - 200);
         }
         // The speed in which the "camera" travels
         float speed = 0.0f;
@@ -106,7 +107,6 @@ public class ThreeDeeDemo {
             }
             // Stop drawing points
             glEnd();
-
 
             // If we're pressing the "up" key increase our speed
             if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {

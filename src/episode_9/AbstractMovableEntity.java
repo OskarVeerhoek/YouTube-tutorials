@@ -29,13 +29,11 @@
 
 package episode_9;
 
-public abstract class AbstractMovableEntity extends AbstractEntity implements
-        MoveableEntity {
+public abstract class AbstractMovableEntity extends AbstractEntity implements MoveableEntity {
 
     protected double dx, dy;
 
-    public AbstractMovableEntity(double x, double y, double width,
-                                 double height) {
+    public AbstractMovableEntity(double x, double y, double width, double height) {
         super(x, y, width, height);
         this.dx = 0;
         this.dy = 0;
@@ -62,5 +60,4 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements
     public void setDY(double dy) {
         this.dy = dy;
     }
-
 }

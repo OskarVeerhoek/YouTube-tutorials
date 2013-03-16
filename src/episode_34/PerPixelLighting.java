@@ -71,8 +71,8 @@ public class PerPixelLighting {
             System.exit(1);
         }
 
-        EulerCamera cam = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        EulerCamera cam = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f,
+                11.45f);
         cam.setFieldOfView(60);
         cam.applyPerspectiveMatrix();
 
@@ -93,10 +93,11 @@ public class PerPixelLighting {
             cam.processMouse(1, 80, -80);
             cam.processKeyboard(16, 1, 1, 1);
 
-            if (Mouse.isButtonDown(0))
+            if (Mouse.isButtonDown(0)) {
                 Mouse.setGrabbed(true);
-            else if (Mouse.isButtonDown(1))
+            } else if (Mouse.isButtonDown(1)) {
                 Mouse.setGrabbed(false);
+            }
 
             Display.update();
             Display.sync(60);

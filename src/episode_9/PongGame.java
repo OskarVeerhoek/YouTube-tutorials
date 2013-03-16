@@ -29,7 +29,6 @@
 
 package episode_9;
 
-
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -131,9 +130,8 @@ public class PongGame {
     private static void logic(int delta) {
         ball.update(delta);
         bat.update(delta);
-        if (ball.getX() <= bat.getX() + bat.getWidth()
-                && ball.getX() >= bat.getX() && ball.getY() >= bat.getY()
-                && ball.getY() <= bat.getY() + bat.getHeight()) {
+        if (ball.getX() <= bat.getX() + bat.getWidth() && ball.getX() >= bat.getX() && ball.getY() >= bat.getY() &&
+                ball.getY() <= bat.getY() + bat.getHeight()) {
             ball.setDX(0.3);
         }
     }

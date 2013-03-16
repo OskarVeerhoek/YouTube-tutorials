@@ -42,7 +42,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
 /**
- * Showcases OpenGL_ picking. Press the left mouse button over either one of the triangles and look at the console output.
+ * Showcases OpenGL_ picking. Press the left mouse button over either one of the triangles and look at the console
+ * output.
  */
 public class PickingDemo {
 
@@ -54,13 +55,9 @@ public class PickingDemo {
     private static final FloatBuffer realTriangleColour = BufferTools.asFloatBuffer(1, 0, 0);
     private static final FloatBuffer realOtherTriangleColour = BufferTools.asFloatBuffer(0, 0, 1);
 
-    /**
-     * The frame-buffer object that will contain our custom render buffer
-     */
+    /** The frame-buffer object that will contain our custom render buffer */
     private static int frameBuffer;
-    /**
-     * The render-buffer that will store the picking rendering
-     */
+    /** The render-buffer that will store the picking rendering */
     private static int renderBuffer;
 
     private static void cleanUp(boolean asCrash) {
@@ -83,7 +80,8 @@ public class PickingDemo {
         glVertex2f(-1, -1);
         glVertex2f(0, -1);
         glVertex2f(-1, +1);
-        glColor3f(pickingOtherTriangleColour.get(0), pickingOtherTriangleColour.get(1), pickingOtherTriangleColour.get(2));
+        glColor3f(pickingOtherTriangleColour.get(0), pickingOtherTriangleColour.get(1),
+                pickingOtherTriangleColour.get(2));
         glVertex2f(1, -1);
         glVertex2f(0, -1);
         glVertex2f(1, 1);
@@ -112,7 +110,8 @@ public class PickingDemo {
                 glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
                 FloatBuffer pixels = BufferTools.reserveData(3);
-                // Read the pixel colour at the mouse coordinates and store the information (red-green-blue) in "pixels".
+                // Read the pixel colour at the mouse coordinates and store the information (red-green-blue) in
+                // "pixels".
                 glReadPixels(Mouse.getX(), Mouse.getY(), 1, 1, GL_RGB, GL_FLOAT, pixels);
                 // If the pixel colour equals the triangle's picking colour ...
                 if (BufferTools.bufferEquals(pixels, pickingTriangleColour, 3)) {

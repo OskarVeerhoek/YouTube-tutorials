@@ -40,10 +40,9 @@ import java.io.IOException;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
-/**
- * @author Oskar
- */
+/** @author Oskar */
 public class ShaderDemo {
+
     public static void main(String[] args) {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));

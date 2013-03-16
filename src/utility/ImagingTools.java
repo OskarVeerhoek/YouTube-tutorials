@@ -47,10 +47,12 @@ import static org.lwjgl.opengl.GL11.*;
  * @author Oskar Veerhoek
  */
 public class ImagingTools {
+
     /**
      * Loads a PNG texture and puts it in Gl_TEXTURE_RECTANGLE_ARB
      *
      * @param location the location of the png image file
+     *
      * @return the generated texture handle or -1 if there was a loading error
      */
     public static int glLoadLinearPNG(String location) {
@@ -65,7 +67,8 @@ public class ImagingTools {
             buffer.flip();
             glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA,
+                    GL_UNSIGNED_BYTE, buffer);
         } catch (FileNotFoundException e) {
             System.err.println("Texture file could not be found.");
             return -1;
@@ -89,6 +92,7 @@ public class ImagingTools {
      * Loads a PNG texture and puts it in Gl_TEXTURE_2D
      *
      * @param location the location of the png image file
+     *
      * @return the generated texture handle or -1 if there was a loading error
      */
     public static int glLoadPNG(String location) {
@@ -103,7 +107,8 @@ public class ImagingTools {
             buffer.flip();
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA,
+                    GL_UNSIGNED_BYTE, buffer);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             return -1;

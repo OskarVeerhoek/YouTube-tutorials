@@ -58,6 +58,7 @@ public class EntityDemo {
     }
 
     private static class Box extends AbstractMovableEntity {
+
         public Box(double x, double y, double width, double height) {
             super(x, y, width, height);
         }
@@ -66,7 +67,6 @@ public class EntityDemo {
         public void draw() {
             glRectd(x, y, x + width, y + height);
         }
-
     }
 
     private static class Point extends AbstractEntity {

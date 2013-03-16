@@ -35,9 +35,7 @@ import org.lwjgl.opengl.Display;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
-/**
- * OpenGL error handling using glGetError and gluErrorString
- */
+/** OpenGL error handling using glGetError and gluErrorString */
 public class ErrorHandling {
 
     public static void main(String[] args) throws LWJGLException {
@@ -54,5 +52,4 @@ public class ErrorHandling {
         Display.destroy();
         System.exit(0);
     }
-
 }

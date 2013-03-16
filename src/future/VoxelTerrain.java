@@ -53,9 +53,9 @@ import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.*;
 
 /**
- * A 3D voxel terrain loaded from a heightmap and a lookup texture.
- * Press 'L' to reload the shader and texture files. Press 'P' to switch between normal and wireframe mode.
- * Click here for an image: https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
+ * A 3D voxel terrain loaded from a heightmap and a lookup texture. Press 'L' to reload the shader and texture files.
+ * Press 'P' to switch between normal and wireframe mode. Click here for an image:
+ * https://twitter.com/i/#!/CodingUniverse/media/slideshow?url=pic.twitter.com%2FDgMdZ5jm.
  *
  * @author Oskar Veerhoek
  */
@@ -64,26 +64,17 @@ public class VoxelTerrain {
     private static final String WINDOW_TITLE = "Voxel Terrain!";
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
     private static final float ASPECT_RATIO = (float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1];
-    private static final EulerCamera camera = new EulerCamera.Builder()
-            .setPosition(-5.4f, 19.2f, 33.2f)
-            .setRotation(30, 61, 0)
-            .setAspectRatio(ASPECT_RATIO)
-            .setFieldOfView(60)
-            .build();
-    /**
-     * The shader program that will use the lookup texture and the heightmap's vertex data to draw the terrain.
-     */
+    private static final EulerCamera camera = new EulerCamera.Builder().setPosition(-5.4f, 19.2f,
+            33.2f).setRotation(30, 61, 0).setAspectRatio(ASPECT_RATIO).setFieldOfView(60).build();
+    /** The shader program that will use the lookup texture and the heightmap's vertex data to draw the terrain. */
     private static int shaderProgram;
-    /**
-     * The texture that will be used to find out which colours correspond to which heights.
-     */
+    /** The texture that will be used to find out which colours correspond to which heights. */
     private static int lookupTexture;
-    /**
-     * The display list that will contain the heightmap's vertex data.
-     */
+    /** The display list that will contain the heightmap's vertex data. */
     private static int heightmapDisplayList;
     /**
-     * The points of the height. The first dimension represents the z-coordinate. The second dimension represents the x-coordinate. The float value represents the height.
+     * The points of the height. The first dimension represents the z-coordinate. The second dimension represents the
+     * x-coordinate. The float value represents the height.
      */
     private static float[][] data;
 
@@ -91,7 +82,7 @@ public class VoxelTerrain {
         glLoadIdentity();
         camera.applyTranslations();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//        glCallList(heightmapDisplayList);
+        //        glCallList(heightmapDisplayList);
         glScalef(0.2f, 0.06f, 0.2f);
         for (int z = 0; z < data.length - 1; z++) {
             glBegin(GL_TRIANGLE_STRIP);
@@ -136,12 +127,14 @@ public class VoxelTerrain {
                 }
             }
         }
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
-        if (Mouse.isGrabbed())
+        }
+        if (Mouse.isGrabbed()) {
             camera.processMouse(1, 80, -80);
+        }
         camera.processKeyboard(16, 1);
     }
 
@@ -171,7 +164,7 @@ public class VoxelTerrain {
         glEnable(GL_DEPTH_TEST);
         // Set the blue sky background.
         glClearColor(0, 0.75f, 1, 1);
-//        glEnable(GL_CULL_FACE);
+        //        glEnable(GL_CULL_FACE);
     }
 
     private static void update() {
@@ -203,7 +196,8 @@ public class VoxelTerrain {
             heightmapinfoInputStream.close();
             buffer.flip();
             glBindTexture(GL_TEXTURE_2D, lookupTexture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA,
+                    GL_UNSIGNED_BYTE, buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -220,8 +214,8 @@ public class VoxelTerrain {
                 float y = data[z][x];
                 glVertex3f(x, y, z);
                 glVertex3f(x, y, z + 1);
-//                glVertex3f(x, data[z][x], z);
-//                glVertex3f(x, data[z + 1][x], z + 1);
+                //                glVertex3f(x, data[z][x], z);
+                //                glVertex3f(x, data[z + 1][x], z + 1);
             }
             glEnd();
         }
@@ -231,8 +225,8 @@ public class VoxelTerrain {
                 float y = data[z][x];
                 glVertex3f(x, y, z);
                 glVertex3f(x, data[z - 1][x], z);
-//                glVertex3f(x, data[z][x], z);
-//                glVertex3f(x, data[z + 1][x], z + 1);
+                //                glVertex3f(x, data[z][x], z);
+                //                glVertex3f(x, data[z + 1][x], z + 1);
             }
             glEnd();
         }
@@ -260,5 +254,4 @@ public class VoxelTerrain {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

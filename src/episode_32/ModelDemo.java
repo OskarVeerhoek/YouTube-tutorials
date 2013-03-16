@@ -113,10 +113,11 @@ public class ModelDemo {
     private static void checkInput() {
         camera.processMouse(1, 80, -80);
         camera.processKeyboard(16, 1, 1, 1);
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
     }
 
     private static void cleanUp() {
@@ -133,12 +134,8 @@ public class ModelDemo {
     }
 
     private static void setUpCamera() {
-        camera = new EulerCamera.Builder()
-                .setAspectRatio((float) Display.getWidth() / Display.getHeight())
-                .setRotation(-1.12f, 0.16f, 0f)
-                .setPosition(-1.38f, 1.36f, 7.95f)
-                .setFieldOfView(60)
-                .build();
+        camera = new EulerCamera.Builder().setAspectRatio((float) Display.getWidth() / Display.getHeight())
+                .setRotation(-1.12f, 0.16f, 0f).setPosition(-1.38f, 1.36f, 7.95f).setFieldOfView(60).build();
         camera.applyOptimalStates();
         camera.applyPerspectiveMatrix();
     }

@@ -37,8 +37,7 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Showcases the use of 'smooth' transitions (non-linear), using the Math.sin()
- * function.
+ * Showcases the use of 'smooth' transitions (non-linear), using the Math.sin() function.
  *
  * @author Oskar
  */
@@ -47,25 +46,23 @@ public class SmoothTransitions {
     private static enum State {
 
         /**
-         * The state where the applications waits for user input and draws
-         * nothing. If enter is pressed the state is set to fading
+         * The state where the applications waits for user input and draws nothing. If enter is pressed the state is set
+         * to fading
          */
         INTRO,
         /**
-         * The state where the actual fading in happens. A blue rectangle slowly
-         * appears. When the opacity is at 100%, the state is set to main.
+         * The state where the actual fading in happens. A blue rectangle slowly appears. When the opacity is at 100%,
+         * the state is set to main.
          */
         FADING,
         /**
-         * The state where the rectangle is shown without transparency. If the
-         * user presses enter the state is set to intro.
+         * The state where the rectangle is shown without transparency. If the user presses enter the state is set to
+         * intro.
          */
         MAIN
     }
 
-    /**
-     * Default state is intro.
-     */
+    /** Default state is intro. */
     private static State state = State.INTRO;
 
     public static void main(String[] args) {

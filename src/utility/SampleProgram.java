@@ -70,10 +70,10 @@ public class SampleProgram {
     }
 
     private static void setUpStates() {
-//        glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_BLEND);
-//        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //        glEnable(GL_DEPTH_TEST);
+        //        glEnable(GL_LIGHTING);
+        //        glEnable(GL_BLEND);
+        //        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     private static void update() {
@@ -108,5 +108,4 @@ public class SampleProgram {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

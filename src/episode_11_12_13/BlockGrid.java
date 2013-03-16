@@ -49,8 +49,7 @@ public class BlockGrid {
     public BlockGrid() {
         for (int x = 0; x < BLOCKS_WIDTH; x++) {
             for (int y = 0; y < BLOCKS_HEIGHT; y++) {
-                blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y
-                        * BLOCK_SIZE);
+                blocks[x][y] = new Block(BlockType.AIR, x * BLOCK_SIZE, y * BLOCK_SIZE);
             }
         }
     }
@@ -64,15 +63,14 @@ public class BlockGrid {
                 Element e = (Element) block;
                 int x = Integer.parseInt(e.getAttributeValue("x"));
                 int y = Integer.parseInt(e.getAttributeValue("y"));
-                blocks[x][y] = new Block(BlockType.valueOf(e.getAttributeValue("type")), x * BLOCK_SIZE, y
-                        * BLOCK_SIZE);
+                blocks[x][y] = new Block(BlockType.valueOf(e.getAttributeValue("type")), x * BLOCK_SIZE,
+                        y * BLOCK_SIZE);
             }
         } catch (JDOMException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void save(File saveFile) {
@@ -84,8 +82,7 @@ public class BlockGrid {
                 Element block = new Element("block");
                 block.setAttribute("x", String.valueOf((int) (blocks[x][y].getX() / BLOCK_SIZE)));
                 block.setAttribute("y", String.valueOf((int) (blocks[x][y].getY() / BLOCK_SIZE)));
-                block.setAttribute("type",
-                        String.valueOf(blocks[x][y].getType()));
+                block.setAttribute("type", String.valueOf(blocks[x][y].getType()));
                 root.addContent(block);
             }
         }

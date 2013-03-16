@@ -47,9 +47,7 @@ import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
-/**
- * Shows per pixel lighting. Press 'P' for per pixel lighting and 'V' for per vertex.
- */
+/** Shows per pixel lighting. Press 'P' for per pixel lighting and 'V' for per vertex. */
 public class PerPixelLightingDemo {
 
     private static EulerCamera camera;
@@ -94,10 +92,11 @@ public class PerPixelLightingDemo {
         timer.update();
         camera.processMouse(1, 80, -80);
         camera.processKeyboard(16, 1, 1, 1);
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
         while (Keyboard.next()) {
             if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
                 currentShaderProgram = perPixelShaderProgram;
@@ -129,10 +128,8 @@ public class PerPixelLightingDemo {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
-                0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -169,14 +166,15 @@ public class PerPixelLightingDemo {
     }
 
     private static void setUpShaders() {
-        perPixelShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION, FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION);
-        perVertexShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION, FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION);
+        perPixelShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_PIXEL_LIGHTING_LOCATION,
+                FRAGMENT_SHADER_PER_PIXEL_LIGHTING_LOCATION);
+        perVertexShaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_PER_VERTEX_LIGHTING_LOCATION,
+                FRAGMENT_SHADER_PER_VERTEX_LIGHTING_LOCATION);
         currentShaderProgram = perPixelShaderProgram;
     }
 
     private static void setUpCamera() {
-        camera = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        camera = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         camera.setFieldOfView(70);
         camera.applyPerspectiveMatrix();
     }

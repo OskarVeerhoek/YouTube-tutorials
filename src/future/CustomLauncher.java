@@ -35,52 +35,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * [Oskar]<br>
- * Thanks to http://www.youtube.com/user/theanprocks/ : To download the files from the official servers, have a look at http://pastebin.com/DZLDVGYh
- * Shows a custom launcher application that automatically downloads the required
- * jar files.<br>
- * [/Oskar]<br>
- * <br>
- * <p/>
- * [Ryan]<br>
- * Updated to check if the libraries and natives are missing, then only
- * downloads the ones that are missing.<br>
- * Methods are defined in alphabetical order for easier code navigation.<br>
- * [/Ryan]
+ * [Oskar]<br> Thanks to http://www.youtube.com/user/theanprocks/ : To download the files from the official servers,
+ * have a look at http://pastebin.com/DZLDVGYh Shows a custom launcher application that automatically downloads the
+ * required jar files.<br> [/Oskar]<br> <br> [Ryan]<br> Updated to check if the libraries and natives are missing, then
+ * only downloads the ones that are missing.<br> Methods are defined in alphabetical order for easier code
+ * navigation.<br> [/Ryan]
  *
  * @author Oskar Veerhoek
  * @author Ryan Porterfield a.k.a. ShadowHawk54
  * @version 2.1.5
  */
 public class CustomLauncher {
-    /**
-     * Base folder for all external libraries
-     */
+
+    /** Base folder for all external libraries */
     private static final File libraryFolder = new File("download");
-    /**
-     * The download folder of my personal web-site where I'm hosting all the
-     * jars and natives.
-     */
+    /** The download folder of my personal web-site where I'm hosting all the jars and natives. */
     private static final String baseURL = "http://ryanporterfield.com/downloads/";
-    /**
-     * A list of the libraries that are are missing
-     */
+    /** A list of the libraries that are are missing */
     final private Map<String, Integer> missing = new HashMap<String, Integer>();
-    /**
-     * Amount of bytes downloaded.
-     */
+    /** Amount of bytes downloaded. */
     private int totalDownloaded;
-    /**
-     * Total size <em>in bytes</em> that needs to be downloaded
-     */
+    /** Total size <em>in bytes</em> that needs to be downloaded */
     private int totalDownloadSize;
-    /**
-     * A complete list of all external libraries names and file sizes.
-     */
+    /** A complete list of all external libraries names and file sizes. */
     private Map<String, Integer> dependencies;
-    /**
-     * An Operating System variable
-     */
+    /** An Operating System variable */
     private OS os;
 
     /**
@@ -95,8 +74,7 @@ public class CustomLauncher {
         launcher.check();
 
         if (!launcher.missing.isEmpty()) {
-            System.out.println("Missing " + (launcher.totalDownloadSize / 1024)
-                    + "KiB");
+            System.out.println("Missing " + (launcher.totalDownloadSize / 1024) + "KiB");
             System.out.println("Starting Download");
             launcher.downloadMissing();
         } else {
@@ -104,9 +82,7 @@ public class CustomLauncher {
         }
     }
 
-    /**
-     * Constructor initializes the instance variables
-     */
+    /** Constructor initializes the instance variables */
     public CustomLauncher() {
         if (!libraryFolder.exists() && !libraryFolder.mkdirs()) {
             throw new RuntimeException("Cannot create required folders.");
@@ -132,9 +108,8 @@ public class CustomLauncher {
     }
 
     /**
-     * Set the os variable by parsing the result of
-     * <em>System.getProperty("os.name")</em> for operating system dependent
-     * natives.
+     * Set the os variable by parsing the result of <em>System.getProperty("os.name")</em> for operating system
+     * dependent natives.
      *
      * @see CustomLauncher#os
      */
@@ -205,8 +180,7 @@ public class CustomLauncher {
     }
 
     /**
-     * Puts all the dependency jars and their file-sizes into the
-     * dependencies map.
+     * Puts all the dependency jars and their file-sizes into the dependencies map.
      *
      * @see CustomLauncher#dependencies
      */
@@ -224,10 +198,7 @@ public class CustomLauncher {
         dependencies.put("slick.jar", 643277);
     }
 
-    /**
-     * Grabs the list of natives from the OS enum and puts them into the
-     * natives map.
-     */
+    /** Grabs the list of natives from the OS enum and puts them into the natives map. */
     private void populateNatives() {
         for (String nLib : os.natives.keySet()) {
             dependencies.put(nLib, os.natives.get(nLib));
@@ -235,9 +206,8 @@ public class CustomLauncher {
     }
 
     enum OS {
-        LINUX("native/linux/", linux()), OSX("native/macosx/", osx()), SOlARIS(
-                "native/solaris/", solaris()), WINDOWS("native/windows/",
-                windows());
+        LINUX("native/linux/", linux()), OSX("native/macosx/", osx()), SOlARIS("native/solaris/", solaris()),
+        WINDOWS("native/windows/", windows());
 
         final public String url;
         final public Map<String, Integer> natives;

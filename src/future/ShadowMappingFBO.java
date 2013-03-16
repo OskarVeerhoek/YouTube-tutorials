@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Sam K., Daniel K.
+ * Copyright (c) 2013, Oskar Veerhoek
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -55,12 +55,14 @@ import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.util.glu.GLU.*;
 
 /**
- * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible. Some code was modified by Oskar Veerhoek.
+ * Shows how to get shadows working in OpenGL. Ported from the OpenGLSuperBible. Some code was modified by Oskar
+ * Veerhoek.
  *
  * @author Sam K.
  * @author Daniel W.
  */
 public class ShadowMappingFBO {
+
     /**
      * The width of the depth texture which is known as the shadow map. The higher the width, the more detailed the
      * shadows.
@@ -76,9 +78,7 @@ public class ShadowMappingFBO {
      * draw the shadow map.
      */
     private static int frameBuffer;
-    /**
-     * The render buffer holding the shadow map in the form of a depth texture.
-     */
+    /** The render buffer holding the shadow map in the form of a depth texture. */
     private static int renderBuffer;
     private static int bunnyDisplayList;
 
@@ -86,14 +86,9 @@ public class ShadowMappingFBO {
     private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
-    private static final EulerCamera camera = new EulerCamera.Builder()
-            .setAspectRatio((float) DISPLAY_MODE.getWidth() / DISPLAY_MODE.getHeight())
-            .setPosition(23, 34, 87)
-            .setRotation(22, 341, 0)
-            .setNearClippingPane(2)
-            .setFarClippingPane(300)
-            .setFieldOfView(60)
-            .build();
+    private static final EulerCamera camera = new EulerCamera.Builder().setAspectRatio((float) DISPLAY_MODE.getWidth
+            () / DISPLAY_MODE.getHeight()).setPosition(23, 34, 87).setRotation(22, 341,
+            0).setNearClippingPane(2).setFarClippingPane(300).setFieldOfView(60).build();
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -150,9 +145,7 @@ public class ShadowMappingFBO {
         glLight(GL_LIGHT0, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1));
     }
 
-    /**
-     * Sets up the OpenGL states.
-     */
+    /** Sets up the OpenGL states. */
     public static void setUpFramebufferObject() {
         int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
         int maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
@@ -191,11 +184,11 @@ public class ShadowMappingFBO {
         glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
         // If the intensity of a given texel is lower than 0.5f, then the texture should not be sampled. In practice,
         // the higher the value, the less of the shadow is visible, and the other way around.
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB,
-                0.5F);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB, 0.5F);
 
         // Set the automatic texture coordinate generation mode to eye linear. The texture coordinate is calculated
-        // with the inverse of the model-view matrix and a so-called 'object plane' (have yet to find out what that means).
+        // with the inverse of the model-view matrix and a so-called 'object plane' (have yet to find out what that
+        // means).
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
@@ -205,13 +198,10 @@ public class ShadowMappingFBO {
         renderBuffer = glGenRenderbuffers();
         glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
         // Set the internal storage format of the render buffer to a depth component of 32 bits (4 bytes).
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32,
-                maxTextureSize, maxTextureSize);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, maxTextureSize, maxTextureSize);
         // Attach the render buffer to the frame buffer as a depth attachment. This means that, if the frame buffer is
         // bound, any depth texture values will be copied to the render buffer object.
-        glFramebufferRenderbuffer(GL_FRAMEBUFFER,
-                GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER,
-                renderBuffer);
+        glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
         // OpenGL shall make no amendment to the colour or multisample buffer.
         glDrawBuffer(GL_NONE);
         // Disable the colour buffer for pixel read operations (such as glReadPixels or glCopyTexImage2D).
@@ -225,9 +215,7 @@ public class ShadowMappingFBO {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    /**
-     * Generate the shadow map.
-     */
+    /** Generate the shadow map. */
     private static void generateShadowMap() {
         /**
          * The model-view matrix of the light.
@@ -250,8 +238,7 @@ public class ShadowMappingFBO {
          * at [0, 0, 0]. The distance is the square-root of the sum of each of
          * the components of the light position squared.
          */
-        float lightToSceneDistance = (float) Math.sqrt(
-                lightPosition.get(0) * lightPosition.get(0) +
+        float lightToSceneDistance = (float) Math.sqrt(lightPosition.get(0) * lightPosition.get(0) +
                 lightPosition.get(1) * lightPosition.get(1) +
                 lightPosition.get(2) * lightPosition.get(2));
         /**
@@ -267,16 +254,14 @@ public class ShadowMappingFBO {
         /**
          * The field-of-view of the shadow frustum. Code taken from the OpenGL SuperBible.
          */
-        float fieldOfView = (float) Math.toDegrees(2.0F * Math
-                .atan(sceneBoundingRadius / lightToSceneDistance));
+        float fieldOfView = (float) Math.toDegrees(2.0F * Math.atan(sceneBoundingRadius / lightToSceneDistance));
         glMatrixMode(GL_PROJECTION);
         /**
          * Store the current projection matrix.
          */
         glPushMatrix();
         glLoadIdentity();
-        gluPerspective(fieldOfView, 1, nearPlane, nearPlane
-                + sceneBoundingRadius * 2);
+        gluPerspective(fieldOfView, 1, nearPlane, nearPlane + sceneBoundingRadius * 2);
         glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
         glMatrixMode(GL_MODELVIEW);
         /**
@@ -284,9 +269,7 @@ public class ShadowMappingFBO {
          */
         glPushMatrix();
         glLoadIdentity();
-        gluLookAt(
-                lightPosition.get(0), lightPosition.get(1), lightPosition.get(2),
-                0, 0, 0, 0, 1, 0);
+        gluLookAt(lightPosition.get(0), lightPosition.get(1), lightPosition.get(2), 0, 0, 0, 0, 1, 0);
         glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
         glViewport(0, 0, shadowMapWidth, shadowMapHeight);
         /**
@@ -314,11 +297,13 @@ public class ShadowMappingFBO {
         glDisable(GL_COLOR_MATERIAL);
         glDisable(GL_NORMALIZE);
         /**
-         * Disable the writing of the red, green, blue, and alpha colour components, because we only need the depth component.
+         * Disable the writing of the red, green, blue, and alpha colour components,
+         * because we only need the depth component.
          */
         glColorMask(false, false, false, false);
         /**
-         * An offset is given to every depth value of every polygon fragment to prevent a visual quirk called 'shadow acne'.
+         * An offset is given to every depth value of every polygon fragment to prevent a visual quirk called 'shadow
+         * acne'.
          */
         glEnable(GL_POLYGON_OFFSET_FILL);
         /**
@@ -334,8 +319,7 @@ public class ShadowMappingFBO {
          *  int width, height -> shadowMapWidth, shadowMapHeight
          *  int border -> 0
          */
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0,
-                shadowMapWidth, shadowMapHeight, 0);
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, shadowMapWidth, shadowMapHeight, 0);
         // Restore the previous model-view matrix.
         glPopMatrix();
         glMatrixMode(GL_PROJECTION);
@@ -359,9 +343,7 @@ public class ShadowMappingFBO {
         Matrix4f.transpose(textureMatrix, textureMatrix);
     }
 
-    /**
-     * Sets up a display.
-     */
+    /** Sets up a display. */
     private static void setUpDisplay() {
         try {
             Display.setDisplayMode(DISPLAY_MODE);
@@ -373,16 +355,13 @@ public class ShadowMappingFBO {
             Display.destroy();
             System.exit(1);
         }
-        if (!GLContext.getCapabilities().OpenGL14
-                && !GLContext.getCapabilities().GL_ARB_shadow) {
-            System.out
-                    .println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
+        if (!GLContext.getCapabilities().OpenGL14 && !GLContext.getCapabilities().GL_ARB_shadow) {
+            System.out.println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
             Display.destroy();
             System.exit(1);
         }
         if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
-            System.err
-                    .println("GL_ARB_shadow_ambient extension not available.");
+            System.err.println("GL_ARB_shadow_ambient extension not available.");
             Display.destroy();
             System.exit(1);
         }
@@ -401,9 +380,7 @@ public class ShadowMappingFBO {
         glPopAttrib();
     }
 
-    /**
-     * This is where anything you want rendered into your world should go.
-     */
+    /** This is where anything you want rendered into your world should go. */
     private static void drawShadowCastingObjects() {
         glPushMatrix();
         glScalef(5, 5, 5);
@@ -420,8 +397,7 @@ public class ShadowMappingFBO {
         {
             glEnable(GL_TEXTURE_2D);
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE,
-                    GL_COMPARE_R_TO_TEXTURE);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
             glEnable(GL_TEXTURE_GEN_S);
             glEnable(GL_TEXTURE_GEN_T);
             glEnable(GL_TEXTURE_GEN_R);
@@ -467,9 +443,7 @@ public class ShadowMappingFBO {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
-    /**
-     * Handles the keyboard and mouse input.
-     */
+    /** Handles the keyboard and mouse input. */
     public static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
@@ -481,18 +455,18 @@ public class ShadowMappingFBO {
                 }
             }
         }
-        if (Mouse.isGrabbed())
+        if (Mouse.isGrabbed()) {
             camera.processMouse(1.0f, 80, -80);
+        }
         camera.processKeyboard(16.0f, 10);
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
     }
 
-    /**
-     * Cleanup after the program.
-     */
+    /** Cleanup after the program. */
     private static void cleanUp() {
         glDeleteFramebuffers(frameBuffer);
         glDeleteLists(bunnyDisplayList, 1);

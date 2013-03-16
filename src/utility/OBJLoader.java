@@ -41,10 +41,9 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
-/**
- * @author Oskar
- */
+/** @author Oskar */
 public class OBJLoader {
+
     public static int createDisplayList(Model m) {
         int displayList = glGenLists(1);
         glNewList(displayList, GL_COMPILE);
@@ -124,11 +123,11 @@ public class OBJLoader {
 
             } else if (line.startsWith("f ")) {
                 Vector3f vertexIndices = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[0]),
-                        Float.valueOf(line.split(" ")[2].split("/")[0]),
-                        Float.valueOf(line.split(" ")[3].split("/")[0]));
+                        Float.valueOf(line.split(" ")[2].split("/")[0]), Float.valueOf(line.split(" ")[3].split("/")
+                        [0]));
                 Vector3f normalIndices = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[2]),
-                        Float.valueOf(line.split(" ")[2].split("/")[2]),
-                        Float.valueOf(line.split(" ")[3].split("/")[2]));
+                        Float.valueOf(line.split(" ")[2].split("/")[2]), Float.valueOf(line.split(" ")[3].split("/")
+                        [2]));
                 m.faces.add(new Face(vertexIndices, normalIndices));
             }
         }

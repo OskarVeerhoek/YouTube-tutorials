@@ -58,110 +58,70 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluPerspective;
 
 /**
- * A LWJGL port of the awesome MineFront Pre-ALPHA 0.02 Controls: W/UP =
- * forward; A/LEFT = strafe left; D/RIGHT = strafe right; S/DOWN = backward;
- * SPACE = fly up; SHIFT = fly down; CONTROL = move faster; TAB = move slower; Q
- * = increase walking speed; Z = decrease walking speed; O = increase mouse
- * speed; L = decrease mouse speed; C = reset position
+ * A LWJGL port of the awesome MineFront Pre-ALPHA 0.02 Controls: W/UP = forward; A/LEFT = strafe left; D/RIGHT = strafe
+ * right; S/DOWN = backward; SPACE = fly up; SHIFT = fly down; CONTROL = move faster; TAB = move slower; Q = increase
+ * walking speed; Z = decrease walking speed; O = increase mouse speed; L = decrease mouse speed; C = reset position
  *
  * @author Oskar Veerhoek, Yan Chernikov
  */
 public class MineFront {
 
-    /**
-     * Defines if the application is resizable.
-     */
+    /** Defines if the application is resizable. */
     public static final boolean resizable = true;
     /*
      * Defines if the application is running. Set to false to terminate the
      * program.
      */
     public static volatile boolean running = true;
-    /**
-     * The position of the player as a 3D vector (xyz).
-     */
+    /** The position of the player as a 3D vector (xyz). */
     public static Vector3f position = new Vector3f(0, 0, 0);
     /**
-     * The rotation of the axis (where to the player looks). The X component
-     * stands for the rotation along the x-axis, where 0 is dead ahead, 180 is
-     * backwards, and 360 is automically set to 0 (dead ahead). The value must
-     * be between (including) 0 and 360. The Y component stands for the rotation
-     * along the y-axis, where 0 is looking straight ahead, -90 is straight up,
-     * and 90 is straight down. The value must be between (including) -90 and
-     * 90.
+     * The rotation of the axis (where to the player looks). The X component stands for the rotation along the x-axis,
+     * where 0 is dead ahead, 180 is backwards, and 360 is automically set to 0 (dead ahead). The value must be between
+     * (including) 0 and 360. The Y component stands for the rotation along the y-axis, where 0 is looking straight
+     * ahead, -90 is straight up, and 90 is straight down. The value must be between (including) -90 and 90.
      */
     public static Vector3f rotation = new Vector3f(0, 0, 0);
-    /**
-     * The minimal distance from the camera where objects are rendered.
-     */
+    /** The minimal distance from the camera where objects are rendered. */
     public static float zNear = 0.001f;
     /**
-     * The width and length of the floor and ceiling. Don't put anything above
-     * 1000, or OpenGL will start to freak out, though.
+     * The width and length of the floor and ceiling. Don't put anything above 1000, or OpenGL will start to freak out,
+     * though.
      */
     public static final int gridSize = 10;
     /**
-     * The size of tiles, where 0.5 is the standard size. Increasing the size by
-     * results in smaller tiles, and vice versa.
+     * The size of tiles, where 0.5 is the standard size. Increasing the size by results in smaller tiles, and vice
+     * versa.
      */
     public static final float tileSize = 0.20f;
-    /**
-     * The maximal distance from the camera where objects are rendered.
-     */
+    /** The maximal distance from the camera where objects are rendered. */
     public static float zFar = 35f;
-    /**
-     * The distance where fog starts appearing.
-     */
+    /** The distance where fog starts appearing. */
     public static float fogNear = 25f;
-    /**
-     * The distance where the fog stops appearing (fully black here)
-     */
+    /** The distance where the fog stops appearing (fully black here) */
     public static float fogFar = 33f;
-    /**
-     * The color of the fog in rgba.
-     */
+    /** The color of the fog in rgba. */
     public static Color fogColor = new Color(1f, 1f, 1f, 1f);
-    /**
-     * Defines if the application utilizes full-screen.
-     */
+    /** Defines if the application utilizes full-screen. */
     public static final boolean fullscreen = true;
-    /**
-     * Defines the walking speed, where 10 is the standard.
-     */
+    /** Defines the walking speed, where 10 is the standard. */
     public static int walkingSpeed = 10;
-    /**
-     * Defines the mouse speed.
-     */
+    /** Defines the mouse speed. */
     public static int mouseSpeed = 2;
     public static int joystickSpeed = 2;
-    /**
-     * Defines if the application utilizes vertical synchronization (eliminates
-     * screen tearing; caps fps to 60fps)
-     */
+    /** Defines if the application utilizes vertical synchronization (eliminates screen tearing; caps fps to 60fps) */
     public static final boolean vsync = false;
-    /**
-     * Defines if the applications prints its frames-per-second to the console.
-     */
+    /** Defines if the applications prints its frames-per-second to the console. */
     public static boolean printFPS = false;
-    /**
-     * Defines the maximum angle at which the player can look up.
-     */
+    /** Defines the maximum angle at which the player can look up. */
     public static final int maxLookUp = 85;
-    /**
-     * Defines the minimum angle at which the player can look down.
-     */
+    /** Defines the minimum angle at which the player can look down. */
     public static final int maxLookDown = -85;
-    /**
-     * The height of the ceiling.
-     */
+    /** The height of the ceiling. */
     public static final float ceilingHeight = 10;
-    /**
-     * The height of the floor.
-     */
+    /** The height of the floor. */
     public static final float floorHeight = -1;
-    /**
-     * Defines the field of view.
-     */
+    /** Defines the field of view. */
     public static int fov = 80;
     private static int fps;
     private static long lastFPS;
@@ -237,8 +197,7 @@ public class MineFront {
         Controller joystick = ControllerEnvironment.getDefaultEnvironment().getControllers()[0];
 
         {
-            FloatBuffer fogColours = BufferUtils.createFloatBuffer(
-                    4);
+            FloatBuffer fogColours = BufferUtils.createFloatBuffer(4);
             fogColours.put(new float[]{fogColor.r, fogColor.g, fogColor.b, fogColor.a});
             glClearColor(fogColor.r, fogColor.g, fogColor.b, fogColor.a);
             fogColours.flip();
@@ -262,7 +221,8 @@ public class MineFront {
                 glBindTexture(GL_TEXTURE_2D, floorTexture);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA,
+                        GL_UNSIGNED_BYTE, buffer);
                 glBindTexture(GL_TEXTURE_2D, 0);
             } catch (FileNotFoundException ex) {
                 System.err.println("Failed to find the texture files.");
@@ -504,8 +464,8 @@ public class MineFront {
                     } else if (rz > 0) {
                         keyLeft = true;
                     }
-//                } else if (c.getName().equals("slider")) {
-//                    joystickSpeed = (int) ((-c.getPollData() + 1.1) * 10);
+                    //                } else if (c.getName().equals("slider")) {
+                    //                    joystickSpeed = (int) ((-c.getPollData() + 1.1) * 10);
                 } else if (c.getName().equals("3") || c.getName().equals("4")) {
                     if (c.getPollData() == 1f) {
                         flyDown = true;
@@ -525,11 +485,9 @@ public class MineFront {
                 }
                 float mouseDX = (float) (dx * joystickSpeed * 0.5);
                 float mouseDY = (float) (-dy * joystickSpeed * 0.5);
-                if (rotation.y + mouseDX
-                        >= 360) {
+                if (rotation.y + mouseDX >= 360) {
                     rotation.y = rotation.y + mouseDX - 360;
-                } else if (rotation.y + mouseDX
-                        < 0) {
+                } else if (rotation.y + mouseDX < 0) {
                     rotation.y = 360 - rotation.y + mouseDX;
                 } else {
                     rotation.y += mouseDX;
@@ -658,7 +616,6 @@ public class MineFront {
                 if (Mouse.isButtonDown(1)) {
                     Mouse.setGrabbed(false);
                 }
-
             }
             while (Keyboard.next()) {
                 if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
@@ -702,8 +659,6 @@ public class MineFront {
                             gluPerspective(fov, (float) Display.getWidth() / (float) Display.getHeight(), zNear, zFar);
                             glMatrixMode(GL_MODELVIEW);
                             glLoadIdentity();
-
-
                         }
                     } catch (LWJGLException ex) {
                         Logger.getLogger(MineFront.class.getName()).log(Level.SEVERE, null, ex);
@@ -731,9 +686,9 @@ public class MineFront {
                 updateFPS();
             }
             Display.update();
-//            if (vsync) {
-//                Display.sync(60);
-//            }
+            //            if (vsync) {
+            //                Display.sync(60);
+            //            }
             Display.sync(30);
             if (Display.isCloseRequested()) {
                 running = false;

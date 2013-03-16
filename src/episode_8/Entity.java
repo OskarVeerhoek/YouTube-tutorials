@@ -30,6 +30,7 @@
 package episode_8;
 
 public interface Entity {
+
     public void draw();
 
     // See episode 7

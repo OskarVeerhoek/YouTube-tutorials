@@ -47,16 +47,30 @@ public final class Sprite {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Sprite sprite = (Sprite) o;
 
-        if (h != sprite.h) return false;
-        if (w != sprite.w) return false;
-        if (x != sprite.x) return false;
-        if (y != sprite.y) return false;
-        if (name != null ? !name.equals(sprite.name) : sprite.name != null) return false;
+        if (h != sprite.h) {
+            return false;
+        }
+        if (w != sprite.w) {
+            return false;
+        }
+        if (x != sprite.x) {
+            return false;
+        }
+        if (y != sprite.y) {
+            return false;
+        }
+        if (name != null ? !name.equals(sprite.name) : sprite.name != null) {
+            return false;
+        }
 
         return true;
     }

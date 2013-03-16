@@ -37,9 +37,9 @@ import org.lwjgl.opengl.DisplayMode;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Shows how to use OpenGL scissoring to render a specific part of the viewport.
- * Press the left mouse button to drag the bottom-left corner of the scissor box.
- * Press the right mouse button to drag the upper-right corner of the scissor box.
+ * Shows how to use OpenGL scissoring to render a specific part of the viewport. Press the left mouse button to drag the
+ * bottom-left corner of the scissor box. Press the right mouse button to drag the upper-right corner of the scissor
+ * box.
  *
  * @author Oskar Veerhoek
  */
@@ -49,29 +49,22 @@ public class ScissorDemo {
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
     /**
-     * The dimensions of the scissor box.
-     * [0] is the left x-coordinate of the scissor box
-     * [1] is the bottom y-coordinate of the scissor box
-     * [2] is the right x-coordinate of the scissor box
-     * [3] is the right y-coordinate of the scissor box
+     * The dimensions of the scissor box. [0] is the left x-coordinate of the scissor box [1] is the bottom y-coordinate
+     * of the scissor box [2] is the right x-coordinate of the scissor box [3] is the right y-coordinate of the scissor
+     * box
      */
     private static int scissorBox[] = {0, 0, WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]};
     /**
-     * The location of the mouse cursor relative to the application window.
-     * [0] is the x-coordinate of the mouse cursor (0 is left)
-     * [1] is the y-coordinate of the mouse cursor (0 is bottom)
+     * The location of the mouse cursor relative to the application window. [0] is the x-coordinate of the mouse cursor
+     * (0 is left) [1] is the y-coordinate of the mouse cursor (0 is bottom)
      */
     private static int mouseLocation[] = {0, 0};
     /**
-     * The mouse button which is being pressed.
-     * -1 stands for no mouse button
-     * 0 stands for the left mouse button
-     * 1 stands for the right mouse button
+     * The mouse button which is being pressed. -1 stands for no mouse button 0 stands for the left mouse button 1
+     * stands for the right mouse button
      */
     private static int mouseButtonPressed = -1;
-    /**
-     * If the width and height of the scissor box are negative.
-     */
+    /** If the width and height of the scissor box are negative. */
     private static boolean scissorInverted = false;
 
     public static void main(String[] args) {
@@ -187,5 +180,4 @@ public class ScissorDemo {
             cleanUp(true);
         }
     }
-
 }

@@ -42,15 +42,13 @@ import org.lwjgl.opengl.GL11;
  * @author Oskar Veerhoek
  */
 public class CameraTest {
+
     public static void main(String args[]) throws LWJGLException {
         Display.setVSyncEnabled(true);
         Display.setDisplayMode(new DisplayMode(640, 480));
         Display.setResizable(true);
         Display.create();
-        EulerCamera camera = new EulerCamera.Builder()
-                .setAspectRatio(640f / 480f)
-                .setFieldOfView(60)
-                .build();
+        EulerCamera camera = new EulerCamera.Builder().setAspectRatio(640f / 480f).setFieldOfView(60).build();
         camera.applyPerspectiveMatrix();
         camera.applyOptimalStates();
         Mouse.setGrabbed(true);

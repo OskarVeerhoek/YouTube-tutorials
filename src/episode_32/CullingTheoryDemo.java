@@ -226,5 +226,4 @@ public class CullingTheoryDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }

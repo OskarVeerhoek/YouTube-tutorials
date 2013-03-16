@@ -52,9 +52,7 @@ public class AdvancedRendering {
 
     private static long lastFrame;
 
-    /**
-     * All the different render modes
-     */
+    /** All the different render modes */
     private static enum RenderMode {
         IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS
     }
@@ -101,7 +99,8 @@ public class AdvancedRendering {
         for (int i = 0; i < points.length; i++) {
             // I altered the zFar variable to adapt to the points.length.
             // Points, no matter how much, now appear evenly distributed along the screen
-            points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f, random.nextInt(points.length / 50) - points.length / 50);
+            points[i] = new Point((random.nextFloat() - 0.5f) * 100f, (random.nextFloat() - 0.5f) * 100f,
+                    random.nextInt(points.length / 50) - points.length / 50);
         }
 
         /**
@@ -231,7 +230,6 @@ public class AdvancedRendering {
                     speed = 0;
                     glLoadIdentity();
                 }
-
             }
 
             Display.update();

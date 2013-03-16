@@ -94,5 +94,4 @@ public abstract class AbstractEntity implements Entity {
         hitbox.setBounds((int) x, (int) y, (int) width, (int) height);
         return hitbox.intersects(other.getX(), other.getY(), other.getWidth(), other.getHeight());
     }
-
 }

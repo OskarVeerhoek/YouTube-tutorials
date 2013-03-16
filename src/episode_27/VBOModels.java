@@ -76,10 +76,11 @@ public class VBOModels {
     private static void checkInput() {
         cam.processMouse(1, 80, -80);
         cam.processKeyboard(16, 1, 1, 1);
-        if (Mouse.isButtonDown(0))
+        if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
-        else if (Mouse.isButtonDown(1))
+        } else if (Mouse.isButtonDown(1)) {
             Mouse.setGrabbed(false);
+        }
     }
 
     private static void cleanUp() {
@@ -115,10 +116,8 @@ public class VBOModels {
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f,
-                0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION,
-                BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
         glEnable(GL_COLOR_MATERIAL);
@@ -141,37 +140,37 @@ public class VBOModels {
             cleanUp();
             System.exit(1);
         }
-//		vboVertexHandle = glGenBuffers();
-//		vboNormalHandle = glGenBuffers();
-//		model = null;
-//		try {
-//			model = OBJLoader.loadModel(new File(MODEL_LOCATION));
-//		} catch (FileNotFoundException e){
-//			e.printStackTrace();
-//			cleanUp();
-//			System.exit(1);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			cleanUp();
-//			System.exit(1);
-//		}
-//		FloatBuffer vertices = reserveData(model.faces.size() * 9);
-//		FloatBuffer normals = reserveData(model.faces.size() * 9);
-//		for (Face face : model.faces) {
-//			vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
-//			vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
-//			vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
-//			normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
-//			normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
-//			normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
-//		}
-//		vertices.flip();
-//		normals.flip();
-//		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-//		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-//		glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-//		glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
-//		glBindBuffer(GL_ARRAY_BUFFER, 0);
+        //		vboVertexHandle = glGenBuffers();
+        //		vboNormalHandle = glGenBuffers();
+        //		model = null;
+        //		try {
+        //			model = OBJLoader.loadModel(new File(MODEL_LOCATION));
+        //		} catch (FileNotFoundException e){
+        //			e.printStackTrace();
+        //			cleanUp();
+        //			System.exit(1);
+        //		} catch (IOException e) {
+        //			e.printStackTrace();
+        //			cleanUp();
+        //			System.exit(1);
+        //		}
+        //		FloatBuffer vertices = reserveData(model.faces.size() * 9);
+        //		FloatBuffer normals = reserveData(model.faces.size() * 9);
+        //		for (Face face : model.faces) {
+        //			vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
+        //			vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
+        //			vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
+        //			normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
+        //			normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
+        //			normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
+        //		}
+        //		vertices.flip();
+        //		normals.flip();
+        //		glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+        //		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+        //		glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+        //		glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
+        //		glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
     private static void setUpShaders() {
@@ -179,8 +178,7 @@ public class VBOModels {
     }
 
     private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth()
-                / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        cam = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
         cam.setFieldOfView(70);
         cam.applyPerspectiveMatrix();
     }

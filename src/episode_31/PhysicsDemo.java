@@ -162,5 +162,4 @@ public class PhysicsDemo {
         enterGameLoop();
         cleanUp(false);
     }
-
 }
