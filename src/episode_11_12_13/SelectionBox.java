@@ -33,12 +33,12 @@ import org.lwjgl.input.Mouse;
 
 import static org.lwjgl.opengl.GL11.*;
 
-public class SelectionBox {
+class SelectionBox {
 
     private float x, y;
     private float size;
     private BlockType selection;
-    private Block temp_selection;
+    private final Block temp_selection;
 
     public SelectionBox(float x, float y, float size, BlockType selection) {
         this.x = x;

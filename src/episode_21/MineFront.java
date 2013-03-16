@@ -67,62 +67,62 @@ import static org.lwjgl.util.glu.GLU.gluPerspective;
 public class MineFront {
 
     /** Defines if the application is resizable. */
-    public static final boolean resizable = true;
+    private static final boolean resizable = true;
     /*
      * Defines if the application is running. Set to false to terminate the
      * program.
      */
-    public static volatile boolean running = true;
+    private static volatile boolean running = true;
     /** The position of the player as a 3D vector (xyz). */
-    public static Vector3f position = new Vector3f(0, 0, 0);
+    private static Vector3f position = new Vector3f(0, 0, 0);
     /**
      * The rotation of the axis (where to the player looks). The X component stands for the rotation along the x-axis,
      * where 0 is dead ahead, 180 is backwards, and 360 is automically set to 0 (dead ahead). The value must be between
      * (including) 0 and 360. The Y component stands for the rotation along the y-axis, where 0 is looking straight
      * ahead, -90 is straight up, and 90 is straight down. The value must be between (including) -90 and 90.
      */
-    public static Vector3f rotation = new Vector3f(0, 0, 0);
+    private static Vector3f rotation = new Vector3f(0, 0, 0);
     /** The minimal distance from the camera where objects are rendered. */
-    public static float zNear = 0.001f;
+    private static final float zNear = 0.001f;
     /**
      * The width and length of the floor and ceiling. Don't put anything above 1000, or OpenGL will start to freak out,
      * though.
      */
-    public static final int gridSize = 10;
+    private static final int gridSize = 10;
     /**
      * The size of tiles, where 0.5 is the standard size. Increasing the size by results in smaller tiles, and vice
      * versa.
      */
-    public static final float tileSize = 0.20f;
+    private static final float tileSize = 0.20f;
     /** The maximal distance from the camera where objects are rendered. */
-    public static float zFar = 35f;
+    private static final float zFar = 35f;
     /** The distance where fog starts appearing. */
-    public static float fogNear = 25f;
+    private static final float fogNear = 25f;
     /** The distance where the fog stops appearing (fully black here) */
-    public static float fogFar = 33f;
+    private static final float fogFar = 33f;
     /** The color of the fog in rgba. */
-    public static Color fogColor = new Color(1f, 1f, 1f, 1f);
+    private static final Color fogColor = new Color(1f, 1f, 1f, 1f);
     /** Defines if the application utilizes full-screen. */
-    public static final boolean fullscreen = true;
+    private static final boolean fullscreen = true;
     /** Defines the walking speed, where 10 is the standard. */
-    public static int walkingSpeed = 10;
+    private static int walkingSpeed = 10;
     /** Defines the mouse speed. */
-    public static int mouseSpeed = 2;
-    public static int joystickSpeed = 2;
+    private static int mouseSpeed = 2;
+    private static int joystickSpeed = 2;
     /** Defines if the application utilizes vertical synchronization (eliminates screen tearing; caps fps to 60fps) */
-    public static final boolean vsync = false;
+    private static final boolean vsync = false;
     /** Defines if the applications prints its frames-per-second to the console. */
-    public static boolean printFPS = false;
+    private static final boolean printFPS = false;
     /** Defines the maximum angle at which the player can look up. */
-    public static final int maxLookUp = 85;
+    private static final int maxLookUp = 85;
     /** Defines the minimum angle at which the player can look down. */
-    public static final int maxLookDown = -85;
+    private static final int maxLookDown = -85;
     /** The height of the ceiling. */
-    public static final float ceilingHeight = 10;
+    private static final float ceilingHeight = 10;
     /** The height of the floor. */
-    public static final float floorHeight = -1;
+    private static final float floorHeight = -1;
     /** Defines the field of view. */
-    public static int fov = 80;
+    private static final int fov = 80;
     private static int fps;
     private static long lastFPS;
     private static long lastFrame;
@@ -138,7 +138,7 @@ public class MineFront {
         return delta;
     }
 
-    public static void updateFPS() {
+    private static void updateFPS() {
         if (getTime() - lastFPS > 1000) {
             if (printFPS) {
                 System.out.println("FPS: " + fps);

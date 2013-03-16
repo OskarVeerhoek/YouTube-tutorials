@@ -49,7 +49,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class InputDemo {
 
-    private static List<Box> shapes = new ArrayList<Box>(16);
+    private static final List<Box> shapes = new ArrayList<Box>(16);
     private static boolean somethingIsSelected = false;
     private static long lastColourChange;
 

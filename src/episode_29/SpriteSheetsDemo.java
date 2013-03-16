@@ -58,7 +58,7 @@ public class SpriteSheetsDemo {
     private static final int[] WINDOW_DIMENSIONS = {480, 480};
 
     private static int spritesheet;
-    private static Map<String, Sprite> spriteMap = new HashMap<String, Sprite>();
+    private static final Map<String, Sprite> spriteMap = new HashMap<String, Sprite>();
     private static Sprite currentSprite;
     private static final String SPRITESHEET_IMAGE_LOCATION = "res/images/spritesheet.png";
     private static final String SPRITESHEET_XML_LOCATION = "res/images/spritesheet.xml";

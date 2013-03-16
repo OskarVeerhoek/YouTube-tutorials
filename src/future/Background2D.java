@@ -58,8 +58,8 @@ public class Background2D {
     private static int directBackgroundTextureDisplayList;
     private static int semiBackgroundTextureID;
     private static int semiBackgroundTextureDisplayList;
-    private static float speed = 1.5f;
-    private static float cameraPosition[] = {0, 0};
+    private static final float speed = 1.5f;
+    private static final float[] cameraPosition = {0, 0};
 
     private static final String DIRECT_BACKGROUND_LOCATION = "res/images/direct_background.png";
     private static final String SEMI_BACKGROUND_LOCATION = "res/images/semi_background.png";

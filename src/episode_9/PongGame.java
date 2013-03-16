@@ -44,8 +44,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class PongGame {
 
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 480;
+    private static final int WIDTH = 640;
+    private static final int HEIGHT = 480;
     private static boolean isRunning = true;
     private static Ball ball;
     private static Bat bat;

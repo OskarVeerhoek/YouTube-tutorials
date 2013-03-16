@@ -47,7 +47,7 @@ public class BitmapFonts {
     private static final String WINDOW_TITLE = "Bitmap Fonts";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
-    private static StringBuilder renderString = new StringBuilder("Enter your text");
+    private static final StringBuilder renderString = new StringBuilder("Enter your text");
     private static int fontTexture;
 
     private static void render() {

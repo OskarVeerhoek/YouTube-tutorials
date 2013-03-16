@@ -35,6 +35,7 @@ import org.lwjgl.opengl.DisplayMode;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.ConsoleHandler;
@@ -54,7 +55,7 @@ public class LoggingDemo {
 
     private static final String WINDOW_TITLE = "Logging Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
-    private static Logger logger = Logger.getLogger(LoggingDemo.class.getName());
+    private static final Logger logger = Logger.getLogger(LoggingDemo.class.getName());
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT); // | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT
@@ -82,14 +83,13 @@ public class LoggingDemo {
         // Add code for the initialization of the projection matrix here
     }
 
+    @SuppressWarnings("ManualArrayToCollectionCopy")
     private static void setUpLogger() {
         logger.setLevel(Level.FINER);
         ConsoleHandler ch = new ConsoleHandler();
         ch.setLevel(Level.ALL);
         Set<Handler> handlersToDestroy = new HashSet<Handler>();
-        for (Handler h : logger.getHandlers()) {
-            handlersToDestroy.add(h);
-        }
+        Collections.addAll(handlersToDestroy, logger.getHandlers());
         for (Handler h : handlersToDestroy) {
             logger.removeHandler(h);
         }

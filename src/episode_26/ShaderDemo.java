@@ -55,9 +55,9 @@ public class ShaderDemo {
 
     private static int shaderProgram, bunny;
 
-    public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
+    private static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
+    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
 
     public static void main(String[] args) {
         try {

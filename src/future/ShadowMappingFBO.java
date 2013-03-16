@@ -108,7 +108,7 @@ public class ShadowMappingFBO {
         System.exit(0);
     }
 
-    public static void setUpModel() {
+    private static void setUpModel() {
         try {
             bunnyDisplayList = OBJLoader.createDisplayList(OBJLoader.loadModel(new File("res/models/bunny.obj")));
         } catch (FileNotFoundException e) {
@@ -120,12 +120,12 @@ public class ShadowMappingFBO {
         }
     }
 
-    public static void setUpCamera() {
+    private static void setUpCamera() {
         camera.applyPerspectiveMatrix();
         camera.applyOptimalStates();
     }
 
-    public static void setUpStates() {
+    private static void setUpStates() {
         // Enable, well, lighting
         glEnable(GL_LIGHTING);
         // Have the submitted colours play a role in the lighting calculations
@@ -146,7 +146,7 @@ public class ShadowMappingFBO {
     }
 
     /** Sets up the OpenGL states. */
-    public static void setUpFramebufferObject() {
+    private static void setUpFramebufferObject() {
         int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
         int maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
 
@@ -439,12 +439,12 @@ public class ShadowMappingFBO {
         glPopAttrib();
     }
 
-    public static void logic() {
+    private static void logic() {
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
     }
 
     /** Handles the keyboard and mouse input. */
-    public static void input() {
+    private static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {

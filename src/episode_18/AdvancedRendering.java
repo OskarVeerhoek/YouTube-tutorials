@@ -57,21 +57,19 @@ public class AdvancedRendering {
         IMMEDIATE, DISPLAY_LISTS, VERTEX_ARRAYS, VERTEX_BUFFER_OBJECTS
     }
 
-    private static RenderMode mode;
-
-    public static float getDelta() {
+    private static float getDelta() {
         long time = getTime();
         float delta = (float) (time - lastFrame);
         lastFrame = time;
         return delta;
     }
 
-    public static long getTime() {
+    private static long getTime() {
         return (Sys.getTime() * 1000) / Sys.getTimerResolution();
     }
 
     // The speed in which the "camera" travels
-    static float speed = 0.0f;
+    private static float speed = 0.0f;
     //
 
     public static void main(String[] args) {
@@ -146,7 +144,7 @@ public class AdvancedRendering {
         lastFrame = getTime();
 
         System.out.println("Render mode set to Immediate Mode.");
-        mode = RenderMode.IMMEDIATE;
+        RenderMode mode = RenderMode.IMMEDIATE;
 
         while (!Display.isCloseRequested()) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -247,7 +245,9 @@ public class AdvancedRendering {
 
     private static class Point {
 
-        float x, y, z;
+        final float x;
+        final float y;
+        final float z;
 
         public Point(float x, float y, float z) {
             this.x = x;

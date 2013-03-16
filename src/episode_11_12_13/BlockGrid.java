@@ -42,9 +42,9 @@ import java.io.IOException;
 
 import static episode_11_12_13.World.*;
 
-public class BlockGrid {
+class BlockGrid {
 
-    private Block[][] blocks = new Block[BLOCKS_WIDTH][BLOCKS_HEIGHT];
+    private final Block[][] blocks = new Block[BLOCKS_WIDTH][BLOCKS_HEIGHT];
 
     public BlockGrid() {
         for (int x = 0; x < BLOCKS_WIDTH; x++) {

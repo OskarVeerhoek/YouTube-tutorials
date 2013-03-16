@@ -83,7 +83,7 @@ public class CustomLauncher {
     }
 
     /** Constructor initializes the instance variables */
-    public CustomLauncher() {
+    private CustomLauncher() {
         if (!libraryFolder.exists() && !libraryFolder.mkdirs()) {
             throw new RuntimeException("Cannot create required folders.");
         }
@@ -113,7 +113,7 @@ public class CustomLauncher {
      *
      * @see CustomLauncher#os
      */
-    public void checkOS() {
+    void checkOS() {
         String opSys = System.getProperty("os.name").toLowerCase();
 
         if (opSys.contains("win")) {
@@ -134,7 +134,7 @@ public class CustomLauncher {
         }
     }
 
-    public void download(String source, String destination, int size) {
+    void download(String source, String destination, int size) {
         // ten percent of the total download size
         int percent = totalDownloadSize / 10;
         File ofile = new File(libraryFolder, destination);
@@ -168,7 +168,7 @@ public class CustomLauncher {
         }
     }
 
-    public void downloadMissing() {
+    void downloadMissing() {
         for (String lib : missing.keySet()) {
             String url = baseURL, file = lib;
             if (!lib.endsWith(".jar")) {

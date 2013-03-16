@@ -121,8 +121,8 @@ interface Entity2D {
 
 abstract class AbstractEntity2D implements Entity2D {
 
-    protected float x;
-    protected float y;
+    float x;
+    float y;
 
     public float getX() {
         return x;
@@ -154,7 +154,7 @@ abstract class AbstractEntity2D implements Entity2D {
 
 class Box2D extends AbstractEntity2D {
 
-    protected float size;
+    private final float size;
 
     public Box2D(float x, float y, float size) {
         this.x = x;

@@ -52,7 +52,7 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 public class TextDemo {
 
     private static UnicodeFont font;
-    private static DecimalFormat formatter = new DecimalFormat("#.##");
+    private static final DecimalFormat formatter = new DecimalFormat("#.##");
     private static Model model;
 
     private static EulerCamera cam;
@@ -60,14 +60,14 @@ public class TextDemo {
     private static int vboVertexHandle;
     private static int vboNormalHandle;
 
-    private static FloatBuffer perspectiveProjectionMatrix = BufferTools.reserveData(16);
-    private static FloatBuffer orthographicProjectionMatrix = BufferTools.reserveData(16);
+    private static final FloatBuffer perspectiveProjectionMatrix = BufferTools.reserveData(16);
+    private static final FloatBuffer orthographicProjectionMatrix = BufferTools.reserveData(16);
 
-    public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
-    public static final int DISPLAY_WIDTH = 640;
-    public static final int DISPLAY_HEIGHT = 480;
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
+    private static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
+    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
+    private static final int DISPLAY_WIDTH = 640;
+    private static final int DISPLAY_HEIGHT = 480;
 
     public static void main(String[] args) {
         setUpDisplay();

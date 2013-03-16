@@ -143,7 +143,9 @@ public class ThreeDeeDemo {
 
     private static class Point {
 
-        float x, y, z;
+        final float x;
+        final float y;
+        final float z;
 
         public Point(float x, float y, float z) {
             this.x = x;

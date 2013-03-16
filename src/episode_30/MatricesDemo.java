@@ -57,12 +57,12 @@ public class MatricesDemo {
     private static int vboVertexHandle;
     private static int vboNormalHandle;
 
-    private static LWJGLTimer timer = new LWJGLTimer();
+    private static final LWJGLTimer timer = new LWJGLTimer();
     private static Model model;
 
-    public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
+    private static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
+    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
 
     public static void main(String[] args) {
         setUpDisplay();

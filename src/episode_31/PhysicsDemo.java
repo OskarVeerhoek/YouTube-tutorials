@@ -53,8 +53,8 @@ public class PhysicsDemo {
     private static final String WINDOW_TITLE = "Physics in 2D!";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
 
-    private static World world = new World(new Vec2(0, -9.8f), false);
-    private static Set<Body> bodies = new HashSet<Body>();
+    private static final World world = new World(new Vec2(0, -9.8f), false);
+    private static final Set<Body> bodies = new HashSet<Body>();
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT);

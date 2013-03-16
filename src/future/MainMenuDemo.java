@@ -50,7 +50,7 @@ public class MainMenuDemo {
     private static final String WINDOW_TITLE = "Main Menu";
     private static final int[] WINDOW_DIMENSIONS = {1280, 720};
 
-    private static Map<String, Integer> textures = new HashMap<String, Integer>();
+    private static final Map<String, Integer> textures = new HashMap<String, Integer>();
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT);

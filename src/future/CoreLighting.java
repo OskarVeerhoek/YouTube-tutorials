@@ -64,9 +64,9 @@ public class CoreLighting {
 
     private static Model model;
 
-    public static final String MODEL_LOCATION = "res/models/bunny.obj";
-    public static final String VERTEX_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.vs";
-    public static final String FRAGMENT_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.fs";
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
+    private static final String VERTEX_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.vs";
+    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.fs";
 
     public static void main(String[] args) {
         setUpDisplay();

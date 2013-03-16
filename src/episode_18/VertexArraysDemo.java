@@ -45,7 +45,7 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class VertexArraysDemo {
 
-    public VertexArraysDemo() {
+    private VertexArraysDemo() {
         try {
             Display.setDisplayMode(new DisplayMode(640, 480));
             Display.setTitle("Vertex Arrays Demo");

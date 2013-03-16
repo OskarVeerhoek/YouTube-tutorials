@@ -31,7 +31,8 @@ package episode_8;
 
 public abstract class AbstractMovableEntity extends AbstractEntity implements MoveableEntity {
 
-    protected double dx, dy;
+    private double dx;
+    private double dy;
 
     public AbstractMovableEntity(double x, double y, double width, double height) {
         super(x, y, width, height);

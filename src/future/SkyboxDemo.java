@@ -50,8 +50,9 @@ public class SkyboxDemo {
     private static final String SKYBOX_TEXTURE_LOCATION = "res/images/skybox.png";
 
     private static int skyboxTextureID;
-    private static EulerCamera camera = new EulerCamera((float) WINDOW_DIMENSIONS[0] / (float) WINDOW_DIMENSIONS[1]);
-    private static LWJGLTimer timer = new LWJGLTimer();
+    private static final EulerCamera camera = new EulerCamera((float) WINDOW_DIMENSIONS[0] / (float)
+            WINDOW_DIMENSIONS[1]);
+    private static final LWJGLTimer timer = new LWJGLTimer();
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

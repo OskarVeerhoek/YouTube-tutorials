@@ -33,8 +33,11 @@ import java.awt.*;
 
 public abstract class AbstractEntity implements Entity {
 
-    protected double x, y, width, height;
-    protected Rectangle hitbox = new Rectangle();
+    double x;
+    double y;
+    double width;
+    double height;
+    private final Rectangle hitbox = new Rectangle();
 
     public AbstractEntity(double x, double y, double width, double height) {
         this.x = x;

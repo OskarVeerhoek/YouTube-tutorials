@@ -61,14 +61,14 @@ public class ShadowMapping {
     // This represents if the clients computer has the ambient shadow extention
     private static boolean ambientShadowsAvailable;
     // Enable this if you want to see the depth texture for debugging purposes.
-    private static boolean showShadowMap = false;
+    private static final boolean showShadowMap = false;
     // Disable this if your computer doesn't support the FBO extension
-    private static boolean useFBO = true;
+    private static final boolean useFBO = true;
 
     // The amount of polygon offset to use
     private static float factor = 4.0F;
 
-    public static int maxTextureSize;
+    private static int maxTextureSize;
 
     private static int shadowWidth = 640;
     private static int shadowHeight = 480;
@@ -76,14 +76,14 @@ public class ShadowMapping {
     private static int frameBuffer;
     private static int renderBuffer;
 
-    private static FloatBuffer ambientLight = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer diffuseLight = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer cameraPosition = BufferUtils.createFloatBuffer(4);
-    private static FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer ambientLight = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer diffuseLight = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer lightPosition = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer cameraPosition = BufferUtils.createFloatBuffer(4);
+    private static final FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(4);
 
-    private static Matrix4f textureMatrix = new Matrix4f();
-    private static Sphere sphere = new Sphere();
+    private static final Matrix4f textureMatrix = new Matrix4f();
+    private static final Sphere sphere = new Sphere();
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -356,7 +356,7 @@ public class ShadowMapping {
     }
 
     /** Sets up the OpenGL states. */
-    public static void setUpOpenGL() {
+    private static void setUpOpenGL() {
         int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE_EXT);
 
         if (!GLContext.getCapabilities().OpenGL14 && GLContext.getCapabilities().GL_ARB_shadow) {
@@ -452,7 +452,7 @@ public class ShadowMapping {
     }
 
     /** Handles the keyboard and mouse input. */
-    public static void input() {
+    private static void input() {
         if (Keyboard.isKeyDown(Keyboard.KEY_F) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             factor--;
             glPolygonOffset(factor, 0.0F);
