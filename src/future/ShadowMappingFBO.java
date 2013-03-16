@@ -61,15 +61,28 @@ import static org.lwjgl.util.glu.GLU.*;
  * @author Daniel W.
  */
 public class ShadowMappingFBO {
+    /**
+     * The width of the depth texture which is known as the shadow map. The higher the width, the more detailed the
+     * shadows.
+     */
     private static int shadowMapWidth;
+    /**
+     * The height of the depth texture which is known as the shadow map. The higher the height, the more detailed the
+     * shadows.
+     */
     private static int shadowMapHeight;
+    /**
+     * The frame buffer holding the shadow map. This frame buffer is an off-screen rendering location to which we will
+     * draw the shadow map.
+     */
     private static int frameBuffer;
+    /**
+     * The render buffer holding the shadow map in the form of a depth texture.
+     */
     private static int renderBuffer;
     private static int bunnyDisplayList;
 
-    private static final FloatBuffer ambientLight = BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F);
-    private static final FloatBuffer diffuseLight = BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1.0F);
-    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200.0F, 250.0F, 200.0F, 1.0F);
+    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
     private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
     private static final Matrix4f textureMatrix = new Matrix4f();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
@@ -81,7 +94,6 @@ public class ShadowMappingFBO {
             .setFarClippingPane(300)
             .setFieldOfView(60)
             .build();
-    public static final String MODEL_LOCATION = "res/models/bunny.obj";
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -103,7 +115,7 @@ public class ShadowMappingFBO {
 
     public static void setUpModel() {
         try {
-            bunnyDisplayList = OBJLoader.createDisplayList(OBJLoader.loadModel(new File(MODEL_LOCATION)));
+            bunnyDisplayList = OBJLoader.createDisplayList(OBJLoader.loadModel(new File("res/models/bunny.obj")));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             cleanUp();
@@ -133,9 +145,9 @@ public class ShadowMappingFBO {
         glEnable(GL_COLOR_MATERIAL);
         glColorMaterial(GL_FRONT, GL_DIFFUSE);
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, ambientLight);
-        glLight(GL_LIGHT0, GL_AMBIENT, ambientLight);
-        glLight(GL_LIGHT0, GL_DIFFUSE, diffuseLight);
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F));
+        glLight(GL_LIGHT0, GL_AMBIENT, BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F));
+        glLight(GL_LIGHT0, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1.0F));
     }
 
     /**
