@@ -248,6 +248,10 @@ public class ShadowMappingFBO {
          * as the zNear parameter in gluPerspective.
          */
         float nearPlane = lightToSceneDistance - sceneBoundingRadius;
+        if (nearPlane < 0) {
+            System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
+            return;
+        }
         /**
          * The field-of-view of the shadow frustum. Code taken from the OpenGL SuperBible.
          */
