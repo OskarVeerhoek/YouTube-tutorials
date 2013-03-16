@@ -180,7 +180,7 @@ public class ShadowMappingFBO {
         // produce blockiness.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // State that the texture holds nondescript 'intenstity' data.
+        // State that the texture holds nondescript 'intensity' data.
         glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_TEXTURE_MODE, GL_INTENSITY);
         // If the intensity of a given texel is lower than 0.5f, then the texture should not be sampled. In practice,
         // the higher the value, the less of the shadow is visible, and the other way around.
