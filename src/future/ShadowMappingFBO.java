@@ -145,9 +145,9 @@ public class ShadowMappingFBO {
         glEnable(GL_COLOR_MATERIAL);
         glColorMaterial(GL_FRONT, GL_DIFFUSE);
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F));
-        glLight(GL_LIGHT0, GL_AMBIENT, BufferTools.asFlippedFloatBuffer(0.0F, 0.0F, 0.0F, 1.0F));
-        glLight(GL_LIGHT0, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1.0F));
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
+        glLight(GL_LIGHT0, GL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
+        glLight(GL_LIGHT0, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1));
     }
 
     /**
@@ -393,10 +393,10 @@ public class ShadowMappingFBO {
         glDisable(GL_LIGHTING);
         glBegin(GL_QUADS);
         glColor3f(0.3F, 0.6F, 0.3F);
-        glVertex3f(-120.0F, -19.0F, -120.0F);
-        glVertex3f(-120.0F, -19.0F, +120.0F);
-        glVertex3f(+120.0F, -19.0F, +120.0F);
-        glVertex3f(+120.0F, -19.0F, -120.0F);
+        glVertex3f(-120, -19, -120);
+        glVertex3f(-120, -19, +120);
+        glVertex3f(+120, -19, +120);
+        glVertex3f(+120, -19, -120);
         glEnd();
         glPopAttrib();
     }
