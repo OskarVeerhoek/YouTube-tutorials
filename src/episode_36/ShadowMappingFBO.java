@@ -206,7 +206,7 @@ public class ShadowMappingFBO {
         if (FBOStatus != GL_FRAMEBUFFER_COMPLETE) {
             System.err.println("Framebuffer error: " + gluErrorString(glGetError()));
         }
-        // Bind the default frame buffer.
+        // Bind the default frame buffer, which is used for ordinary drawing.
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
@@ -259,51 +259,33 @@ public class ShadowMappingFBO {
         gluPerspective(fieldOfView, 1, nearPlane, nearPlane + sceneBoundingRadius * 2);
         glGetFloat(GL_PROJECTION_MATRIX, lightProjection);
         glMatrixMode(GL_MODELVIEW);
-        /**
-         * Store the current model-view matrix.
-         */
+        // Store the current model-view matrix.
         glPushMatrix();
         glLoadIdentity();
         gluLookAt(lightPosition.get(0), lightPosition.get(1), lightPosition.get(2), 0, 0, 0, 0, 1, 0);
         glGetFloat(GL_MODELVIEW_MATRIX, lightModelView);
         glViewport(0, 0, shadowMapWidth, shadowMapHeight);
-        /**
-         * Bind the extra frame buffer in which to store the shadow map in the form a depth texture.
-         */
+        // Bind the extra frame buffer in which to store the shadow map in the form a depth texture.
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-        /**
-         * Clear only the depth buffer bit. Clearing the colour buffer is unnecessary, because it is disabled (we
-         * only need depth components).
-         */
+        // Clear only the depth buffer bit. Clearing the colour buffer is unnecessary, because it is disabled (we
+        // only need depth components).
         glClear(GL_DEPTH_BUFFER_BIT);
-        /**
-         * Store the current attribute state.
-         */
+        // Store the current attribute state.
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        /**
-         * Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
-         * vertices are positioned, and not what colour they have.
-         */
+        // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
+        // vertices are positioned, and not what colour they have.
         glShadeModel(GL_FLAT);
-        /**
-         * Enabling all these lighting states is unnecessary for reasons listed above.
-         */
+        // Enabling all these lighting states is unnecessary for reasons listed above.
         glDisable(GL_LIGHTING);
         glDisable(GL_COLOR_MATERIAL);
         glDisable(GL_NORMALIZE);
-        /**
-         * Disable the writing of the red, green, blue, and alpha colour components,
-         * because we only need the depth component.
-         */
+        // Disable the writing of the red, green, blue, and alpha colour components,
+        // because we only need the depth component.
         glColorMask(false, false, false, false);
-        /**
-         * An offset is given to every depth value of every polygon fragment to prevent a visual quirk called 'shadow
-         * acne'.
-         */
+        // An offset is given to every depth value of every polygon fragment to prevent a visual quirk called 'shadow
+        // acne'.
         glEnable(GL_POLYGON_OFFSET_FILL);
-        /**
-         * Draw the objects which cast shadows.
-         */
+        // Draw the objects which cast shadows.
         drawShadowCastingObjects();
         /**
          * Copy the pixels of the shadow map to the frame buffer object depth attachment.
@@ -324,7 +306,7 @@ public class ShadowMappingFBO {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         // Restore the previous attribute state.
         glPopAttrib();
-        // Restore the viewport.
+        // Restore the view port.
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
         lightProjectionTemp.load(lightProjection);
         lightModelViewTemp.load(lightModelView);
@@ -333,8 +315,10 @@ public class ShadowMappingFBO {
         textureMatrix.setIdentity();
         textureMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
         textureMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
+        // Multiply the texture matrix by the projection and model-view matrices of the light.
         Matrix4f.mul(textureMatrix, lightProjectionTemp, textureMatrix);
         Matrix4f.mul(textureMatrix, lightModelViewTemp, textureMatrix);
+        // Transpose the texture matrix.
         Matrix4f.transpose(textureMatrix, textureMatrix);
     }
 
@@ -385,19 +369,30 @@ public class ShadowMappingFBO {
     }
 
     private static void render() {
+        // Reset any changes made to the model-view matrix.
         glLoadIdentity();
+        // Apply the camera position and orientation to the model-view matrix.
         camera.applyTranslations();
+        // Clear the screen.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Store the current attribute state.
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         {
+            // Enable textures.
             glEnable(GL_TEXTURE_2D);
+            // ???
             glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+            // Compare the texture coordinate 'r' (the distance from the light to the surface of the object) to the
+            // value in the depth texture.
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+            // Enable 's' texture coordinate generation.
             glEnable(GL_TEXTURE_GEN_S);
+            // Enable 't' texture coordinate generation.
             glEnable(GL_TEXTURE_GEN_T);
+            // Enable 'r' texture coordinate generation.
             glEnable(GL_TEXTURE_GEN_R);
+            // Enable 'q' texture coordinate generation.
             glEnable(GL_TEXTURE_GEN_Q);
-
             textureBuffer.clear();
             textureBuffer.put(0, textureMatrix.m00);
             textureBuffer.put(1, textureMatrix.m01);
@@ -431,6 +426,7 @@ public class ShadowMappingFBO {
             drawShadowCastingObjects();
             generateShadowMap();
         }
+        // Restore the previous attribute state.
         glPopAttrib();
     }
 
