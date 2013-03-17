@@ -94,10 +94,10 @@ public class ShadowMappingFBO {
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
-        setUpFramebufferObject();
-        generateShadowMap();
+        setUpFramebufferObject();        
         setUpCamera();
         setUpModel();
+        generateShadowMap();
         while (!Display.isCloseRequested()) {
             render();
             logic();
