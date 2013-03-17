@@ -422,9 +422,9 @@ public class ShadowMappingFBO {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         {
             generateTextureCoordinates();
+            drawGround();
             drawShadowCastingObjects();
             generateShadowMap();
-            drawGround();
         }
         // Restore the previous attribute state.
         glPopAttrib();
