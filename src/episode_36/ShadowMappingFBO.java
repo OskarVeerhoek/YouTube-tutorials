@@ -131,13 +131,10 @@ public class ShadowMappingFBO {
         glEnable(GL_COLOR_MATERIAL);
         glEnable(GL_NORMALIZE);
         glEnable(GL_LIGHT0);
-        glDisable(GL_POLYGON_OFFSET_FILL);
+        glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glPolygonOffset(2.5F, 0.0F);
         glClearColor(0, 0.75f, 1, 1);
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
         glLight(GL_LIGHT0, GL_POSITION, lightPosition);
         glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
         glLight(GL_LIGHT0, GL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
