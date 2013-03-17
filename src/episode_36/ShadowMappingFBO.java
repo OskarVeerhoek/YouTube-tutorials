@@ -66,7 +66,7 @@ public class ShadowMappingFBO {
     /** The position of the omnidirectional shadow-casting light. * */
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
     private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
-    private static final Matrix4f lightModelViewProjection = new Matrix4f();
+    private static final Matrix4f textureMatrix = new Matrix4f();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
     private static final EulerCamera camera = new EulerCamera.Builder().setAspectRatio((float) DISPLAY_MODE.getWidth
             () / DISPLAY_MODE.getHeight()).setPosition(23, 34, 87).setRotation(22, 341,
@@ -95,7 +95,7 @@ public class ShadowMappingFBO {
         setUpDisplay();
         setUpStates();
         setUpFrameBufferObject();
-        drawShadowMap();
+        generateShadowMap();
         setUpCamera();
         setUpModel();
         while (!Display.isCloseRequested()) {
@@ -207,8 +207,8 @@ public class ShadowMappingFBO {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
-    /** Draw the shadow map. */
-    private static void drawShadowMap() {
+    /** Generate the shadow map. */
+    private static void generateShadowMap() {
         /**
          * The model-view matrix of the light.
          */
@@ -272,39 +272,38 @@ public class ShadowMappingFBO {
         glClear(GL_DEPTH_BUFFER_BIT);
         // Store the current attribute state.
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        { // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
-            // vertices are positioned, and not what colour they have.
-            glShadeModel(GL_FLAT);
-            // Enabling all these lighting states is unnecessary for reasons listed above.
-            glDisable(GL_LIGHTING);
-            glDisable(GL_COLOR_MATERIAL);
-            glDisable(GL_NORMALIZE);
-            // Disable the writing of the red, green, blue, and alpha colour components,
-            // because we only need the depth component.
-            glColorMask(false, false, false, false);
-            // An offset is given to every depth value of every polygon fragment to prevent a visual quirk called shadow
-            // acne.
-            glEnable(GL_POLYGON_OFFSET_FILL);
-            // Draw the objects that cast shadows.
-            drawShadowCastingObjects();
-            /**
-             * Copy the pixels of the shadow map to the frame buffer object depth attachment.
-             *  int target -> GL_TEXTURE_2D
-             *  int level  -> 0, has to do with mip-mapping, which is not applicable to shadow maps
-             *  int internalformat -> GL_DEPTH_COMPONENT
-             *  int x, y -> 0, 0
-             *  int width, height -> shadowMapWidth, shadowMapHeight
-             *  int border -> 0
-             */
-            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, shadowMapWidth, shadowMapHeight, 0);
-            // Restore the previous model-view matrix.
-            glPopMatrix();
-            glMatrixMode(GL_PROJECTION);
-            // Restore the previous projection matrix.
-            glPopMatrix();
-            glMatrixMode(GL_MODELVIEW);
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        }
+        // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
+        // vertices are positioned, and not what colour they have.
+        glShadeModel(GL_FLAT);
+        // Enabling all these lighting states is unnecessary for reasons listed above.
+        glDisable(GL_LIGHTING);
+        glDisable(GL_COLOR_MATERIAL);
+        glDisable(GL_NORMALIZE);
+        // Disable the writing of the red, green, blue, and alpha colour components,
+        // because we only need the depth component.
+        glColorMask(false, false, false, false);
+        // An offset is given to every depth value of every polygon fragment to prevent a visual quirk called 'shadow
+        // acne'.
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        // Draw the objects that cast shadows.
+        drawShadowCastingObjects();
+        /**
+         * Copy the pixels of the shadow map to the frame buffer object depth attachment.
+         *  int target -> GL_TEXTURE_2D
+         *  int level  -> 0, has to do with mip-mapping, which is not applicable to shadow maps
+         *  int internalformat -> GL_DEPTH_COMPONENT
+         *  int x, y -> 0, 0
+         *  int width, height -> shadowMapWidth, shadowMapHeight
+         *  int border -> 0
+         */
+        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, shadowMapWidth, shadowMapHeight, 0);
+        // Restore the previous model-view matrix.
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        // Restore the previous projection matrix.
+        glPopMatrix();
+        glMatrixMode(GL_MODELVIEW);
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
         // Restore the previous attribute state.
         glPopAttrib();
         // Restore the view port.
@@ -313,16 +312,14 @@ public class ShadowMappingFBO {
         lightModelViewTemp.load(lightModelView);
         lightProjection.flip();
         lightModelView.flip();
-        lightModelViewProjection.setIdentity();
-        // Tweak the depth model-view and projection matrix so that the vertices will be given in texture coordinates,
-        // and not homogeneous coordinates.
-        lightModelViewProjection.translate(new Vector3f(0.5F, 0.5F, 0.5F));
-        lightModelViewProjection.scale(new Vector3f(0.5F, 0.5F, 0.5F));
-        // Multiply the depth model-view and projection matrix by the projection and model-view matrices of the light.
-        Matrix4f.mul(lightModelViewProjection, lightProjectionTemp, lightModelViewProjection);
-        Matrix4f.mul(lightModelViewProjection, lightModelViewTemp, lightModelViewProjection);
-        // Transpose the depth model-view and projection matrix.
-        Matrix4f.transpose(lightModelViewProjection, lightModelViewProjection);
+        textureMatrix.setIdentity();
+        textureMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
+        textureMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
+        // Multiply the texture matrix by the projection and model-view matrices of the light.
+        Matrix4f.mul(textureMatrix, lightProjectionTemp, textureMatrix);
+        Matrix4f.mul(textureMatrix, lightModelViewTemp, textureMatrix);
+        // Transpose the texture matrix.
+        Matrix4f.transpose(textureMatrix, textureMatrix);
     }
 
     /** Sets up a display. */
@@ -351,21 +348,18 @@ public class ShadowMappingFBO {
 
     private static void drawGround() {
         glPushAttrib(GL_LIGHTING_BIT);
-        {
-            glDisable(GL_LIGHTING);
-            glBegin(GL_QUADS);
-            // Set the colour to green.
-            glColor3f(0.3F, 0.6F, 0.3F);
-            glVertex3f(-120, -19, -120);
-            glVertex3f(-120, -19, +120);
-            glVertex3f(+120, -19, +120);
-            glVertex3f(+120, -19, -120);
-        }
+        glDisable(GL_LIGHTING);
+        glBegin(GL_QUADS);
+        glColor3f(0.3F, 0.6F, 0.3F);
+        glVertex3f(-120, -19, -120);
+        glVertex3f(-120, -19, +120);
+        glVertex3f(+120, -19, +120);
+        glVertex3f(+120, -19, -120);
         glEnd();
         glPopAttrib();
     }
 
-    /** Draw all the objects that cast shadows. Walls and floors usually should not cast shadows. */
+    /** This is where anything you want rendered into your world should go. */
     private static void drawShadowCastingObjects() {
         glPushMatrix();
         glScalef(5, 5, 5);
@@ -374,7 +368,6 @@ public class ShadowMappingFBO {
         glPopMatrix();
     }
 
-    /** Generate the texture coordinates that are using in conjunction with the shadow map. */
     private static void generateTextureCoordinates() {
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         // Compare the texture coordinate 'r' (the distance from the light to the surface of the object) to the
@@ -389,31 +382,31 @@ public class ShadowMappingFBO {
         // Enable 'q' texture coordinate generation.
         glEnable(GL_TEXTURE_GEN_Q);
         textureBuffer.clear();
-        textureBuffer.put(0, lightModelViewProjection.m00);
-        textureBuffer.put(1, lightModelViewProjection.m01);
-        textureBuffer.put(2, lightModelViewProjection.m02);
-        textureBuffer.put(3, lightModelViewProjection.m03);
+        textureBuffer.put(0, textureMatrix.m00);
+        textureBuffer.put(1, textureMatrix.m01);
+        textureBuffer.put(2, textureMatrix.m02);
+        textureBuffer.put(3, textureMatrix.m03);
 
         glTexGen(GL_S, GL_EYE_PLANE, textureBuffer);
 
-        textureBuffer.put(0, lightModelViewProjection.m10);
-        textureBuffer.put(1, lightModelViewProjection.m11);
-        textureBuffer.put(2, lightModelViewProjection.m12);
-        textureBuffer.put(3, lightModelViewProjection.m13);
+        textureBuffer.put(0, textureMatrix.m10);
+        textureBuffer.put(1, textureMatrix.m11);
+        textureBuffer.put(2, textureMatrix.m12);
+        textureBuffer.put(3, textureMatrix.m13);
 
         glTexGen(GL_T, GL_EYE_PLANE, textureBuffer);
 
-        textureBuffer.put(0, lightModelViewProjection.m20);
-        textureBuffer.put(1, lightModelViewProjection.m21);
-        textureBuffer.put(2, lightModelViewProjection.m22);
-        textureBuffer.put(3, lightModelViewProjection.m23);
+        textureBuffer.put(0, textureMatrix.m20);
+        textureBuffer.put(1, textureMatrix.m21);
+        textureBuffer.put(2, textureMatrix.m22);
+        textureBuffer.put(3, textureMatrix.m23);
 
         glTexGen(GL_R, GL_EYE_PLANE, textureBuffer);
 
-        textureBuffer.put(0, lightModelViewProjection.m30);
-        textureBuffer.put(1, lightModelViewProjection.m31);
-        textureBuffer.put(2, lightModelViewProjection.m32);
-        textureBuffer.put(3, lightModelViewProjection.m33);
+        textureBuffer.put(0, textureMatrix.m30);
+        textureBuffer.put(1, textureMatrix.m31);
+        textureBuffer.put(2, textureMatrix.m32);
+        textureBuffer.put(3, textureMatrix.m33);
 
         glTexGen(GL_Q, GL_EYE_PLANE, textureBuffer);
     }
@@ -430,7 +423,7 @@ public class ShadowMappingFBO {
         {
             generateTextureCoordinates();
             drawShadowCastingObjects();
-            drawShadowMap();
+            generateShadowMap();
             drawGround();
         }
         // Restore the previous attribute state.
