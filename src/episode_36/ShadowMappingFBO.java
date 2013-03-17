@@ -95,9 +95,9 @@ public class ShadowMappingFBO {
         setUpDisplay();
         setUpStates();
         setUpFrameBufferObject();
-        generateShadowMap();
         setUpCamera();
         setUpModel();
+        drawShadowMap();
         while (!Display.isCloseRequested()) {
             render();
             logic();
@@ -208,7 +208,7 @@ public class ShadowMappingFBO {
     }
 
     /** Generate the shadow map. */
-    private static void generateShadowMap() {
+    private static void drawShadowMap() {
         /**
          * The model-view matrix of the light.
          */
@@ -424,7 +424,7 @@ public class ShadowMappingFBO {
             generateTextureCoordinates();
             drawGround();
             drawShadowCastingObjects();
-            generateShadowMap();
+            drawShadowMap();
         }
         // Restore the previous attribute state.
         glPopAttrib();
