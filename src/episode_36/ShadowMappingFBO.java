@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package future;
+package episode_36;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
@@ -126,9 +126,7 @@ public class ShadowMappingFBO {
     }
 
     private static void setUpStates() {
-        // Enable, well, lighting
         glEnable(GL_LIGHTING);
-        // Have the submitted colours play a role in the lighting calculations
         glEnable(GL_COLOR_MATERIAL);
         glEnable(GL_NORMALIZE);
         glEnable(GL_LIGHT0);
