@@ -67,7 +67,7 @@ public class ShadowMappingFBO {
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
     private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
     private static final Matrix4f textureMatrix = new Matrix4f();
-    private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
+    private static final DisplayMode DISPLAY_MODE = new DisplayMode(800, 600);
     private static final EulerCamera camera = new EulerCamera.Builder().setAspectRatio((float) DISPLAY_MODE.getWidth
             () / DISPLAY_MODE.getHeight()).setPosition(23, 34, 87).setRotation(22, 341,
             0).setNearClippingPane(2).setFarClippingPane(300).setFieldOfView(60).build();
@@ -90,8 +90,6 @@ public class ShadowMappingFBO {
     private static int renderBuffer;
     /** The display list that holds the Stanford bunny model. */
     private static int bunnyDisplayList;
-    /** If the camera is too close the scene for the shadow map to be generated properly. */
-    private static boolean cameraTooClose;
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -344,13 +342,7 @@ public class ShadowMappingFBO {
          */
         float nearPlane = lightToSceneDistance - sceneBoundingRadius;
         if (nearPlane < 0) {
-            if (!cameraTooClose) {
-                System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
-            }
-            cameraTooClose = true;
-            return;
-        } else {
-            cameraTooClose = false;
+            System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
         }
         /**
          * The field-of-view of the shadow frustum in degrees. Formula taken from the OpenGL SuperBible.
@@ -448,7 +440,7 @@ public class ShadowMappingFBO {
     private static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
-                if (Keyboard.isKeyDown(Keyboard.KEY_Q) && !cameraTooClose) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
                     lightPosition.flip();
                     lightPosition.clear();
                     lightPosition.put(new float[]{camera.x(), camera.y(), camera.z(), 1});
