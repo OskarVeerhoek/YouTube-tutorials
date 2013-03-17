@@ -63,6 +63,14 @@ import static org.lwjgl.util.glu.GLU.*;
  */
 public class ShadowMappingFBO {
 
+    /** The position of the omnidirectional shadow-casting light. * */
+    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
+    private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
+    private static final Matrix4f textureMatrix = new Matrix4f();
+    private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
+    private static final EulerCamera camera = new EulerCamera.Builder().setAspectRatio((float) DISPLAY_MODE.getWidth
+            () / DISPLAY_MODE.getHeight()).setPosition(23, 34, 87).setRotation(22, 341,
+            0).setNearClippingPane(2).setFarClippingPane(300).setFieldOfView(60).build();
     /**
      * The width of the depth texture which is known as the shadow map. The higher the width, the more detailed the
      * shadows.
@@ -80,15 +88,8 @@ public class ShadowMappingFBO {
     private static int frameBuffer;
     /** The render buffer holding the shadow map in the form of a depth texture. */
     private static int renderBuffer;
+    /** The display list which holds the Stanford bunny model. * */
     private static int bunnyDisplayList;
-
-    private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
-    private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
-    private static final Matrix4f textureMatrix = new Matrix4f();
-    private static final DisplayMode DISPLAY_MODE = new DisplayMode(640, 480);
-    private static final EulerCamera camera = new EulerCamera.Builder().setAspectRatio((float) DISPLAY_MODE.getWidth
-            () / DISPLAY_MODE.getHeight()).setPosition(23, 34, 87).setRotation(22, 341,
-            0).setNearClippingPane(2).setFarClippingPane(300).setFieldOfView(60).build();
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -145,29 +146,25 @@ public class ShadowMappingFBO {
 
     /** Sets up the OpenGL states. */
     private static void setUpFramebufferObject() {
-        int maxRenderbufferSize = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
-        int maxTextureSize = glGetInteger(GL_MAX_TEXTURE_SIZE);
-
-        System.out.println("Maximum texture size: " + maxTextureSize);
-        System.out.println("Maximum renderbuffer size: " + maxRenderbufferSize);
-
+        final int MAX_RENDERBUFFER_SIZE = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
+        final int MAX_TEXTURE_SIZE = glGetInteger(GL_MAX_TEXTURE_SIZE);
+        int textureSize;
         /**
-         * Cap the maximum texture and renderbuffer size at 1024x1024 pixels. If you have a good
+         * Cap the maximum shadow map size at 1024x1024 pixels or at the maximum render buffer size. If you have a good
          * graphics card, feel free to increase this value. The program will lag
          * if I record and run the program at the same time with higher values.
          */
-        if (maxTextureSize > 1024) {
-            maxTextureSize = 1024;
-            if (maxRenderbufferSize < maxTextureSize) {
-                maxTextureSize = maxRenderbufferSize;
+        if (MAX_TEXTURE_SIZE > 1024) {
+            if (MAX_RENDERBUFFER_SIZE < MAX_TEXTURE_SIZE) {
+                shadowMapWidth = shadowMapHeight = MAX_RENDERBUFFER_SIZE;
+            } else {
+                shadowMapWidth = shadowMapHeight = 1024;
             }
+        } else {
+            shadowMapWidth = shadowMapHeight = MAX_TEXTURE_SIZE;
         }
-
-        shadowMapWidth = maxTextureSize;
-        shadowMapHeight = maxTextureSize;
-
-        // Clamps texture coordinates (e.g.: (2,0) becomes (1,0)) because we only want one shadow.
-        // Uses 'TO_EDGE' to prevent the texture boarders to affect the shadow map through linear texture filtering.
+        // Clamp texture coordinates (e.g.: (2,0) becomes (1,0)) because we only want one shadow.
+        // Use 'TO_EDGE' to prevent the texture boarders to affect the shadow map through linear texture filtering.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         // Enable bilinear texture filtering. This means that the colour will be
@@ -175,7 +172,7 @@ public class ShadowMappingFBO {
         // (from OpenGL 2.1 References Pages).
         // The alternative to linear texture filtering is nearest-neighbour texture filtering. Here the colour of
         // the closest texel to the given texture coordinate (texture pixel) is taken. This, while being fast, may
-        // produce blockiness.
+        // produce a pixelated image.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         // State that the texture holds nondescript 'intensity' data.
@@ -183,20 +180,20 @@ public class ShadowMappingFBO {
         // If the intensity of a given texel is lower than 0.5f, then the texture should not be sampled. In practice,
         // the higher the value, the less of the shadow is visible, and the other way around.
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FAIL_VALUE_ARB, 0.5F);
-
         // Set the automatic texture coordinate generation mode to eye linear. The texture coordinate is calculated
-        // with the inverse of the model-view matrix and a so-called 'object plane' (have yet to find out what that
-        // means).
+        // with the inverse of the model-view matrix and a plane which we will specify later on.
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+        // Generate and bind a frame buffer.
         frameBuffer = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        // Generate and bind a render buffer.
         renderBuffer = glGenRenderbuffers();
         glBindRenderbuffer(GL_RENDERBUFFER, renderBuffer);
         // Set the internal storage format of the render buffer to a depth component of 32 bits (4 bytes).
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, maxTextureSize, maxTextureSize);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, shadowMapWidth, shadowMapHeight);
         // Attach the render buffer to the frame buffer as a depth attachment. This means that, if the frame buffer is
         // bound, any depth texture values will be copied to the render buffer object.
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderBuffer);
