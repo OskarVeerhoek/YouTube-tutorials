@@ -272,39 +272,40 @@ public class ShadowMappingFBO {
         glClear(GL_DEPTH_BUFFER_BIT);
         // Store the current attribute state.
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
-        // vertices are positioned, and not what colour they have.
-        glShadeModel(GL_FLAT);
-        // Enabling all these lighting states is unnecessary for reasons listed above.
-        glDisable(GL_LIGHTING);
-        glDisable(GL_COLOR_MATERIAL);
-        glDisable(GL_NORMALIZE);
-        // Disable the writing of the red, green, blue, and alpha colour components,
-        // because we only need the depth component.
-        glColorMask(false, false, false, false);
-        // An offset is given to every depth value of every polygon fragment to prevent a visual quirk called 'shadow
-        // acne'.
-        glEnable(GL_POLYGON_OFFSET_FILL);
-        // Draw the objects that cast shadows.
-        drawShadowCastingObjects();
-        /**
-         * Copy the pixels of the shadow map to the frame buffer object depth attachment.
-         *  int target -> GL_TEXTURE_2D
-         *  int level  -> 0, has to do with mip-mapping, which is not applicable to shadow maps
-         *  int internalformat -> GL_DEPTH_COMPONENT
-         *  int x, y -> 0, 0
-         *  int width, height -> shadowMapWidth, shadowMapHeight
-         *  int border -> 0
-         */
-        glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, shadowMapWidth, shadowMapHeight, 0);
-        // Restore the previous model-view matrix.
-        glPopMatrix();
-        glMatrixMode(GL_PROJECTION);
-        // Restore the previous projection matrix.
-        glPopMatrix();
-        glMatrixMode(GL_MODELVIEW);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        // Restore the previous attribute state.
+        { // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
+            // vertices are positioned, and not what colour they have.
+            glShadeModel(GL_FLAT);
+            // Enabling all these lighting states is unnecessary for reasons listed above.
+            glDisable(GL_LIGHTING);
+            glDisable(GL_COLOR_MATERIAL);
+            glDisable(GL_NORMALIZE);
+            // Disable the writing of the red, green, blue, and alpha colour components,
+            // because we only need the depth component.
+            glColorMask(false, false, false, false);
+            // An offset is given to every depth value of every polygon fragment to prevent a visual quirk called
+            // 'shadow
+            // acne'.
+            glEnable(GL_POLYGON_OFFSET_FILL);
+            // Draw the objects that cast shadows.
+            drawShadowCastingObjects();
+            /**
+             * Copy the pixels of the shadow map to the frame buffer object depth attachment.
+             *  int target -> GL_TEXTURE_2D
+             *  int level  -> 0, has to do with mip-mapping, which is not applicable to shadow maps
+             *  int internalformat -> GL_DEPTH_COMPONENT
+             *  int x, y -> 0, 0
+             *  int width, height -> shadowMapWidth, shadowMapHeight
+             *  int border -> 0
+             */
+            glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, 0, shadowMapWidth, shadowMapHeight, 0);
+            // Restore the previous model-view matrix.
+            glPopMatrix();
+            glMatrixMode(GL_PROJECTION);
+            // Restore the previous projection matrix.
+            glPopMatrix();
+            glMatrixMode(GL_MODELVIEW);
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }// Restore the previous attribute state.
         glPopAttrib();
         // Restore the view port.
         glViewport(0, 0, Display.getWidth(), Display.getHeight());
@@ -348,13 +349,15 @@ public class ShadowMappingFBO {
 
     private static void drawGround() {
         glPushAttrib(GL_LIGHTING_BIT);
-        glDisable(GL_LIGHTING);
-        glBegin(GL_QUADS);
-        glColor3f(0.3F, 0.6F, 0.3F);
-        glVertex3f(-120, -19, -120);
-        glVertex3f(-120, -19, +120);
-        glVertex3f(+120, -19, +120);
-        glVertex3f(+120, -19, -120);
+        {
+            glDisable(GL_LIGHTING);
+            glBegin(GL_QUADS);
+            glColor3f(0.3F, 0.6F, 0.3F);
+            glVertex3f(-120, -19, -120);
+            glVertex3f(-120, -19, +120);
+            glVertex3f(+120, -19, +120);
+            glVertex3f(+120, -19, -120);
+        }
         glEnd();
         glPopAttrib();
     }
