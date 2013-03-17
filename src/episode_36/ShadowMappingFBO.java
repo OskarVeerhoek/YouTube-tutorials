@@ -111,21 +111,28 @@ public class ShadowMappingFBO {
         System.exit(0);
     }
 
-    private static void setUpModel() {
+    /** Sets up a display. */
+    private static void setUpDisplay() {
         try {
-            bunnyDisplayList = OBJLoader.createDisplayList(OBJLoader.loadModel(new File("res/models/bunny.obj")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            cleanUp();
-        } catch (IOException e) {
-            e.printStackTrace();
-            cleanUp();
+            Display.setDisplayMode(DISPLAY_MODE);
+            Display.setVSyncEnabled(true);
+            Display.setTitle("Shadow Mapping Demo");
+            Display.create();
+        } catch (LWJGLException e) {
+            System.err.println("Couldn't set up the display");
+            Display.destroy();
+            System.exit(1);
         }
-    }
-
-    private static void setUpCamera() {
-        camera.applyPerspectiveMatrix();
-        camera.applyOptimalStates();
+        if (!GLContext.getCapabilities().OpenGL14 && !GLContext.getCapabilities().GL_ARB_shadow) {
+            System.out.println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
+            Display.destroy();
+            System.exit(1);
+        }
+        if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
+            System.err.println("GL_ARB_shadow_ambient extension not available.");
+            Display.destroy();
+            System.exit(1);
+        }
     }
 
     private static void setUpStates() {
@@ -209,6 +216,100 @@ public class ShadowMappingFBO {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
 
+    private static void setUpCamera() {
+        camera.applyPerspectiveMatrix();
+        camera.applyOptimalStates();
+    }
+
+    private static void setUpModel() {
+        try {
+            bunnyDisplayList = OBJLoader.createDisplayList(OBJLoader.loadModel(new File("res/models/bunny.obj")));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            cleanUp();
+        } catch (IOException e) {
+            e.printStackTrace();
+            cleanUp();
+        }
+    }
+
+    private static void render() {
+        // Reset any changes made to the model-view matrix.
+        glLoadIdentity();
+        // Apply the camera position and orientation to the model-view matrix.
+        camera.applyTranslations();
+        // Clear the screen.
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Store the current attribute state.
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        {
+            generateTextureCoordinates();
+            drawGround();
+            drawScene();
+            drawShadowMap();
+        }
+        // Restore the previous attribute state.
+        glPopAttrib();
+    }
+
+    private static void generateTextureCoordinates() {
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        // Compare the texture coordinate 'r' (the distance from the light to the surface of the object) to the
+        // value in the depth texture.
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
+        // Enable 's' texture coordinate generation.
+        glEnable(GL_TEXTURE_GEN_S);
+        // Enable 't' texture coordinate generation.
+        glEnable(GL_TEXTURE_GEN_T);
+        // Enable 'r' texture coordinate generation.
+        glEnable(GL_TEXTURE_GEN_R);
+        // Enable 'q' texture coordinate generation.
+        glEnable(GL_TEXTURE_GEN_Q);
+        textureBuffer.clear();
+        textureBuffer.put(0, textureMatrix.m00);
+        textureBuffer.put(1, textureMatrix.m01);
+        textureBuffer.put(2, textureMatrix.m02);
+        textureBuffer.put(3, textureMatrix.m03);
+
+        glTexGen(GL_S, GL_EYE_PLANE, textureBuffer);
+
+        textureBuffer.put(0, textureMatrix.m10);
+        textureBuffer.put(1, textureMatrix.m11);
+        textureBuffer.put(2, textureMatrix.m12);
+        textureBuffer.put(3, textureMatrix.m13);
+
+        glTexGen(GL_T, GL_EYE_PLANE, textureBuffer);
+
+        textureBuffer.put(0, textureMatrix.m20);
+        textureBuffer.put(1, textureMatrix.m21);
+        textureBuffer.put(2, textureMatrix.m22);
+        textureBuffer.put(3, textureMatrix.m23);
+
+        glTexGen(GL_R, GL_EYE_PLANE, textureBuffer);
+
+        textureBuffer.put(0, textureMatrix.m30);
+        textureBuffer.put(1, textureMatrix.m31);
+        textureBuffer.put(2, textureMatrix.m32);
+        textureBuffer.put(3, textureMatrix.m33);
+
+        glTexGen(GL_Q, GL_EYE_PLANE, textureBuffer);
+    }
+
+    private static void drawGround() {
+        glPushAttrib(GL_LIGHTING_BIT);
+        {
+            glDisable(GL_LIGHTING);
+            glBegin(GL_QUADS);
+            glColor3f(0.3F, 0.6F, 0.3F);
+            glVertex3f(-120, -19, -120);
+            glVertex3f(-120, -19, +120);
+            glVertex3f(+120, -19, +120);
+            glVertex3f(+120, -19, -120);
+        }
+        glEnd();
+        glPopAttrib();
+    }
+
     /** Generate the shadow map. */
     private static void drawShadowMap() {
         /**
@@ -243,8 +344,10 @@ public class ShadowMappingFBO {
          */
         float nearPlane = lightToSceneDistance - sceneBoundingRadius;
         if (nearPlane < 0) {
+            if (!cameraTooClose) {
+                System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
+            }
             cameraTooClose = true;
-            System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
             return;
         } else {
             cameraTooClose = false;
@@ -292,7 +395,7 @@ public class ShadowMappingFBO {
             // acne'.
             glEnable(GL_POLYGON_OFFSET_FILL);
             // Draw the objects that cast shadows.
-            drawShadowCastingObjects();
+            drawScene();
             /**
              * Copy the pixels of the shadow map to the frame buffer object depth attachment.
              *  int target -> GL_TEXTURE_2D
@@ -328,114 +431,13 @@ public class ShadowMappingFBO {
         Matrix4f.transpose(textureMatrix, textureMatrix);
     }
 
-    /** Sets up a display. */
-    private static void setUpDisplay() {
-        try {
-            Display.setDisplayMode(DISPLAY_MODE);
-            Display.setVSyncEnabled(true);
-            Display.setTitle("Shadow Mapping Demo");
-            Display.create();
-        } catch (LWJGLException e) {
-            System.err.println("Couldn't set up the display");
-            Display.destroy();
-            System.exit(1);
-        }
-        if (!GLContext.getCapabilities().OpenGL14 && !GLContext.getCapabilities().GL_ARB_shadow) {
-            System.out.println("Can't create shadows at all. Requires OpenGL 1.4 or the GL_ARB_shadow extension");
-            Display.destroy();
-            System.exit(1);
-        }
-        if (!GLContext.getCapabilities().GL_ARB_shadow_ambient) {
-            System.err.println("GL_ARB_shadow_ambient extension not available.");
-            Display.destroy();
-            System.exit(1);
-        }
-    }
-
-    private static void drawGround() {
-        glPushAttrib(GL_LIGHTING_BIT);
-        {
-            glDisable(GL_LIGHTING);
-            glBegin(GL_QUADS);
-            glColor3f(0.3F, 0.6F, 0.3F);
-            glVertex3f(-120, -19, -120);
-            glVertex3f(-120, -19, +120);
-            glVertex3f(+120, -19, +120);
-            glVertex3f(+120, -19, -120);
-        }
-        glEnd();
-        glPopAttrib();
-    }
-
     /** This is where anything you want rendered into your world should go. */
-    private static void drawShadowCastingObjects() {
+    private static void drawScene() {
         glPushMatrix();
         glScalef(5, 5, 5);
         glTranslatef(0, -2, 0);
         glCallList(bunnyDisplayList);
         glPopMatrix();
-    }
-
-    private static void generateTextureCoordinates() {
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        // Compare the texture coordinate 'r' (the distance from the light to the surface of the object) to the
-        // value in the depth texture.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
-        // Enable 's' texture coordinate generation.
-        glEnable(GL_TEXTURE_GEN_S);
-        // Enable 't' texture coordinate generation.
-        glEnable(GL_TEXTURE_GEN_T);
-        // Enable 'r' texture coordinate generation.
-        glEnable(GL_TEXTURE_GEN_R);
-        // Enable 'q' texture coordinate generation.
-        glEnable(GL_TEXTURE_GEN_Q);
-        textureBuffer.clear();
-        textureBuffer.put(0, textureMatrix.m00);
-        textureBuffer.put(1, textureMatrix.m01);
-        textureBuffer.put(2, textureMatrix.m02);
-        textureBuffer.put(3, textureMatrix.m03);
-
-        glTexGen(GL_S, GL_EYE_PLANE, textureBuffer);
-
-        textureBuffer.put(0, textureMatrix.m10);
-        textureBuffer.put(1, textureMatrix.m11);
-        textureBuffer.put(2, textureMatrix.m12);
-        textureBuffer.put(3, textureMatrix.m13);
-
-        glTexGen(GL_T, GL_EYE_PLANE, textureBuffer);
-
-        textureBuffer.put(0, textureMatrix.m20);
-        textureBuffer.put(1, textureMatrix.m21);
-        textureBuffer.put(2, textureMatrix.m22);
-        textureBuffer.put(3, textureMatrix.m23);
-
-        glTexGen(GL_R, GL_EYE_PLANE, textureBuffer);
-
-        textureBuffer.put(0, textureMatrix.m30);
-        textureBuffer.put(1, textureMatrix.m31);
-        textureBuffer.put(2, textureMatrix.m32);
-        textureBuffer.put(3, textureMatrix.m33);
-
-        glTexGen(GL_Q, GL_EYE_PLANE, textureBuffer);
-    }
-
-    private static void render() {
-        // Reset any changes made to the model-view matrix.
-        glLoadIdentity();
-        // Apply the camera position and orientation to the model-view matrix.
-        camera.applyTranslations();
-        // Clear the screen.
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        // Store the current attribute state.
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        {
-            generateTextureCoordinates();
-            drawGround();
-            drawShadowCastingObjects();
-            drawShadowMap();
-        }
-        // Restore the previous attribute state.
-        glPopAttrib();
     }
 
     private static void logic() {
