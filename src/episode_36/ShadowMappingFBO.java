@@ -94,7 +94,7 @@ public class ShadowMappingFBO {
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
-        setUpFramebufferObject();
+        setUpFrameBufferObject();
         generateShadowMap();
         setUpCamera();
         setUpModel();
@@ -140,26 +140,6 @@ public class ShadowMappingFBO {
         glLightModel(GL_LIGHT_MODEL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
         glLight(GL_LIGHT0, GL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
         glLight(GL_LIGHT0, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1));
-    }
-
-    /** Sets up the OpenGL states. */
-    private static void setUpFramebufferObject() {
-        final int MAX_RENDERBUFFER_SIZE = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
-        final int MAX_TEXTURE_SIZE = glGetInteger(GL_MAX_TEXTURE_SIZE);
-        /**
-         * Cap the maximum shadow map size at 1024x1024 pixels or at the maximum render buffer size. If you have a good
-         * graphics card, feel free to increase this value. The program will lag
-         * if I record and run the program at the same time with higher values.
-         */
-        if (MAX_TEXTURE_SIZE > 1024) {
-            if (MAX_RENDERBUFFER_SIZE < MAX_TEXTURE_SIZE) {
-                shadowMapWidth = shadowMapHeight = MAX_RENDERBUFFER_SIZE;
-            } else {
-                shadowMapWidth = shadowMapHeight = 1024;
-            }
-        } else {
-            shadowMapWidth = shadowMapHeight = MAX_TEXTURE_SIZE;
-        }
         // Clamp texture coordinates (e.g.: (2,0) becomes (1,0)) because we only want one shadow.
         // Use 'TO_EDGE' to prevent the texture boarders to affect the shadow map through linear texture filtering.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -183,6 +163,26 @@ public class ShadowMappingFBO {
         glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
         glTexGeni(GL_Q, GL_TEXTURE_GEN_MODE, GL_EYE_LINEAR);
+    }
+
+    /** Sets up the OpenGL states. */
+    private static void setUpFrameBufferObject() {
+        final int MAX_RENDERBUFFER_SIZE = glGetInteger(GL_MAX_RENDERBUFFER_SIZE);
+        final int MAX_TEXTURE_SIZE = glGetInteger(GL_MAX_TEXTURE_SIZE);
+        /**
+         * Cap the maximum shadow map size at 1024x1024 pixels or at the maximum render buffer size. If you have a good
+         * graphics card, feel free to increase this value. The program will lag
+         * if I record and run the program at the same time with higher values.
+         */
+        if (MAX_TEXTURE_SIZE > 1024) {
+            if (MAX_RENDERBUFFER_SIZE < MAX_TEXTURE_SIZE) {
+                shadowMapWidth = shadowMapHeight = MAX_RENDERBUFFER_SIZE;
+            } else {
+                shadowMapWidth = shadowMapHeight = 1024;
+            }
+        } else {
+            shadowMapWidth = shadowMapHeight = MAX_TEXTURE_SIZE;
+        }
         // Generate and bind a frame buffer.
         frameBuffer = glGenFramebuffers();
         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
