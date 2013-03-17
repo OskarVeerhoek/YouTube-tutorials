@@ -63,7 +63,7 @@ import static org.lwjgl.util.glu.GLU.*;
  */
 public class ShadowMappingFBO {
 
-    /** The position of the omnidirectional shadow-casting light. * */
+    /** The position of the omnidirectional shadow-casting light. */
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
     private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
     private static final Matrix4f textureMatrix = new Matrix4f();
@@ -88,8 +88,10 @@ public class ShadowMappingFBO {
     private static int frameBuffer;
     /** The render buffer holding the shadow map in the form of a depth texture. */
     private static int renderBuffer;
-    /** The display list that holds the Stanford bunny model. * */
+    /** The display list that holds the Stanford bunny model. */
     private static int bunnyDisplayList;
+    /** If the camera is too close the scene for the shadow map to be generated properly. */
+    private static boolean cameraTooClose;
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -241,8 +243,11 @@ public class ShadowMappingFBO {
          */
         float nearPlane = lightToSceneDistance - sceneBoundingRadius;
         if (nearPlane < 0) {
+            cameraTooClose = true;
             System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
             return;
+        } else {
+            cameraTooClose = false;
         }
         /**
          * The field-of-view of the shadow frustum in degrees. Formula taken from the OpenGL SuperBible.
@@ -441,7 +446,7 @@ public class ShadowMappingFBO {
     private static void input() {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
-                if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_Q) && !cameraTooClose) {
                     lightPosition.flip();
                     lightPosition.clear();
                     lightPosition.put(new float[]{camera.x(), camera.y(), camera.z(), 1});
