@@ -66,7 +66,7 @@ public class ShadowMappingFBO {
     /** The position of the omnidirectional shadow-casting light. */
     private static final FloatBuffer lightPosition = BufferTools.asFlippedFloatBuffer(200, 250, 200, 1);
     private static final FloatBuffer textureBuffer = BufferUtils.createFloatBuffer(16);
-    private static final Matrix4f textureMatrix = new Matrix4f();
+    private static final Matrix4f depthModelViewProjection = new Matrix4f();
     private static final DisplayMode DISPLAY_MODE = new DisplayMode(800, 600);
     private static final EulerCamera camera = new EulerCamera.Builder().setAspectRatio((float) DISPLAY_MODE.getWidth
             () / DISPLAY_MODE.getHeight()).setPosition(23, 34, 87).setRotation(22, 341,
@@ -148,8 +148,8 @@ public class ShadowMappingFBO {
         glLight(GL_LIGHT0, GL_AMBIENT, BufferTools.asFlippedFloatBuffer(0, 0, 0, 1));
         glLight(GL_LIGHT0, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(1.7F, 1.7F, 1.7F, 1));
         // Clamp texture coordinates (e.g.: (2,0) becomes (1,0)) because we only want one shadow.
-        // Use 'TO_EDGE' to prevent the texture boarders to affect the shadow map through linear texture filtering.
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        // Use 'TO_EDGE' to prevent the texture borders to affect the shadow map through linear texture filtering.
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); // [x,y,z,w] -> [s,t,r,q]
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         // Enable bilinear texture filtering. This means that the colour will be
         // a 'weighted value of the four texture elements that are closest to the center of the pixel being textured'
@@ -253,7 +253,7 @@ public class ShadowMappingFBO {
     private static void generateTextureCoordinates() {
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
         // Compare the texture coordinate 'r' (the distance from the light to the surface of the object) to the
-        // value in the depth texture.
+        // value in the depth buffer.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_R_TO_TEXTURE);
         // Enable 's' texture coordinate generation.
         glEnable(GL_TEXTURE_GEN_S);
@@ -264,31 +264,31 @@ public class ShadowMappingFBO {
         // Enable 'q' texture coordinate generation.
         glEnable(GL_TEXTURE_GEN_Q);
         textureBuffer.clear();
-        textureBuffer.put(0, textureMatrix.m00);
-        textureBuffer.put(1, textureMatrix.m01);
-        textureBuffer.put(2, textureMatrix.m02);
-        textureBuffer.put(3, textureMatrix.m03);
+        textureBuffer.put(0, depthModelViewProjection.m00);
+        textureBuffer.put(1, depthModelViewProjection.m01);
+        textureBuffer.put(2, depthModelViewProjection.m02);
+        textureBuffer.put(3, depthModelViewProjection.m03);
 
         glTexGen(GL_S, GL_EYE_PLANE, textureBuffer);
 
-        textureBuffer.put(0, textureMatrix.m10);
-        textureBuffer.put(1, textureMatrix.m11);
-        textureBuffer.put(2, textureMatrix.m12);
-        textureBuffer.put(3, textureMatrix.m13);
+        textureBuffer.put(0, depthModelViewProjection.m10);
+        textureBuffer.put(1, depthModelViewProjection.m11);
+        textureBuffer.put(2, depthModelViewProjection.m12);
+        textureBuffer.put(3, depthModelViewProjection.m13);
 
         glTexGen(GL_T, GL_EYE_PLANE, textureBuffer);
 
-        textureBuffer.put(0, textureMatrix.m20);
-        textureBuffer.put(1, textureMatrix.m21);
-        textureBuffer.put(2, textureMatrix.m22);
-        textureBuffer.put(3, textureMatrix.m23);
+        textureBuffer.put(0, depthModelViewProjection.m20);
+        textureBuffer.put(1, depthModelViewProjection.m21);
+        textureBuffer.put(2, depthModelViewProjection.m22);
+        textureBuffer.put(3, depthModelViewProjection.m23);
 
         glTexGen(GL_R, GL_EYE_PLANE, textureBuffer);
 
-        textureBuffer.put(0, textureMatrix.m30);
-        textureBuffer.put(1, textureMatrix.m31);
-        textureBuffer.put(2, textureMatrix.m32);
-        textureBuffer.put(3, textureMatrix.m33);
+        textureBuffer.put(0, depthModelViewProjection.m30);
+        textureBuffer.put(1, depthModelViewProjection.m31);
+        textureBuffer.put(2, depthModelViewProjection.m32);
+        textureBuffer.put(3, depthModelViewProjection.m33);
 
         glTexGen(GL_Q, GL_EYE_PLANE, textureBuffer);
     }
@@ -303,8 +303,8 @@ public class ShadowMappingFBO {
             glVertex3f(-120, -19, +120);
             glVertex3f(+120, -19, +120);
             glVertex3f(+120, -19, -120);
+            glEnd();
         }
-        glEnd();
         glPopAttrib();
     }
 
@@ -322,27 +322,25 @@ public class ShadowMappingFBO {
         Matrix4f lightModelViewTemp = new Matrix4f();
         /**
          * The radius that encompasses all the objects that cast shadows in the scene. There should
-         * be no object farther  away than 50 units from [0, 0, 0] in any direction.
+         * be no object farther away than 50 units from [0, 0, 0] in any direction.
          * If an object exceeds the radius, the object may cast shadows wrongly.
          */
         float sceneBoundingRadius = 50;
         /**
          * The distance from the light to the scene, assuming that the scene is located
          * at [0, 0, 0]. Using the Pythagorean theorem, the distance is calculated by taking the square-root of the
-         * sum of each of
-         * the components of the light position squared.
+         * sum of each of the components of the light position squared.
          */
         float lightToSceneDistance = (float) Math.sqrt(lightPosition.get(0) * lightPosition.get(0) +
                 lightPosition.get(1) * lightPosition.get(1) +
                 lightPosition.get(2) * lightPosition.get(2));
         /**
          * The distance to the object that is nearest to the camera. This excludes objects that do not cast shadows.
-         * This will be used
-         * as the zNear parameter in gluPerspective.
+         * This will be used as the zNear parameter in gluPerspective.
          */
         float nearPlane = lightToSceneDistance - sceneBoundingRadius;
         if (nearPlane < 0) {
-            System.err.println("Camera is too close to object. A valid shadow map cannot be generated.");
+            System.err.println("Camera is too close to scene. A valid shadow map cannot be generated.");
         }
         /**
          * The field-of-view of the shadow frustum in degrees. Formula taken from the OpenGL SuperBible.
@@ -372,7 +370,9 @@ public class ShadowMappingFBO {
         glClear(GL_DEPTH_BUFFER_BIT);
         // Store the current attribute state.
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        { // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the shape
+        {
+            // Disable smooth shading, because the shading in a shadow map is irrelevant. It only matters where the
+            // shape
             // vertices are positioned, and not what colour they have.
             glShadeModel(GL_FLAT);
             // Enabling all these lighting states is unnecessary for reasons listed above.
@@ -413,14 +413,15 @@ public class ShadowMappingFBO {
         lightModelViewTemp.load(lightModelView);
         lightProjection.flip();
         lightModelView.flip();
-        textureMatrix.setIdentity();
-        textureMatrix.translate(new Vector3f(0.5F, 0.5F, 0.5F));
-        textureMatrix.scale(new Vector3f(0.5F, 0.5F, 0.5F));
+        depthModelViewProjection.setIdentity();
+        // [-1,1] -> [-0.5,0.5] -> [0,1]
+        depthModelViewProjection.translate(new Vector3f(0.5F, 0.5F, 0.5F));
+        depthModelViewProjection.scale(new Vector3f(0.5F, 0.5F, 0.5F));
         // Multiply the texture matrix by the projection and model-view matrices of the light.
-        Matrix4f.mul(textureMatrix, lightProjectionTemp, textureMatrix);
-        Matrix4f.mul(textureMatrix, lightModelViewTemp, textureMatrix);
+        Matrix4f.mul(depthModelViewProjection, lightProjectionTemp, depthModelViewProjection);
+        Matrix4f.mul(depthModelViewProjection, lightModelViewTemp, depthModelViewProjection);
         // Transpose the texture matrix.
-        Matrix4f.transpose(textureMatrix, textureMatrix);
+        Matrix4f.transpose(depthModelViewProjection, depthModelViewProjection);
     }
 
     /** This is where anything you want rendered into your world should go. */
