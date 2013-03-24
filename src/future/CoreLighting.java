@@ -29,7 +29,6 @@
 
 package future;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -44,6 +43,7 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
+import static utility.BufferTools.asFloatBuffer;
 
 /** NOT DONE YET Shows lighting without using the fixed function pipeline. */
 public class CoreLighting {
@@ -84,55 +84,17 @@ public class CoreLighting {
         System.exit(0);
     }
 
-    private static void checkInput() {
-        cam.processMouse(1, 80, -80);
-        cam.processKeyboard(16, 1, 1, 1);
-        if (Mouse.isButtonDown(0)) {
-            Mouse.setGrabbed(true);
-        } else if (Mouse.isButtonDown(1)) {
-            Mouse.setGrabbed(false);
+    private static void setUpDisplay() {
+        try {
+            Display.setDisplayMode(new DisplayMode(640, 480));
+            Display.setVSyncEnabled(true);
+            Display.setTitle("Core Lighting Demo");
+            Display.create();
+        } catch (LWJGLException e) {
+            System.err.println("The display wasn't initialized correctly. :(");
+            Display.destroy();
+            System.exit(1);
         }
-    }
-
-    private static void cleanUp() {
-        glDeleteProgram(shaderProgram);
-        glDeleteBuffers(vboVertexHandle);
-        glDeleteBuffers(vboNormalHandle);
-        Display.destroy();
-    }
-
-    private static void render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glLoadIdentity();
-        cam.applyTranslations();
-        glUseProgram(shaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
-        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-        glVertexPointer(3, GL_FLOAT, 0, 0L);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-        glNormalPointer(GL_FLOAT, 0, 0L);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glColor3f(0.4f, 0.27f, 0.17f);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
-        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glUseProgram(0);
-    }
-
-    private static void setUpLighting() {
-        glShadeModel(GL_SMOOTH);
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
     }
 
     private static void setUpVBOs() {
@@ -173,6 +135,12 @@ public class CoreLighting {
         }
     }
 
+    private static void setUpCamera() {
+        cam = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
+        cam.setFieldOfView(70);
+        cam.applyPerspectiveMatrix();
+    }
+
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
         attributeVertex = glGetAttribLocation(shaderProgram, "attributeVertex");
@@ -187,29 +155,54 @@ public class CoreLighting {
         glValidateProgram(shaderProgram);
     }
 
-    private static void setUpCamera() {
-        cam = new EulerCamera((float) Display.getWidth() / (float) Display.getHeight(), -2.19f, 1.36f, 11.45f);
-        cam.setFieldOfView(70);
-        cam.applyPerspectiveMatrix();
+    private static void setUpLighting() {
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial(GL_FRONT, GL_DIFFUSE);
     }
 
-    private static void setUpDisplay() {
-        try {
-            Display.setDisplayMode(new DisplayMode(640, 480));
-            Display.setVSyncEnabled(true);
-            Display.setTitle("Core Lighting Demo");
-            Display.create();
-        } catch (LWJGLException e) {
-            System.err.println("The display wasn't initialized correctly. :(");
-            Display.destroy();
-            System.exit(1);
+    private static void render() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glLoadIdentity();
+        cam.applyTranslations();
+        glUseProgram(shaderProgram);
+        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
+        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+        glVertexPointer(3, GL_FLOAT, 0, 0L);
+        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+        glNormalPointer(GL_FLOAT, 0, 0L);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glColor3f(0.4f, 0.27f, 0.17f);
+        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
+        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glUseProgram(0);
+    }
+
+    private static void checkInput() {
+        cam.processMouse(1, 80, -80);
+        cam.processKeyboard(16, 1, 1, 1);
+        if (Mouse.isButtonDown(0)) {
+            Mouse.setGrabbed(true);
+        } else if (Mouse.isButtonDown(1)) {
+            Mouse.setGrabbed(false);
         }
     }
 
-    private static FloatBuffer asFloatBuffer(float... values) {
-        FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
-        buffer.put(values);
-        buffer.flip();
-        return buffer;
+    private static void cleanUp() {
+        glDeleteProgram(shaderProgram);
+        glDeleteBuffers(vboVertexHandle);
+        glDeleteBuffers(vboNormalHandle);
+        Display.destroy();
     }
 }
