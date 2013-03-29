@@ -75,9 +75,22 @@ public class BitmapFonts {
     private static void renderString(String string, float x, float y, float characterSizeX, float characterSizeY) {
         glPushMatrix();
         glTranslatef(x, y, 0);
+        glBegin(GL_QUADS);
         for (int i = 0; i < string.length(); i++) {
-            renderCharacter(string.charAt(i), i * characterSizeX / 3, 0, characterSizeX, characterSizeY);
+            int asciiCode = (int) string.charAt(i);
+            final float cellSize = 1.0f / 16.0f;
+            float cellX = asciiCode % 16 * cellSize;
+            float cellY = asciiCode / 16 * cellSize;
+            glTexCoord2f(cellX, cellY + cellSize);
+            glVertex2f(i * characterSizeX / 3, y);
+            glTexCoord2f(cellX + cellSize, cellY + cellSize);
+            glVertex2f(i * characterSizeX / 3 + characterSizeX / 2, y);
+            glTexCoord2f(cellX + cellSize, cellY);
+            glVertex2f(i * characterSizeX / 3 + characterSizeX / 2, y + characterSizeY);
+            glTexCoord2f(cellX, cellY);
+            glVertex2f(i * characterSizeX / 3, y + characterSizeY);
         }
+        glEnd();
         glPopMatrix();
     }
 
@@ -85,7 +98,9 @@ public class BitmapFonts {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 if (Keyboard.getEventKey() != Keyboard.KEY_BACK) {
-                    renderString.append(Keyboard.getEventCharacter());
+                    if (Keyboard.getEventKey() != Keyboard.KEY_LSHIFT) {
+                        renderString.append(Keyboard.getEventCharacter());
+                    }
                 } else if (renderString.length() > 0) {
                     renderString.setLength(renderString.length() - 1);
                 }
@@ -102,7 +117,7 @@ public class BitmapFonts {
     private static void setUpTextures() throws IOException {
         fontTexture = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, fontTexture);
-        PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/images/bitmapfont.png"));
+        PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/images/font.png"));
         ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
         decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
         buffer.flip();
