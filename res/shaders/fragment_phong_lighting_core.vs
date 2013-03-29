@@ -30,9 +30,9 @@
 #version 120
 
 attribute vec4 attributeVertex;
-attribute vec4 attributeColour;
-attribute vec4 attributeNormal;
+attribute vec3 attributeNormal;
 
+uniform vec4 uniformColour;
 uniform mat4 uniformModelViewProjectionMatrix;
 
 // The colour we're going to pass to the fragment shader.

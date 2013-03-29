@@ -43,6 +43,8 @@ varying vec3 varyingNormal;
 varying vec4 varyingVertex;
 
 void main() {
+    gl_FragColor = vec4(1, 0, 0, 0);
+/**
     vec3 vertexPosition = (uniformModelViewMatrix * varyingVertex).xyz;
     vec3 surfaceNormal = (uniformNormalMatrix * varyingNormal).xyz;
     gl_FragColor += uniformAmbientLight;
@@ -54,5 +56,5 @@ void main() {
     if (diffuseLightIntensity != 0) {
         float fspecular = pow(specular, gl_FrontMaterial.shininess);
         gl_FragColor += fspecular;
-    }
+    }**/
 }

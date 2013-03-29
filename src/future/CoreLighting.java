@@ -33,6 +33,7 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.glu.GLU;
 import utility.*;
 
 import java.io.File;
@@ -43,7 +44,6 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
-import static utility.BufferTools.asFloatBuffer;
 
 /** NOT DONE YET Shows lighting without using the fixed function pipeline. */
 public class CoreLighting {
@@ -63,6 +63,8 @@ public class CoreLighting {
     private static int attributeNormal;
 
     private static Model model;
+    private static FloatBuffer modelViewProjection = BufferTools.reserveData(16);
+    private static FloatBuffer modelView = BufferTools.reserveData(16);
 
     private static final String MODEL_LOCATION = "res/models/bunny.obj";
     private static final String VERTEX_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.vs";
@@ -75,11 +77,14 @@ public class CoreLighting {
         setUpShaders();
         setUpLighting();
         while (!Display.isCloseRequested()) {
+            configureUniforms();
             render();
-            checkInput();
+            logic();
+            input();
             Display.update();
             Display.sync(60);
         }
+        System.err.println(GLU.gluErrorString(glGetError()));
         cleanUp();
         System.exit(0);
     }
@@ -118,12 +123,12 @@ public class CoreLighting {
             glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
             glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
             glEnableVertexAttribArray(attributeVertex);
-            glVertexAttribPointer(attributeVertex, 3, false, 0, vertices);
+            glVertexAttribPointer(attributeVertex, 3, GL_FLOAT, false, 0, 0L);
             glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
             glEnableVertexAttribArray(attributeNormal);
             glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
             glNormalPointer(GL_FLOAT, 0, 0L);
-            // TODO: This really isn't finished yet. :-(
+//            glBindBuffer(GL_ARRAY_BUFFER, vboColourHandle);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             cleanUp();
@@ -153,43 +158,56 @@ public class CoreLighting {
         uniformNormalMatrix = glGetUniformLocation(shaderProgram, "uniformNormalMatrix");
         uniformShininess = glGetUniformLocation(shaderProgram, "uniformShininess");
         glValidateProgram(shaderProgram);
+        glUseProgram(shaderProgram);
     }
 
     private static void setUpLighting() {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
-        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
+//        glEnable(GL_LIGHTING);
+//        glEnable(GL_LIGHT0);
+//        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+//        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+//        glEnable(GL_COLOR_MATERIAL);
+//        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+    }
+
+    private static void configureUniforms() {
+        glUniformMatrix4(uniformModelViewProjectionMatrix, false, modelViewProjection);
+        glUniformMatrix4(uniformModelViewMatrix, false, modelView);
     }
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         cam.applyTranslations();
-        glUseProgram(shaderProgram);
-        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
-        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-        glVertexPointer(3, GL_FLOAT, 0, 0L);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-        glNormalPointer(GL_FLOAT, 0, 0L);
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
-        glColor3f(0.4f, 0.27f, 0.17f);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
         glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glUseProgram(0);
     }
 
-    private static void checkInput() {
+    private static void logic() {
+        glLoadIdentity();
+        cam.applyTranslations();
+        cam.applyPerspectiveMatrix();
+        glGetFloat(GL_MODELVIEW_MATRIX, modelView);
+        FloatBuffer projection = BufferTools.reserveData(16);
+        glGetFloat(GL_PROJECTION_MATRIX, projection);
+        glLoadIdentity();
+        glLoadMatrix(modelView);
+        glMultMatrix(projection);
+//        glGetFloat(GL_MODELVIEW_MATRIX, modelView);
+//        for (int i = 0; i < 16; i++) {
+//            System.out.print(modelView.get(i) + " ");
+//        }
+//        System.out.println();
+    }
+
+    private static void input() {
         cam.processMouse(1, 80, -80);
         cam.processKeyboard(16, 1, 1, 1);
         if (Mouse.isButtonDown(0)) {
