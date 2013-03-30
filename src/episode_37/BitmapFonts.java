@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package future;
+package episode_37;
 
 import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
@@ -86,12 +86,11 @@ public class BitmapFonts {
         // Load the previously loaded texture data into the texture object.
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
                 buffer);
+        // Unbind the texture.
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     private static void setUpStates() {
-        glEnable(GL_TEXTURE_2D);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_ONE, GL_ONE);
         glClearColor(0, 0.3f, 0, 1);
     }
 
@@ -105,11 +104,26 @@ public class BitmapFonts {
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT);
-        renderString(renderString.toString(), -0.9f, 0, 0.3f, 0.225f);
+        renderString(renderString.toString(), fontTexture, 16, -0.9f, 0, 0.3f, 0.225f);
     }
 
-    private static void renderString(String string, float x, float y, float characterSizeX, float characterSizeY) {
+    /**
+     * Renders text using a font bitmap.
+     *
+     * @param string the string to render
+     * @param textureObject the texture object containing the font glyphs
+     * @param gridSize the dimensions of the bitmap grid (e.g. 16 -> 16x16 grid; 8 -> 8x8 grid)
+     * @param x the x-coordinate of the bottom-left corner of where the string starts rendering
+     * @param y the y-coordinate of the bottom-left corner of where the string starts rendering
+     * @param characterWidth the width of the character
+     * @param characterHeight the height of the character
+     */
+    private static void renderString(String string, int textureObject, int gridSize, float x, float y,
+                                     float characterWidth, float characterHeight) {
         glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureObject);
         // Enable linear texture filtering for smoothed results.
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -127,22 +141,21 @@ public class BitmapFonts {
             // Get the ASCII-code of the character by type-casting to integer.
             int asciiCode = (int) string.charAt(i);
             // There are 16 cells in a texture, and a texture coordinate ranges from 0.0 to 1.0.
-            final float cellSize = 1.0f / 16.0f;
+            final float cellSize = 1.0f / gridSize;
             // The cell's x-coordinate is the greatest integer smaller than remainder of the ASCII-code divided by the
             // amount of cells on the x-axis, times the cell size.
-            float cellX = ((int) asciiCode % 16) * cellSize;
+            float cellX = ((int) asciiCode % gridSize) * cellSize;
             // The cell's y-coordinate is the greatest integer smaller than the ASCII-code divided by the amount of
-            // cells
-            // on the y-axis.
-            float cellY = ((int) asciiCode / 16) * cellSize;
+            // cells on the y-axis.
+            float cellY = ((int) asciiCode / gridSize) * cellSize;
             glTexCoord2f(cellX, cellY + cellSize);
-            glVertex2f(i * characterSizeX / 3, y);
+            glVertex2f(i * characterWidth / 3, y);
             glTexCoord2f(cellX + cellSize, cellY + cellSize);
-            glVertex2f(i * characterSizeX / 3 + characterSizeX / 2, y);
+            glVertex2f(i * characterWidth / 3 + characterWidth / 2, y);
             glTexCoord2f(cellX + cellSize, cellY);
-            glVertex2f(i * characterSizeX / 3 + characterSizeX / 2, y + characterSizeY);
+            glVertex2f(i * characterWidth / 3 + characterWidth / 2, y + characterHeight);
             glTexCoord2f(cellX, cellY);
-            glVertex2f(i * characterSizeX / 3, y + characterSizeY);
+            glVertex2f(i * characterWidth / 3, y + characterHeight);
         }
         glEnd();
         glPopMatrix();

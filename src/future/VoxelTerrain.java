@@ -156,7 +156,6 @@ public class VoxelTerrain {
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair("res/shaders/landscape_voxel.vs", "res/shaders/landscape_voxel.fs");
         glUseProgram(shaderProgram);
-        glUniform1i(glGetUniformLocation(shaderProgram, "lookup"), 0);
     }
 
     private static void setUpStates() {
