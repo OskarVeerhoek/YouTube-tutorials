@@ -50,7 +50,8 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
-import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL20.glDeleteProgram;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 
 /**
  * A 3D voxel terrain loaded from a heightmap and a lookup texture. Press 'L' to reload the shader and texture files.

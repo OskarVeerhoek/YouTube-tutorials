@@ -48,6 +48,9 @@ import static org.lwjgl.opengl.GL20.*;
 /** NOT DONE YET Shows lighting without using the fixed function pipeline. */
 public class CoreLighting {
 
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
+    private static final String VERTEX_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.vs";
+    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.fs";
     private static EulerCamera cam;
     private static int shaderProgram;
     private static int vboVertexHandle;
@@ -61,14 +64,9 @@ public class CoreLighting {
     private static int attributeVertex;
     private static int attributeColour;
     private static int attributeNormal;
-
     private static Model model;
     private static FloatBuffer modelViewProjection = BufferTools.reserveData(16);
     private static FloatBuffer modelView = BufferTools.reserveData(16);
-
-    private static final String MODEL_LOCATION = "res/models/bunny.obj";
-    private static final String VERTEX_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.vs";
-    private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/fragment_phong_lighting_core.fs";
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -108,15 +106,15 @@ public class CoreLighting {
             model = OBJLoader.loadModel(new File(MODEL_LOCATION));
             int vboVertexHandle = glGenBuffers();
             int vboNormalHandle = glGenBuffers();
-            FloatBuffer vertices = BufferTools.reserveData(model.faces.size() * 9);
-            FloatBuffer normals = BufferTools.reserveData(model.faces.size() * 9);
-            for (Face face : model.faces) {
-                vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.x - 1)));
-                vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.y - 1)));
-                vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.z - 1)));
-                normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.x - 1)));
-                normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.y - 1)));
-                normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.z - 1)));
+            FloatBuffer vertices = BufferTools.reserveData(model.getFaces().size() * 9);
+            FloatBuffer normals = BufferTools.reserveData(model.getFaces().size() * 9);
+            for (Model.Face face : model.getFaces()) {
+                vertices.put(BufferTools.asFloats(model.getVertices().get(face.getVertexIndices()[0] - 1)));
+                vertices.put(BufferTools.asFloats(model.getVertices().get(face.getVertexIndices()[1] - 1)));
+                vertices.put(BufferTools.asFloats(model.getVertices().get(face.getVertexIndices()[2] - 1)));
+                normals.put(BufferTools.asFloats(model.getNormals().get(face.getNormalIndices()[0] - 1)));
+                normals.put(BufferTools.asFloats(model.getNormals().get(face.getNormalIndices()[1] - 1)));
+                normals.put(BufferTools.asFloats(model.getNormals().get(face.getNormalIndices()[2] - 1)));
             }
             vertices.flip();
             normals.flip();
@@ -128,7 +126,7 @@ public class CoreLighting {
             glEnableVertexAttribArray(attributeNormal);
             glBufferData(GL_ARRAY_BUFFER, normals, GL_STATIC_DRAW);
             glNormalPointer(GL_FLOAT, 0, 0L);
-//            glBindBuffer(GL_ARRAY_BUFFER, vboColourHandle);
+            //            glBindBuffer(GL_ARRAY_BUFFER, vboColourHandle);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             cleanUp();
@@ -164,14 +162,14 @@ public class CoreLighting {
     private static void setUpLighting() {
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
-//        glEnable(GL_LIGHTING);
-//        glEnable(GL_LIGHT0);
-//        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
-//        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
+        //        glEnable(GL_LIGHTING);
+        //        glEnable(GL_LIGHT0);
+        //        glLightModel(GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[]{0.05f, 0.05f, 0.05f, 1f}));
+        //        glLight(GL_LIGHT0, GL_POSITION, asFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-//        glEnable(GL_COLOR_MATERIAL);
-//        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+        //        glEnable(GL_COLOR_MATERIAL);
+        //        glColorMaterial(GL_FRONT, GL_DIFFUSE);
     }
 
     private static void configureUniforms() {
@@ -185,7 +183,7 @@ public class CoreLighting {
         cam.applyTranslations();
         glEnableClientState(GL_VERTEX_ARRAY);
         glEnableClientState(GL_NORMAL_ARRAY);
-        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
+        glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
     }
@@ -200,11 +198,11 @@ public class CoreLighting {
         glLoadIdentity();
         glLoadMatrix(modelView);
         glMultMatrix(projection);
-//        glGetFloat(GL_MODELVIEW_MATRIX, modelView);
-//        for (int i = 0; i < 16; i++) {
-//            System.out.print(modelView.get(i) + " ");
-//        }
-//        System.out.println();
+        //        glGetFloat(GL_MODELVIEW_MATRIX, modelView);
+        //        for (int i = 0; i < 16; i++) {
+        //            System.out.print(modelView.get(i) + " ");
+        //        }
+        //        System.out.println();
     }
 
     private static void input() {

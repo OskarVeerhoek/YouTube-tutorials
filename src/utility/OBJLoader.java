@@ -30,6 +30,7 @@
 package utility;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.io.BufferedReader;
@@ -51,18 +52,18 @@ public class OBJLoader {
             glColor3f(0.4f, 0.27f, 0.17f);
             glMaterialf(GL_FRONT, GL_SHININESS, 128.0f);
             glBegin(GL_TRIANGLES);
-            for (Face face : m.faces) {
-                Vector3f n1 = m.normals.get((int) face.normal.x - 1);
+            for (Model.Face face : m.getFaces()) {
+                Vector3f n1 = m.getNormals().get(face.getNormalIndices()[0] - 1);
                 glNormal3f(n1.x, n1.y, n1.z);
-                Vector3f v1 = m.vertices.get((int) face.vertex.x - 1);
+                Vector3f v1 = m.getVertices().get(face.getVertexIndices()[0] - 1);
                 glVertex3f(v1.x, v1.y, v1.z);
-                Vector3f n2 = m.normals.get((int) face.normal.y - 1);
+                Vector3f n2 = m.getNormals().get(face.getNormalIndices()[1] - 1);
                 glNormal3f(n2.x, n2.y, n2.z);
-                Vector3f v2 = m.vertices.get((int) face.vertex.y - 1);
+                Vector3f v2 = m.getVertices().get(face.getVertexIndices()[1] - 1);
                 glVertex3f(v2.x, v2.y, v2.z);
-                Vector3f n3 = m.normals.get((int) face.normal.z - 1);
+                Vector3f n3 = m.getNormals().get(face.getNormalIndices()[2] - 1);
                 glNormal3f(n3.x, n3.y, n3.z);
-                Vector3f v3 = m.vertices.get((int) face.vertex.z - 1);
+                Vector3f v3 = m.getVertices().get(face.getVertexIndices()[2] - 1);
                 glVertex3f(v3.x, v3.y, v3.z);
             }
             glEnd();
@@ -82,15 +83,15 @@ public class OBJLoader {
     public static int[] createVBO(Model model) {
         int vboVertexHandle = glGenBuffers();
         int vboNormalHandle = glGenBuffers();
-        FloatBuffer vertices = reserveData(model.faces.size() * 9);
-        FloatBuffer normals = reserveData(model.faces.size() * 9);
-        for (Face face : model.faces) {
-            vertices.put(asFloats(model.vertices.get((int) face.vertex.x - 1)));
-            vertices.put(asFloats(model.vertices.get((int) face.vertex.y - 1)));
-            vertices.put(asFloats(model.vertices.get((int) face.vertex.z - 1)));
-            normals.put(asFloats(model.normals.get((int) face.normal.x - 1)));
-            normals.put(asFloats(model.normals.get((int) face.normal.y - 1)));
-            normals.put(asFloats(model.normals.get((int) face.normal.z - 1)));
+        FloatBuffer vertices = reserveData(model.getFaces().size() * 9);
+        FloatBuffer normals = reserveData(model.getFaces().size() * 9);
+        for (Model.Face face : model.getFaces()) {
+            vertices.put(asFloats(model.getVertices().get(face.getVertexIndices()[0] - 1)));
+            vertices.put(asFloats(model.getVertices().get(face.getVertexIndices()[1] - 1)));
+            vertices.put(asFloats(model.getVertices().get(face.getVertexIndices()[2] - 1)));
+            normals.put(asFloats(model.getNormals().get(face.getNormalIndices()[0] - 1)));
+            normals.put(asFloats(model.getNormals().get(face.getNormalIndices()[1] - 1)));
+            normals.put(asFloats(model.getNormals().get(face.getNormalIndices()[2] - 1)));
         }
         vertices.flip();
         normals.flip();
@@ -109,26 +110,51 @@ public class OBJLoader {
         Model m = new Model();
         String line;
         while ((line = reader.readLine()) != null) {
+            if (line.startsWith("#")) {
+                continue;
+            }
             if (line.startsWith("v ")) {
-                float x = Float.valueOf(line.split(" ")[1]);
-                float y = Float.valueOf(line.split(" ")[2]);
-                float z = Float.valueOf(line.split(" ")[3]);
-                m.vertices.add(new Vector3f(x, y, z));
+                String[] xyz = line.split(" ");
+                float x = Float.valueOf(xyz[1]);
+                float y = Float.valueOf(xyz[2]);
+                float z = Float.valueOf(xyz[3]);
+                m.getVertices().add(new Vector3f(x, y, z));
             } else if (line.startsWith("vn ")) {
-                float x = Float.valueOf(line.split(" ")[1]);
-                float y = Float.valueOf(line.split(" ")[2]);
-                float z = Float.valueOf(line.split(" ")[3]);
-                m.normals.add(new Vector3f(x, y, z));
+                String[] xyz = line.split(" ");
+                float x = Float.valueOf(xyz[1]);
+                float y = Float.valueOf(xyz[2]);
+                float z = Float.valueOf(xyz[3]);
+                m.getNormals().add(new Vector3f(x, y, z));
             } else if (line.startsWith("vt ")) {
-
+                String[] xyz = line.split(" ");
+                float s = Float.valueOf(xyz[1]);
+                float t = Float.valueOf(xyz[2]);
+                m.getTextureCoordinates().add(new Vector2f(s, t));
             } else if (line.startsWith("f ")) {
-                Vector3f vertexIndices = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[0]),
-                        Float.valueOf(line.split(" ")[2].split("/")[0]), Float.valueOf(line.split(" ")[3].split("/")
-                        [0]));
-                Vector3f normalIndices = new Vector3f(Float.valueOf(line.split(" ")[1].split("/")[2]),
-                        Float.valueOf(line.split(" ")[2].split("/")[2]), Float.valueOf(line.split(" ")[3].split("/")
-                        [2]));
-                m.faces.add(new Face(vertexIndices, normalIndices));
+                String[] faceIndices = line.split(" ");
+                int[] vertexIndicesArray = {Integer.parseInt(faceIndices[1].split("/")[0]),
+                        Integer.parseInt(faceIndices[2].split("/")[0]), Integer.parseInt(faceIndices[3].split("/")[0])};
+                int[] textureCoordinateIndicesArray = {0, 0};
+                if (m.hasTextureCoordinates()) {
+                    textureCoordinateIndicesArray[0] = Integer.parseInt(faceIndices[1].split("/")[1]);
+                    textureCoordinateIndicesArray[1] = Integer.parseInt(faceIndices[2].split("/")[1]);
+                }
+                int[] normalIndicesArray = {0, 0, 0};
+                if (m.hasNormals()) {
+                    normalIndicesArray[0] = Integer.parseInt(faceIndices[1].split("/")[2]);
+                    normalIndicesArray[1] = Integer.parseInt(faceIndices[2].split("/")[2]);
+                    normalIndicesArray[2] = Integer.parseInt(faceIndices[3].split("/")[2]);
+                }
+                //                Vector3f vertexIndices = new Vector3f(Float.valueOf(faceIndices[1].split("/")[0]),
+                //                        Float.valueOf(faceIndices[2].split("/")[0]),
+                // Float.valueOf(faceIndices[3].split("/")[0]));
+                //                Vector3f normalIndices = new Vector3f(Float.valueOf(faceIndices[1].split("/")[2]),
+                //                        Float.valueOf(faceIndices[2].split("/")[2]),
+                // Float.valueOf(faceIndices[3].split("/")[2]));
+                m.getFaces().add(new Model.Face(vertexIndicesArray, textureCoordinateIndicesArray, normalIndicesArray));
+            } else if (line.startsWith("s ")) {
+                boolean enableSmoothShading = !line.contains("off");
+                m.setEnableSmoothShading(enableSmoothShading);
             }
         }
         reader.close();

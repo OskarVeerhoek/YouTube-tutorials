@@ -120,7 +120,7 @@ public class PerPixelLightingDemo {
         camera.applyTranslations();
         glUseProgram(currentShaderProgram);
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(camera.x(), camera.y(), camera.z(), 1));
-        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
+        glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
     }
 
     private static void setUpStates() {

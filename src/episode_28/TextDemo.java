@@ -99,7 +99,7 @@ public class TextDemo {
         glEnableClientState(GL_NORMAL_ARRAY);
         glColor3f(0.4f, 0.27f, 0.17f);
         glMaterialf(GL_FRONT, GL_SHININESS, 10f);
-        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
+        glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
         glUseProgram(0);
@@ -164,15 +164,15 @@ public class TextDemo {
             cleanUp();
             System.exit(1);
         }
-        FloatBuffer vertices = BufferTools.reserveData(model.faces.size() * 9);
-        FloatBuffer normals = BufferTools.reserveData(model.faces.size() * 9);
-        for (Face face : model.faces) {
-            vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.x - 1)));
-            vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.y - 1)));
-            vertices.put(BufferTools.asFloats(model.vertices.get((int) face.vertex.z - 1)));
-            normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.x - 1)));
-            normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.y - 1)));
-            normals.put(BufferTools.asFloats(model.normals.get((int) face.normal.z - 1)));
+        FloatBuffer vertices = BufferTools.reserveData(model.getFaces().size() * 9);
+        FloatBuffer normals = BufferTools.reserveData(model.getFaces().size() * 9);
+        for (Model.Face face : model.getFaces()) {
+            vertices.put(BufferTools.asFloats(model.getVertices().get(face.getVertexIndices()[0] - 1)));
+            vertices.put(BufferTools.asFloats(model.getVertices().get(face.getVertexIndices()[1] - 1)));
+            vertices.put(BufferTools.asFloats(model.getVertices().get(face.getVertexIndices()[2] - 1)));
+            normals.put(BufferTools.asFloats(model.getNormals().get(face.getNormalIndices()[0] - 1)));
+            normals.put(BufferTools.asFloats(model.getNormals().get(face.getNormalIndices()[1] - 1)));
+            normals.put(BufferTools.asFloats(model.getNormals().get(face.getNormalIndices()[2] - 1)));
         }
         vertices.flip();
         normals.flip();

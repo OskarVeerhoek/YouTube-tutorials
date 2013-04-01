@@ -34,7 +34,10 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
-import utility.*;
+import utility.Camera;
+import utility.EulerCamera;
+import utility.Model;
+import utility.OBJLoader;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,10 +52,9 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ModelDemo {
 
+    private static final String MODEL_LOCATION = "res/models/bunny.obj";
     private static Camera camera;
     private static int bunnyDisplayList;
-
-    private static final String MODEL_LOCATION = "res/models/bunny.obj";
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -91,18 +93,18 @@ public class ModelDemo {
                 System.exit(1);
             }
             glBegin(GL_TRIANGLES);
-            for (Face face : m.faces) {
-                Vector3f n1 = m.normals.get((int) face.normal.x - 1);
+            for (Model.Face face : m.getFaces()) {
+                Vector3f n1 = m.getNormals().get(face.getNormalIndices()[0] - 1);
                 glNormal3f(n1.x, n1.y, n1.z);
-                Vector3f v1 = m.vertices.get((int) face.vertex.x - 1);
+                Vector3f v1 = m.getVertices().get(face.getVertexIndices()[0] - 1);
                 glVertex3f(v1.x, v1.y, v1.z);
-                Vector3f n2 = m.normals.get((int) face.normal.y - 1);
+                Vector3f n2 = m.getNormals().get(face.getNormalIndices()[1] - 1);
                 glNormal3f(n2.x, n2.y, n2.z);
-                Vector3f v2 = m.vertices.get((int) face.vertex.y - 1);
+                Vector3f v2 = m.getVertices().get(face.getVertexIndices()[1] - 1);
                 glVertex3f(v2.x, v2.y, v2.z);
-                Vector3f n3 = m.normals.get((int) face.normal.z - 1);
+                Vector3f n3 = m.getNormals().get(face.getNormalIndices()[2] - 1);
                 glNormal3f(n3.x, n3.y, n3.z);
-                Vector3f v3 = m.vertices.get((int) face.vertex.z - 1);
+                Vector3f v3 = m.getVertices().get(face.getNormalIndices()[2] - 1);
                 glVertex3f(v3.x, v3.y, v3.z);
             }
             glEnd();

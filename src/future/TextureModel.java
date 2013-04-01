@@ -73,8 +73,9 @@ public class TextureModel {
     }
 
     private static void checkInput() {
-        if (Mouse.isGrabbed())
+        if (Mouse.isGrabbed()) {
             cam.processMouse(1, 80, -80);
+        }
         cam.processKeyboard(16, 1, 1, 1);
         if (Mouse.isButtonDown(0)) {
             Mouse.setGrabbed(true);
@@ -104,7 +105,7 @@ public class TextureModel {
         glEnableClientState(GL_NORMAL_ARRAY);
         glColor3f(0.4f, 0.27f, 0.17f);
         glMaterialf(GL_FRONT, GL_SHININESS, 10f);
-        glDrawArrays(GL_TRIANGLES, 0, model.faces.size() * 3);
+        glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
         glBindBuffer(GL_ARRAY_BUFFER, 0);

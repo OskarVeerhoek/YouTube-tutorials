@@ -43,7 +43,8 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ParticleDemo {
 
-    private static ParticleEmitter particleEmitter = new ParticleEmitter(new Vector3f(), 0.001f, 100, new Vector3f(0, 0.1f, 0));
+    private static ParticleEmitter particleEmitter = new ParticleEmitter(new Vector3f(), 0.001f, 100, new Vector3f(0,
+            0.1f, 0));
 
     public static void main(String[] args) {
         setUpDisplay();
@@ -78,7 +79,7 @@ public class ParticleDemo {
         while (Keyboard.next()) {
             if (Keyboard.getEventKeyState()) {
                 if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-//                    resetParticle = true;
+                    //                    resetParticle = true;
                 }
             }
         }

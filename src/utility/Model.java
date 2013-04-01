@@ -29,19 +29,94 @@
 
 package utility;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.lwjgl.opengl.GL11.*;
+
 /** @author Oskar */
 public class Model {
 
-    public final List<Vector3f> vertices = new ArrayList<Vector3f>();
-    public final List<Vector3f> normals = new ArrayList<Vector3f>();
-
-    public final List<Face> faces = new ArrayList<Face>();
+    private final List<Vector3f> vertices = new ArrayList<Vector3f>();
+    private final List<Vector2f> textureCoordinates = new ArrayList<Vector2f>();
+    private final List<Vector3f> normals = new ArrayList<Vector3f>();
+    private final List<Face> faces = new ArrayList<Face>();
+    private boolean enableSmoothShading = true;
 
     public Model() {
+    }
+
+    public void enableStates() {
+        if (isEnableSmoothShading()) {
+            glShadeModel(GL_SMOOTH);
+        } else {
+            glShadeModel(GL_FLAT);
+        }
+    }
+
+    public boolean hasTextureCoordinates() {
+        return getTextureCoordinates().size() > 0;
+    }
+
+    public boolean hasNormals() {
+        return getNormals().size() > 0;
+    }
+
+    public List<Vector3f> getVertices() {
+        return vertices;
+    }
+
+    public List<Vector2f> getTextureCoordinates() {
+        return textureCoordinates;
+    }
+
+    public List<Vector3f> getNormals() {
+        return normals;
+    }
+
+    public List<Face> getFaces() {
+        return faces;
+    }
+
+    public boolean isEnableSmoothShading() {
+        return enableSmoothShading;
+    }
+
+    public void setEnableSmoothShading(boolean enableSmoothShading) {
+        this.enableSmoothShading = enableSmoothShading;
+    }
+
+    /** @author Oskar */
+    public static class Face {
+
+        private final int[] vertexIndices = new int[3];
+        private final int[] normalIndices = new int[3];
+        private final int[] textureCoordinateIndices = new int[2];
+
+        public int[] getVertexIndices() {
+            return vertexIndices;
+        }
+
+        public int[] getTextureCoordinateIndices() {
+            return textureCoordinateIndices;
+        }
+
+        public int[] getNormalIndices() {
+            return normalIndices;
+        }
+
+        public Face(int[] vertexIndices, int[] textureCoordinateIndices, int[] normalIndices) {
+            this.vertexIndices[0] = vertexIndices[0];
+            this.vertexIndices[1] = vertexIndices[1];
+            this.vertexIndices[2] = vertexIndices[2];
+            this.textureCoordinateIndices[0] = textureCoordinateIndices[0];
+            this.textureCoordinateIndices[1] = textureCoordinateIndices[1];
+            this.normalIndices[0] = normalIndices[0];
+            this.normalIndices[1] = normalIndices[1];
+            this.normalIndices[2] = normalIndices[2];
+        }
     }
 }
