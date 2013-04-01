@@ -120,7 +120,7 @@ public class BitmapFonts {
      */
     private static void renderString(String string, int textureObject, int gridSize, float x, float y,
                                      float characterWidth, float characterHeight) {
-        glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT);
+        glPushAttrib(GL_TEXTURE_BIT | GL_ENABLE_BIT | GL_COLOR_BUFFER_BIT);
         glEnable(GL_CULL_FACE);
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, textureObject);
