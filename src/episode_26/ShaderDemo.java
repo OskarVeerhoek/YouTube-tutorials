@@ -53,11 +53,10 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
  */
 public class ShaderDemo {
 
-    private static int shaderProgram, bunny;
-
     private static final String MODEL_LOCATION = "res/models/bunny.obj";
     private static final String VERTEX_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.vs";
     private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/vertex_phong_lighting.fs";
+    private static int shaderProgram, bunny;
 
     public static void main(String[] args) {
         try {
@@ -90,7 +89,9 @@ public class ShaderDemo {
             glCallList(bunny);
             glUseProgram(0);
 
-            cam.processMouse(1, 80, -80);
+            if (Mouse.isGrabbed()) {
+                cam.processMouse(1, 80, -80);
+            }
             cam.processKeyboard(16, 1, 1, 1);
 
             if (Mouse.isButtonDown(0)) {
