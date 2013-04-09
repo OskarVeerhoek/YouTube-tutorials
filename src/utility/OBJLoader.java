@@ -216,7 +216,7 @@ public class OBJLoader {
         return displayList;
     }
 
-    public Model loadTexturedModel(File f) throws IOException {
+    public static Model loadTexturedModel(File f) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(f));
         Model m = new Model();
         Model.Material currentMaterial = new Model.Material();

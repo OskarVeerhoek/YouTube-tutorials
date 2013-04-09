@@ -36,11 +36,11 @@ import org.lwjgl.opengl.DisplayMode;
 import utility.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL15.GL_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
 import static org.lwjgl.opengl.GL20.glDeleteProgram;
 import static org.lwjgl.opengl.GL20.glUseProgram;
 
@@ -52,13 +52,12 @@ public class TextureModel {
     private static final String FRAGMENT_SHADER_LOCATION = "res/shaders/pixel_phong_lighting.fs";
     private static EulerCamera cam;
     private static int shaderProgram;
-    private static int vboVertexHandle;
-    private static int vboNormalHandle;
+    private static int modelDisplayList;
     private static Model model;
 
     public static void main(String[] args) {
         setUpDisplay();
-        setUpVBOs();
+        setUpModel();
         setUpCamera();
         setUpShaders();
         setUpLighting();
@@ -86,8 +85,7 @@ public class TextureModel {
 
     private static void cleanUp() {
         glDeleteProgram(shaderProgram);
-        glDeleteBuffers(vboVertexHandle);
-        glDeleteBuffers(vboNormalHandle);
+        glDeleteLists(modelDisplayList, 1);
         Display.destroy();
     }
 
@@ -97,17 +95,22 @@ public class TextureModel {
         cam.applyTranslations();
         glUseProgram(shaderProgram);
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
-        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-        glVertexPointer(3, GL_FLOAT, 0, 0L);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-        glNormalPointer(GL_FLOAT, 0, 0L);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glColor3f(0.4f, 0.27f, 0.17f);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
-        glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
+        //        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+        //        glVertexPointer(3, GL_FLOAT, 0, 0L);
+        //        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+        //        glNormalPointer(GL_FLOAT, 0, 0L);
+        //        glEnableClientState(GL_VERTEX_ARRAY);
+        //        glEnableClientState(GL_NORMAL_ARRAY);
+        //        glColor3f(0.4f, 0.27f, 0.17f);
+        //        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
+        glPushMatrix();
+        glScalef(3, 3, 3);
+        glTranslatef(0, 0, -2);
+        glCallList(modelDisplayList);
+        glPopMatrix();
+        //        glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
+        //        glDisableClientState(GL_VERTEX_ARRAY);
+        //        glDisableClientState(GL_NORMAL_ARRAY);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glUseProgram(0);
     }
@@ -125,21 +128,14 @@ public class TextureModel {
         glColorMaterial(GL_FRONT, GL_DIFFUSE);
     }
 
-    private static void setUpVBOs() {
-        int[] vbos;
+    private static void setUpModel() {
         try {
-            model = OBJLoader.loadModel(new File(MODEL_LOCATION));
-            vbos = OBJLoader.createVBO(model);
-            vboVertexHandle = vbos[0];
-            vboNormalHandle = vbos[1];
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            cleanUp();
-            System.exit(1);
+            model = OBJLoader.loadTexturedModel(new File(MODEL_LOCATION));
+            model.enableStates();
+            modelDisplayList = OBJLoader.createTexturedDisplayList(model);
         } catch (IOException e) {
             e.printStackTrace();
             cleanUp();
-            System.exit(1);
         }
     }
 
