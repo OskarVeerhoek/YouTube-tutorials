@@ -29,141 +29,97 @@
 
 package future.particle;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /** The source of particles. */
 public class ParticleEmitter {
 
-    private static int lastId = 0;
     /** The location of the particle emitter in world coordinates. */
-    private final Vector3f position;
-    /** The amount of particles generated per millisecond (or equivalent time unit). */
-    private final float particleSpawningRate;
-    /** The lifetime of a particle, starting from when it was generated in milliseconds (or equivalent time unit). */
-    private final float particleLifeTime;
-    /**
-     * The degree of randomness in the generation of the particle lifetime. 0 is no randomness. 0.5 is 50% possible
-     * deviancy from the central value, and 1 is 100% possible deviance from the central value.
-     */
-    private final float particleLifeTimeFactor;
-    /** The initial velocity of the particle. */
-    private final Vector3f particleInitialVelocity;
-    /**
-     * The degree of randomness in the generation of the initial velocity. 0 is no randomness. 0.5 is 50% possible
-     * deviancy from the central value, and 1 is 100% possible deviance from the central value.
-     */
-    private final float particleInitialVelocityFactor;
-    private final Particle[] particles = new Particle[1024];
-    private final Set<Integer> particlesToBeRemoved = new HashSet<Integer>();
-    private float previousAmountOfParticlesToGenerate;
-    private int amountOfParticles = 0;
+    private final Vector3f location;
+    /** The amount of particles generated per frame update. */
+    private final float spawningRate;
+    /** The lifetime of a particle in frame updates. */
+    private final int particleLifeTime;
+    private final List<Particle> particles = new ArrayList<Particle>();
 
-    public ParticleEmitter(Vector3f position, float particleSpawningRate, float particleLifeTime,
-                           Vector3f particleInitialVelocity) {
-        this.position = position;
-        this.particleSpawningRate = particleSpawningRate;
+    public ParticleEmitter(Vector3f location, float spawningRate, int particleLifeTime) {
+        this.location = location;
+        System.out.println(location);
+        this.spawningRate = spawningRate;
         this.particleLifeTime = particleLifeTime;
-        this.particleInitialVelocity = particleInitialVelocity;
-        this.particleInitialVelocityFactor = 0.2f;
-        this.particleLifeTimeFactor = 0.2f;
     }
 
-    public void initialise() {
-
+    private Particle generateNewParticle(int dx, int dy) {
+        return new Particle(new Vector3f(location), new Vector3f(
+                (float) (Math.random() - 0.5f + dx/10) / 120, (float) (Math.random() -0.3f + dy/10) / 60, 0), particleLifeTime);
     }
 
     /**
      * Update the particle emitter. This does not render anything.
-     *
-     * @param timePassed the time passed since the last time this method was called in milliseconds
      */
-    public void update(float timePassed) {
-        float amountOfParticlesToGenerate = previousAmountOfParticlesToGenerate + particleSpawningRate * timePassed;
-        if (amountOfParticlesToGenerate < 1) {
-            previousAmountOfParticlesToGenerate += amountOfParticlesToGenerate;
-            return;
-        }
-        while (amountOfParticlesToGenerate > 0) {
-            //            Particle newParticle = new Particle();
-            //            newParticle.position = new Vector3f(0, 0, 0);
-            //            newParticle.colour = new Vector3f(1, 0, 0);
-            //            newParticle.velocity = new Vector3f(0.1f, 0.1f, 0);
-            //            newParticle.expireTime = 1000;
-            Particle newParticle = new Particle(new Vector3f(), new Vector3f(1, 1, 1), particleInitialVelocity,
-                    particleLifeTime);
-            //            Particle newParticle = new Particle(new Vector3f(), new Vector3f(1, 1, 1),
-            // particleInitialVelocity.translate((float) (Math.random() - 0.5f) / 50, 0, 0), particleLifeTime);
-            particles[newParticle.id] = newParticle;
-            amountOfParticles++;
-            amountOfParticlesToGenerate--;
-        }
-        for (int i = 0; i < particles.length; i++) {
-            if (particles[i] != null) {
-                particles[i].position.translate(particles[i].velocity.x, particles[i].velocity.y,
-                        particles[i].velocity.z);
-                particles[i].velocity.translate(0, -0.001f, 0);
-                particles[i].expireTime -= timePassed;
-                if (particles[i].expireTime < 0 || particles[i].position.y < -1 || particles[i].position.x < -1 ||
-                        particles[i].position.x > 1) {
-                    particlesToBeRemoved.add(particles[i].id);
-                }
+    public void update() {
+        float mouseX = (Mouse.getX() / 640f - 0.5f) * 2;
+        float mouseY = (Mouse.getY() / 480f - 0.5f) * 2;
+        if (Mouse.isButtonDown(0)) {
+            location.setX(mouseX);
+            location.setY(mouseY);
+            int dx = Mouse.getDX();
+            int dy = Mouse.getDY();
+            for (int i = 0; i < spawningRate; i++) {
+                particles.add(generateNewParticle(dx, dy));
             }
         }
-        for (int i : particlesToBeRemoved) {
-            particles[i] = null;
-            amountOfParticles--;
+        for (int i = 0; i < particles.size(); i++) {
+            Particle particle = particles.get(i);
+            particle.update();
+            if (particle.isDestroyed()) {
+                particles.remove(i);
+                i--;
+            }
         }
-        particlesToBeRemoved.clear();
     }
 
     public void draw() {
         glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glPushMatrix();
-        glTranslatef(position.x, position.y, position.z);
         glBegin(GL_POINTS);
         for (Particle particle : particles) {
-            if (particle != null) {
-                glColor3f(particle.colour.x, particle.colour.y, particle.colour.z);
-                glVertex3f(particle.position.x, particle.position.y, particle.position.z);
-            }
+            float colour = (float) particle.expireTime / particleLifeTime;
+            glColor3f(colour, 0.2f * colour, 0.2f * colour);
+            glVertex3f(particle.position.x, particle.position.y, particle.position.z);
         }
         glEnd();
-        glPopMatrix();
         glPopAttrib();
     }
 
     private static class Particle {
 
-        public int id;
         /** The location of the particle in object space. */
         public Vector3f position;
-        /** The colour of the particle. */
-        public Vector3f colour;
         /** The velocity of the particle. */
         public Vector3f velocity;
         /** The time left until the particle expires in milliseconds. */
-        public float expireTime;
+        public int expireTime;
 
-        private Particle() {
-            if (lastId > 512) {
-                lastId = 0;
-            }
-        }
-
-        private Particle(Vector3f position, Vector3f colour, Vector3f velocity, float expireTime) {
+        private Particle(Vector3f position, Vector3f velocity, int expireTime) {
             this.position = position;
-            this.colour = colour;
             this.velocity = velocity;
             this.expireTime = expireTime;
-            this.id = lastId++;
-            if (lastId > 512) {
-                lastId = 0;
-            }
+        }
+
+        public boolean isDestroyed() {
+            return expireTime == 0;
+        }
+
+        public void update() {
+            position.translate(velocity.x, velocity.y, velocity.z);
+            velocity.translate(0, -0.0001f, 0);
+            expireTime -= 1;
         }
 
         @Override
@@ -177,31 +133,34 @@ public class ParticleEmitter {
 
             Particle particle = (Particle) o;
 
-            if (id == particle.id) {
-                return true;
+            if (Float.compare(particle.expireTime, expireTime) != 0) {
+                return false;
+            }
+            if (!position.equals(particle.position)) {
+                return false;
+            }
+            if (!velocity.equals(particle.velocity)) {
+                return false;
             }
 
             return true;
         }
 
         @Override
-        public int hashCode() {
-            int result = position.hashCode();
-            result = 31 * result + colour.hashCode();
-            result = 31 * result + velocity.hashCode();
-            result = 31 * result + (expireTime != +0.0f ? Float.floatToIntBits(expireTime) : 0);
-            return result;
-        }
-
-        @Override
         public String toString() {
             return "Particle{" +
                     "position=" + position +
-                    ", colour=" + colour +
                     ", velocity=" + velocity +
                     ", expireTime=" + expireTime +
-                    ", id=" + id +
                     '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int result = position.hashCode();
+            result += 31 * result + velocity.hashCode();
+            result += 31 * result + (expireTime != +0.0f ? Float.floatToIntBits(expireTime) : 0);
+            return result;
         }
     }
 }

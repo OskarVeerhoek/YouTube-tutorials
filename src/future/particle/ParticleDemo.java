@@ -30,7 +30,6 @@
 package future.particle;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
@@ -43,14 +42,12 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class ParticleDemo {
 
-    private static ParticleEmitter particleEmitter = new ParticleEmitter(new Vector3f(), 0.001f, 100, new Vector3f(0,
-            0.1f, 0));
+    private static ParticleEmitter particleEmitter = new ParticleEmitter(new Vector3f(0, 0, 0), 3, 300);
 
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
         while (!Display.isCloseRequested()) {
-            input();
             logic();
             render();
             refresh();
@@ -72,21 +69,11 @@ public class ParticleDemo {
     }
 
     private static void setUpStates() {
-        glPointSize(1.5f);
-    }
-
-    private static void input() {
-        while (Keyboard.next()) {
-            if (Keyboard.getEventKeyState()) {
-                if (Keyboard.getEventKey() == Keyboard.KEY_SPACE) {
-                    //                    resetParticle = true;
-                }
-            }
-        }
+        glPointSize(2);
     }
 
     private static void logic() {
-        particleEmitter.update(16);
+        particleEmitter.update();
     }
 
     private static void render() {
