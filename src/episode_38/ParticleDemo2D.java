@@ -27,7 +27,7 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package future.particle;
+package episode_38;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Mouse;
