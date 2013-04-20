@@ -30,6 +30,7 @@
 package episode_38;
 
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
@@ -43,13 +44,9 @@ public class ParticleEmitter {
 
     private static Random randomGenerator = new Random();
     private final List<Particle> particles;
-    /** The location of the particle emitter in world coordinates. */
     private Vector3f location;
-    /** The amount of particles generated per frame update. */
     private float spawningRate;
-    /** The lifetime of a particle in frame updates. */
     private int particleLifeTime;
-    /** The force of gravity */
     private Vector3f gravity;
     private Vector3f initialVelocity;
     private boolean enable3D;
@@ -58,6 +55,14 @@ public class ParticleEmitter {
         this(new Vector3f(0, 0, 0), 3, 300, new Vector3f(0, -0.0003f, 0), false, new Vector3f(-0.5f, 0, -0.5f));
     }
 
+    /**
+     * @param location the location of the particle emitter
+     * @param spawningRate the amount of particles generated every call to 'ParticleEmitter.update()'
+     * @param particleLifeTime the life time of the particle in calls to 'ParticleEmitter.update()'
+     * @param gravity the gravity acceleration applied to all the particles each call to 'ParticleEmitter.update()'
+     * @param enable3D whether 3D particle generation is enabled
+     * @param initialVelocity the base initial velocity
+     */
     public ParticleEmitter(Vector3f location, float spawningRate, int particleLifeTime, Vector3f gravity,
                            boolean enable3D, Vector3f initialVelocity) {
         this.location = location;
@@ -70,28 +75,52 @@ public class ParticleEmitter {
         System.out.println(this.initialVelocity);
     }
 
+    public Vector3f getLocation() {
+        return location;
+    }
+
     public void setLocation(Vector3f location) {
         this.location = location;
     }
 
-    public void setParticleLifeTime(int particleLifeTime) {
-        this.particleLifeTime = particleLifeTime;
+    public float getSpawningRate() {
+        return spawningRate;
     }
 
     public void setSpawningRate(float spawningRate) {
         this.spawningRate = spawningRate;
     }
 
+    public Vector3f getGravity() {
+        return gravity;
+    }
+
     public void setGravity(Vector3f gravity) {
         this.gravity = gravity;
     }
 
-    public void setEnable3D(boolean enable3D) {
-        this.enable3D = enable3D;
+    public int getParticleLifeTime() {
+        return particleLifeTime;
+    }
+
+    public void setParticleLifeTime(int particleLifeTime) {
+        this.particleLifeTime = particleLifeTime;
+    }
+
+    public Vector3f getInitialVelocity() {
+        return initialVelocity;
+    }
+
+    public void setInitialVelocity(Vector3f initialVelocity) {
+        this.initialVelocity = initialVelocity;
     }
 
     public boolean isEnable3D() {
         return enable3D;
+    }
+
+    public void setEnable3D(boolean enable3D) {
+        this.enable3D = enable3D;
     }
 
     private Particle generateNewParticle(int dx, int dy) {
@@ -128,8 +157,8 @@ public class ParticleEmitter {
                 }
             }
         } else {
-            float mouseX = (Mouse.getX() / 640f - 0.5f) * 2;
-            float mouseY = (Mouse.getY() / 480f - 0.5f) * 2;
+            float mouseX = ((float) Mouse.getX() / Display.getWidth() - 0.5f) * 2;
+            float mouseY = ((float) Mouse.getY() / Display.getHeight() - 0.5f) * 2;
             if (Mouse.isButtonDown(0)) {
                 location.setX(mouseX);
                 location.setY(mouseY);
@@ -156,11 +185,8 @@ public class ParticleEmitter {
 
     private static class Particle {
 
-        /** The location of the particle in object space. */
         public Vector3f position;
-        /** The velocity of the particle. */
         public Vector3f velocity;
-        /** The time left until the particle expires in milliseconds. */
         public int expireTime;
 
         private Particle(Vector3f position, Vector3f velocity, int expireTime) {
@@ -180,44 +206,12 @@ public class ParticleEmitter {
         }
 
         @Override
-        public boolean equals(Object o) {
-            if (this == o) {
-                return true;
-            }
-            if (o == null || getClass() != o.getClass()) {
-                return false;
-            }
-
-            Particle particle = (Particle) o;
-
-            if (Float.compare(particle.expireTime, expireTime) != 0) {
-                return false;
-            }
-            if (!position.equals(particle.position)) {
-                return false;
-            }
-            if (!velocity.equals(particle.velocity)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        @Override
         public String toString() {
             return "Particle{" +
                     "position=" + position +
                     ", velocity=" + velocity +
                     ", expireTime=" + expireTime +
                     '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int result = position.hashCode();
-            result += 31 * result + velocity.hashCode();
-            result += 31 * result + (expireTime != +0.0f ? Float.floatToIntBits(expireTime) : 0);
-            return result;
         }
     }
 }

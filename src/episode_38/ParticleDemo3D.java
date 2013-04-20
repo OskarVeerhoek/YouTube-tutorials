@@ -31,14 +31,12 @@ package episode_38;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Vector3f;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
-import utility.EulerCamera;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -51,17 +49,11 @@ public class ParticleDemo3D {
     private static ParticleEmitter particleEmitter = new ParticleEmitterBuilder()
             .setLocation(new Vector3f(0, -0.5f, 0))
             .setEnable3D(true)
+            .setInitialVelocity(new Vector3f(0, 0, 0))
             .setGravity(new Vector3f(0, -0.0001f, 0))
             .setSpawningRate(50)
             .setParticleLifeTime(500)
             .createParticleEmitter();
-    private static EulerCamera camera = new EulerCamera.Builder()
-            .setAspectRatio(640f / 480f)
-            .setNearClippingPane(.01f)
-            .setFarClippingPane(2)
-            .setFieldOfView(60)
-            .setPosition(0, 0, 2)
-            .build();
     private static Texture floorTexture;
     private static double step = 0;
     private static boolean rotateDirection = false;
@@ -141,10 +133,6 @@ public class ParticleDemo3D {
             rotate = true;
         } else {
             rotate = false;
-        }
-        camera.processKeyboard(2);
-        if (Mouse.isButtonDown(1)) {
-            camera.processMouse();
         }
     }
 
