@@ -30,30 +30,41 @@
 package future.particle;
 
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.vector.Vector3f;
 
 import static org.lwjgl.opengl.GL11.*;
 
-/**
- * Created with IntelliJ IDEA. User: TheCodingUniverse Date: 29/03/2013 Time: 13:34 To change this template use File |
- * Settings | File Templates.
- */
-public class ParticleDemo {
+public class ParticleDemo2D {
 
-    private static ParticleEmitter particleEmitter = new ParticleEmitter(new Vector3f(0, 0, 0), 3, 300);
+    private static ParticleEmitter particleEmitter = new ParticleEmitterBuilder()
+            .setLocation(new Vector3f(0, -0.5f, 0))
+            .setGravity(new Vector3f(0, -0.002f, 0))
+            .setInitialVelocity(new Vector3f(0, 0, 0))
+            .setSpawningRate(50)
+            .setEnable3D(false)
+            .setParticleLifeTime(300)
+            .createParticleEmitter();
 
     public static void main(String[] args) {
         setUpDisplay();
         setUpStates();
         while (!Display.isCloseRequested()) {
+            input();
             logic();
             render();
             refresh();
         }
         shutdown();
         System.exit(0);
+    }
+
+    private static void setUpStates() {
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glClearColor(0.2f, 0.2f, 0.2f, 1);
     }
 
     private static void setUpDisplay() {
@@ -68,12 +79,12 @@ public class ParticleDemo {
         }
     }
 
-    private static void setUpStates() {
-        glPointSize(2);
-    }
-
     private static void logic() {
         particleEmitter.update();
+    }
+
+    private static void input() {
+        particleEmitter.setLocation(new Vector3f(Mouse.getX(), Mouse.getY(), 0));
     }
 
     private static void render() {

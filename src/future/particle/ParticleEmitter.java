@@ -34,53 +34,110 @@ import org.lwjgl.util.vector.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
 
 /** The source of particles. */
 public class ParticleEmitter {
 
+    private static Random randomGenerator = new Random();
+    private final List<Particle> particles;
     /** The location of the particle emitter in world coordinates. */
-    private final Vector3f location;
+    private Vector3f location;
     /** The amount of particles generated per frame update. */
-    private final float spawningRate;
+    private float spawningRate;
     /** The lifetime of a particle in frame updates. */
-    private final int particleLifeTime;
-    private final List<Particle> particles = new ArrayList<Particle>();
+    private int particleLifeTime;
+    /** The force of gravity */
+    private Vector3f gravity;
+    private Vector3f initialVelocity;
+    private boolean enable3D;
 
-    public ParticleEmitter(Vector3f location, float spawningRate, int particleLifeTime) {
+    public ParticleEmitter() {
+        this(new Vector3f(0, 0, 0), 3, 300, new Vector3f(0, -0.0003f, 0), false, new Vector3f(-0.5f, 0, -0.5f));
+    }
+
+    public ParticleEmitter(Vector3f location, float spawningRate, int particleLifeTime, Vector3f gravity,
+                           boolean enable3D, Vector3f initialVelocity) {
         this.location = location;
-        System.out.println(location);
         this.spawningRate = spawningRate;
+        this.particleLifeTime = particleLifeTime;
+        this.gravity = gravity;
+        this.enable3D = enable3D;
+        this.particles = new ArrayList<Particle>((int) spawningRate * particleLifeTime);
+        this.initialVelocity = initialVelocity;
+        System.out.println(this.initialVelocity);
+    }
+
+    public void setLocation(Vector3f location) {
+        this.location = location;
+    }
+
+    public void setParticleLifeTime(int particleLifeTime) {
         this.particleLifeTime = particleLifeTime;
     }
 
-    private Particle generateNewParticle(int dx, int dy) {
-        return new Particle(new Vector3f(location), new Vector3f(
-                (float) (Math.random() - 0.5f + dx/10) / 120, (float) (Math.random() -0.3f + dy/10) / 60, 0), particleLifeTime);
+    public void setSpawningRate(float spawningRate) {
+        this.spawningRate = spawningRate;
     }
 
-    /**
-     * Update the particle emitter. This does not render anything.
-     */
-    public void update() {
-        float mouseX = (Mouse.getX() / 640f - 0.5f) * 2;
-        float mouseY = (Mouse.getY() / 480f - 0.5f) * 2;
-        if (Mouse.isButtonDown(0)) {
-            location.setX(mouseX);
-            location.setY(mouseY);
-            int dx = Mouse.getDX();
-            int dy = Mouse.getDY();
-            for (int i = 0; i < spawningRate; i++) {
-                particles.add(generateNewParticle(dx, dy));
-            }
+    public void setGravity(Vector3f gravity) {
+        this.gravity = gravity;
+    }
+
+    public void setEnable3D(boolean enable3D) {
+        this.enable3D = enable3D;
+    }
+
+    public boolean isEnable3D() {
+        return enable3D;
+    }
+
+    private Particle generateNewParticle(int dx, int dy) {
+        Vector3f particleLocation = new Vector3f(location);
+        Vector3f particleVelocity = new Vector3f();
+        float randomX = (float) randomGenerator.nextDouble() - 0.5f;
+        float randomY = (float) randomGenerator.nextDouble() - 0.5f;
+        float randomZ = 0;
+        if (enable3D) {
+            randomZ = (float) randomGenerator.nextDouble() - 0.5f;
         }
+        particleVelocity.x = (randomX + initialVelocity.x + dx / 10) / 120;
+        particleVelocity.y = (randomY + initialVelocity.y + dy / 10) / 120;
+        if (enable3D) {
+            particleVelocity.z = (randomZ + initialVelocity.z + dx / 10) / 60;
+        }
+        return new Particle(particleLocation, particleVelocity, particleLifeTime);
+    }
+
+    /** Update the particle emitter. This does not render anything. */
+    public void update() {
         for (int i = 0; i < particles.size(); i++) {
             Particle particle = particles.get(i);
-            particle.update();
+            particle.update(gravity);
             if (particle.isDestroyed()) {
                 particles.remove(i);
                 i--;
+            }
+        }
+        if (enable3D) {
+            if (!Mouse.isButtonDown(0)) {
+                for (int i = 0; i < spawningRate; i++) {
+                    particles.add(generateNewParticle(0, 0));
+                }
+            }
+        } else {
+            float mouseX = (Mouse.getX() / 640f - 0.5f) * 2;
+            float mouseY = (Mouse.getY() / 480f - 0.5f) * 2;
+            if (Mouse.isButtonDown(0)) {
+                location.setX(mouseX);
+                location.setY(mouseY);
+                int dx = Mouse.getDX();
+                int dy = Mouse.getDY();
+                for (int i = 0; i < spawningRate; i++) {
+                    particles.add(generateNewParticle(dx, dy));
+                }
             }
         }
     }
@@ -90,7 +147,7 @@ public class ParticleEmitter {
         glBegin(GL_POINTS);
         for (Particle particle : particles) {
             float colour = (float) particle.expireTime / particleLifeTime;
-            glColor3f(colour, 0.2f * colour, 0.2f * colour);
+            glColor4f(colour, 0.2f * colour, 0.2f * colour, colour);
             glVertex3f(particle.position.x, particle.position.y, particle.position.z);
         }
         glEnd();
@@ -116,9 +173,9 @@ public class ParticleEmitter {
             return expireTime == 0;
         }
 
-        public void update() {
+        public void update(Vector3f gravity) {
             position.translate(velocity.x, velocity.y, velocity.z);
-            velocity.translate(0, -0.0001f, 0);
+            velocity.translate(gravity.x, gravity.y, gravity.z);
             expireTime -= 1;
         }
 
