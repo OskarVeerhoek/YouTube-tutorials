@@ -31,6 +31,7 @@ package episode_38;
 
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.util.glu.GLU;
@@ -55,6 +56,7 @@ public class ParticleDemo3D {
             .setParticleLifeTime(500)
             .createParticleEmitter();
     private static Texture floorTexture;
+    private static float zoom = 1.0f;
     private static double step = 0;
     private static boolean rotateDirection = false;
     private static boolean rotate = false;
@@ -134,12 +136,20 @@ public class ParticleDemo3D {
         } else {
             rotate = false;
         }
+        float zoomModifier = -Mouse.getDWheel() / 12000f;
+        if (zoomModifier < 0) {
+            if (zoom + zoomModifier > 0.15f) {
+                zoom += zoomModifier;
+            }
+        } else if (zoomModifier > 0) {
+            zoom += zoomModifier;
+        }
     }
 
     private static void render() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
-        GLU.gluLookAt((float) Math.sin(step) * 3, 0, (float) Math.cos(step) * 3, 0, 0, 0, 0, 1, 0);
+        GLU.gluLookAt((float) Math.sin(step) * 3 * zoom, 0, (float) Math.cos(step) * 3 * zoom, 0, 0, 0, 0, 1, 0);
 
         glBindTexture(GL_TEXTURE_2D, floorTexture.getTextureID());
         glBegin(GL_QUADS);
