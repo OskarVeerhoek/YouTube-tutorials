@@ -39,6 +39,7 @@ public class ParticleEmitterBuilder {
     private Vector3f gravity = new Vector3f(0, -0.0003f, 0);
     private boolean enable3D = false;
     private Vector3f initialVelocity = new Vector3f(0, 0, 0);
+    private float velocityModifier = 1.0f;
 
     /**
      * Sets the location of the particle emitter.
@@ -47,6 +48,16 @@ public class ParticleEmitterBuilder {
      */
     public ParticleEmitterBuilder setLocation(Vector3f location) {
         this.location = location;
+        return this;
+    }
+
+    /**
+     * Set the modifier of the particle velocity. 2.0 makes the initial velocity of the particles twice as large.
+     *
+     * @param velocityModifier the particle velocity modifier
+     */
+    public ParticleEmitterBuilder setVelocityModifier(float velocityModifier) {
+        this.velocityModifier = velocityModifier;
         return this;
     }
 
@@ -105,6 +116,7 @@ public class ParticleEmitterBuilder {
     }
 
     public ParticleEmitter createParticleEmitter() {
-        return new ParticleEmitter(location, spawningRate, particleLifeTime, gravity, enable3D, initialVelocity);
+        return new ParticleEmitter(location, spawningRate, particleLifeTime, gravity, enable3D, initialVelocity,
+                velocityModifier);
     }
 }

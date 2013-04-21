@@ -141,6 +141,21 @@ public class ParticleDemo3D {
         } else {
             rotate = false;
         }
+        if (Keyboard.isKeyDown(Keyboard.KEY_O)) {
+            particleEmitter.setVelocityModifier(particleEmitter.getVelocityModifier() * 1.01f);
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_L)) {
+            particleEmitter.setVelocityModifier(particleEmitter.getVelocityModifier() / 1.01f);
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_P)) {
+            particleEmitter.setGravity((Vector3f) particleEmitter.getGravity().scale(1.01f));
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_SEMICOLON)) {
+            particleEmitter.setGravity((Vector3f) particleEmitter.getGravity().scale(0.99009900990099f));
+        }
+        if (Keyboard.isKeyDown(Keyboard.KEY_I)) {
+            particleEmitter.setSpawningRate(particleEmitter.getSpawningRate() * 1.01f);
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
+            particleEmitter.setSpawningRate(particleEmitter.getSpawningRate() / 1.01f);
+        }
         float zoomModifier = -Mouse.getDWheel() / 12000f;
         if (zoomModifier < 0) {
             if (zoom + zoomModifier > 0.15f) {

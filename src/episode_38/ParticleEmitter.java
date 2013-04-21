@@ -50,9 +50,10 @@ public class ParticleEmitter {
     private Vector3f gravity;
     private Vector3f initialVelocity;
     private boolean enable3D;
+    private float velocityModifier;
 
     public ParticleEmitter() {
-        this(new Vector3f(0, 0, 0), 3, 300, new Vector3f(0, -0.0003f, 0), false, new Vector3f(-0.5f, 0, -0.5f));
+        this(new Vector3f(0, 0, 0), 3, 300, new Vector3f(0, -0.0003f, 0), false, new Vector3f(-0.5f, 0, -0.5f), 1.0f);
     }
 
     /**
@@ -62,9 +63,10 @@ public class ParticleEmitter {
      * @param gravity the gravity acceleration applied to all the particles each call to 'ParticleEmitter.update()'
      * @param enable3D whether 3D particle generation is enabled
      * @param initialVelocity the base initial velocity
+     * @param velocityModifier the particle velocity modifier
      */
     public ParticleEmitter(Vector3f location, float spawningRate, int particleLifeTime, Vector3f gravity,
-                           boolean enable3D, Vector3f initialVelocity) {
+                           boolean enable3D, Vector3f initialVelocity, float velocityModifier) {
         this.location = location;
         this.spawningRate = spawningRate;
         this.particleLifeTime = particleLifeTime;
@@ -72,7 +74,15 @@ public class ParticleEmitter {
         this.enable3D = enable3D;
         this.particles = new ArrayList<Particle>((int) spawningRate * particleLifeTime);
         this.initialVelocity = initialVelocity;
-        System.out.println(this.initialVelocity);
+        this.velocityModifier = velocityModifier;
+    }
+
+    public float getVelocityModifier() {
+        return velocityModifier;
+    }
+
+    public void setVelocityModifier(float velocityModifier) {
+        this.velocityModifier = velocityModifier;
     }
 
     public Vector3f getLocation() {
@@ -137,6 +147,7 @@ public class ParticleEmitter {
         if (enable3D) {
             particleVelocity.z = (randomZ + initialVelocity.z + dx / 10) / 60;
         }
+        particleVelocity.scale(velocityModifier);
         return new Particle(particleLocation, particleVelocity, particleLifeTime);
     }
 
