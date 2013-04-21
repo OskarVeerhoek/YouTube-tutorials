@@ -45,6 +45,11 @@ import java.io.IOException;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.util.glu.GLU.gluErrorString;
 
+/**
+ * A 3D particle system. The system continually emits particles in a randomised direction from the emitter location.
+ * Gravity affects particles. Particles gradually fade away, the longer they live. The left and right arrow keys pan the
+ * scene. The mouse wheel zooms in or out. Pressing the left mouse button temporarily stops particle generation.
+ */
 public class ParticleDemo3D {
 
     private static ParticleEmitter particleEmitter = new ParticleEmitterBuilder()
