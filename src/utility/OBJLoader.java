@@ -40,7 +40,9 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 
-/** @author Oskar */
+/**
+ * @author Oskar
+ */
 public class OBJLoader {
 
     public static int createDisplayList(Model m) {
@@ -293,7 +295,7 @@ public class OBJLoader {
                 String[] faceIndices = line.split(" ");
                 int[] vertexIndicesArray = {Integer.parseInt(faceIndices[1].split("/")[0]),
                         Integer.parseInt(faceIndices[2].split("/")[0]), Integer.parseInt(faceIndices[3].split("/")[0])};
-                int[] textureCoordinateIndicesArray = {0, 0, 0};
+                int[] textureCoordinateIndicesArray = {-1, -1, -1};
                 if (m.hasTextureCoordinates()) {
                     textureCoordinateIndicesArray[0] = Integer.parseInt(faceIndices[1].split("/")[1]);
                     textureCoordinateIndicesArray[1] = Integer.parseInt(faceIndices[2].split("/")[1]);
