@@ -71,7 +71,7 @@ void main() {
 	float diffuseLightIntensity = max(0, dot(surfaceNormal, lightDirection));
 	// Sets the colour (which is passed to the fragment program) to the concatenation
 	// of the material colour and the diffuse light intensity.
-	varyingColour.rgb = diffuseLightIntensity * gl_Color.rgb;
+	varyingColour.rgb = diffuseLightIntensity * gl_FrontMaterial.diffuse.rgb;
 	// Adds ambient colour to the colour so even the darkest part equals ambientColour.
 	varyingColour += gl_LightModel.ambient.rgb;
 	

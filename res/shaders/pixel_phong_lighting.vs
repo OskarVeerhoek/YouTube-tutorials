@@ -40,7 +40,7 @@ void main() {
     // Pass the vertex colour attribute to the fragment shader.
     // This value will be interpolated automatically by OpenGL
     // if GL_SHADE_MODEL is GL_SMOOTH. (that's the default)
-    varyingColour = gl_Color;
+    varyingColour = gl_FrontMaterial.diffuse;
     // Pass the vertex normal attribute to the fragment shader.
     // This value will be interpolated automatically by OpenGL
     // if GL_SHADE_MODEL is GL_SMOOTH. (that's the default)

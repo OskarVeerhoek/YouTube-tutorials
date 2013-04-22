@@ -91,24 +91,13 @@ public class VBOModels {
     }
 
     private static void render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glLoadIdentity();
         cam.applyTranslations();
-        glUseProgram(shaderProgram);
+
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(cam.x(), cam.y(), cam.z(), 1));
-        glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
-        glVertexPointer(3, GL_FLOAT, 0, 0L);
-        glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
-        glNormalPointer(GL_FLOAT, 0, 0L);
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glColor3f(0.4f, 0.27f, 0.17f);
-        glMaterialf(GL_FRONT, GL_SHININESS, 10f);
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glDrawArrays(GL_TRIANGLES, 0, model.getFaces().size() * 3);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glUseProgram(0);
     }
 
     private static void setUpLighting() {
@@ -120,8 +109,8 @@ public class VBOModels {
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+        glMaterialf(GL_FRONT, GL_SHININESS, 120);
+        glMaterial(GL_FRONT, GL_DIFFUSE, BufferTools.asFlippedFloatBuffer(0.4f, 0.27f, 0.17f, 0));
     }
 
     private static void setUpVBOs() {
@@ -131,6 +120,12 @@ public class VBOModels {
             vbos = OBJLoader.createVBO(model);
             vboVertexHandle = vbos[0];
             vboNormalHandle = vbos[1];
+            glBindBuffer(GL_ARRAY_BUFFER, vboVertexHandle);
+            glVertexPointer(3, GL_FLOAT, 0, 0L);
+            glBindBuffer(GL_ARRAY_BUFFER, vboNormalHandle);
+            glNormalPointer(GL_FLOAT, 0, 0L);
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_NORMAL_ARRAY);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             cleanUp();
@@ -175,6 +170,7 @@ public class VBOModels {
 
     private static void setUpShaders() {
         shaderProgram = ShaderLoader.loadShaderPair(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
+        glUseProgram(shaderProgram);
     }
 
     private static void setUpCamera() {
