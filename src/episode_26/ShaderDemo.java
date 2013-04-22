@@ -136,8 +136,7 @@ public class ShaderDemo {
         glLight(GL_LIGHT0, GL_POSITION, BufferTools.asFlippedFloatBuffer(new float[]{0, 0, 0, 1}));
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
-        glEnable(GL_COLOR_MATERIAL);
-        glColorMaterial(GL_FRONT, GL_DIFFUSE);
+        glColor3f(0.4f, 0.27f, 0.17f);
     }
 
     private static void setUpShaders() {

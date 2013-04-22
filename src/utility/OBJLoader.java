@@ -47,6 +47,7 @@ public class OBJLoader {
         int displayList = glGenLists(1);
         glNewList(displayList, GL_COMPILE);
         {
+            glMaterialf(GL_FRONT, GL_SHININESS, 120);
             glColor3f(0.4f, 0.27f, 0.17f);
             glBegin(GL_TRIANGLES);
             for (Model.Face face : m.getFaces()) {
