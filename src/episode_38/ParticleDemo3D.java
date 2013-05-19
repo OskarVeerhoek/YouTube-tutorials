@@ -53,7 +53,6 @@ import static org.lwjgl.util.glu.GLU.gluErrorString;
 public class ParticleDemo3D {
 
     private static ParticleEmitter particleEmitter = new ParticleEmitterBuilder()
-            .setLocation(new Vector3f(0, -0.5f, 0))
             .setEnable3D(true)
             .setInitialVelocity(new Vector3f(0, 0, 0))
             .setGravity(new Vector3f(0, -0.0001f, 0))
@@ -184,10 +183,7 @@ public class ParticleDemo3D {
         glEnd();
         glBindTexture(GL_TEXTURE_2D, 0);
 
-        glPushMatrix();
-        glTranslatef(0, 0.5f, 0);
         particleEmitter.draw();
-        glPopMatrix();
     }
 
     private static void refresh() {
