@@ -145,7 +145,7 @@ public class ParticleEmitter {
         particleVelocity.x = (randomX + initialVelocity.x + dx / 10) / 120;
         particleVelocity.y = (randomY + initialVelocity.y + dy / 10) / 120;
         if (enable3D) {
-            particleVelocity.z = (randomZ + initialVelocity.z + dx / 10) / 60;
+            particleVelocity.z = (randomZ + initialVelocity.z) / 120;
         }
         particleVelocity.scale(velocityModifier);
         return new Particle(particleLocation, particleVelocity, particleLifeTime);
@@ -171,8 +171,7 @@ public class ParticleEmitter {
             float mouseX = ((float) Mouse.getX() / Display.getWidth() - 0.5f) * 2;
             float mouseY = ((float) Mouse.getY() / Display.getHeight() - 0.5f) * 2;
             if (Mouse.isButtonDown(0)) {
-                location.setX(mouseX);
-                location.setY(mouseY);
+                location.set(mouseX, mouseY);
                 int dx = Mouse.getDX();
                 int dy = Mouse.getDY();
                 for (int i = 0; i < spawningRate; i++) {
@@ -207,7 +206,7 @@ public class ParticleEmitter {
         }
 
         public boolean isDestroyed() {
-            return expireTime == 0;
+            return expireTime <= 0;
         }
 
         public void update(Vector3f gravity) {

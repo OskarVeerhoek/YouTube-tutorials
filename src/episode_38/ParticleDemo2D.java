@@ -40,9 +40,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class ParticleDemo2D {
 
     private static ParticleEmitter particleEmitter = new ParticleEmitterBuilder()
-            .setLocation(new Vector3f(0, -0.5f, 0))
             .setGravity(new Vector3f(0, -0.002f, 0))
-            .setInitialVelocity(new Vector3f(0, 0, 0))
             .setSpawningRate(50)
             .setEnable3D(false)
             .setParticleLifeTime(300)
