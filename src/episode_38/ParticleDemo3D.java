@@ -155,6 +155,12 @@ public class ParticleDemo3D {
         } else if (Keyboard.isKeyDown(Keyboard.KEY_K)) {
             particleEmitter.setSpawningRate(particleEmitter.getSpawningRate() / 1.01f);
         }
+        float pointSize = glGetFloat(GL_POINT_SIZE);
+        if (Keyboard.isKeyDown(Keyboard.KEY_T) && pointSize < 50) {
+            glPointSize(pointSize * 1.01f);
+        } else if (Keyboard.isKeyDown(Keyboard.KEY_G) && pointSize > 0) {
+            glPointSize(pointSize / 1.01f);
+        }
         float zoomModifier = -Mouse.getDWheel() / 12000f;
         if (zoomModifier < 0) {
             if (zoom + zoomModifier > 0.15f) {
