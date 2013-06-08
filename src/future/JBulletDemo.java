@@ -63,7 +63,9 @@ import java.util.Set;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
- * Put description here.
+ * Simulates 3D physics using the JBullet library. Use WSAD and the mouse to look around. Press the left mouse button
+ * to attract the green control ball. Press 'g' to create additional red balls. Press 'f' to reset the location of the
+ * control ball.
  *
  * @author Oskar Veerhoek
  */
@@ -263,7 +265,6 @@ public class JBulletDemo {
     }
 
     private static void cleanUp(boolean asCrash) {
-        // Add cleaning code here
         Display.destroy();
         System.exit(asCrash ? 1 : 0);
     }
