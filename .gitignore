@@ -22,6 +22,7 @@ local.properties
 Youtube-Tutorials.iml
 Youtube-Tutorials.eml
 out
+src/META-INF
 
 
 ## Windows
