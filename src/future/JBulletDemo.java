@@ -38,6 +38,7 @@ import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.SphereShape;
 import com.bulletphysics.collision.shapes.StaticPlaneShape;
 import com.bulletphysics.dynamics.DiscreteDynamicsWorld;
+import com.bulletphysics.dynamics.DynamicsWorld;
 import com.bulletphysics.dynamics.RigidBody;
 import com.bulletphysics.dynamics.RigidBodyConstructionInfo;
 import com.bulletphysics.dynamics.constraintsolver.ConstraintSolver;
@@ -57,6 +58,7 @@ import utility.EulerCamera;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Quat4f;
 import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -74,11 +76,14 @@ public class JBulletDemo {
     private static final String WINDOW_TITLE = "JBullet Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
     /**
+     * T
+     */
+    private static final Transform DEFAULT_BALL_TRANSFORM = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(0, 35, 0), 1.0f));
+    /**
      * The container for the JBullet physics world. This represents the collision data and motion data, as well as the
      * algorithms for collision detection and reaction.
      */
     private static DiscreteDynamicsWorld dynamicsWorld;
-    private static final Transform DEFAULT_BALL_TRANSFORM = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(0, 35, 0), 1.0f));
     /**
      * The spherical rigid bodies that fly around. Red is non-controllable, green is controllable.
      */
@@ -88,7 +93,6 @@ public class JBulletDemo {
      */
     private static RigidBody controlBall;
     private static EulerCamera camera = new EulerCamera.Builder()
-            .setAspectRatio(640f / 480f)
             .setFieldOfView(60)
             .setNearClippingPane(0.3f)
             .setFarClippingPane(100)
@@ -106,6 +110,10 @@ public class JBulletDemo {
      * Whether to reset the position of the control ball.
      */
     private static boolean resetControlBall = false;
+    /**
+     * A LWJGL helper object that draws a sphere.
+     */
+    private static Sphere sphere = new Sphere();
 
     private static void setUpPhysics() {
         /**
@@ -147,14 +155,14 @@ public class JBulletDemo {
         dynamicsWorld.addRigidBody(groundRigidBody);
         // Initialise 'ballMotion' to a motion state that assigns a specified location to the ball.
         MotionState ballMotion = new DefaultMotionState(new Transform(DEFAULT_BALL_TRANSFORM));
-        // Calculate the ball's inertia (resistance to movement) using its mass (1 kilogram).
+        // Calculate the ball's inertia (resistance to movement) using its mass (2.5 kilograms).
         Vector3f ballInertia = new Vector3f(0, 0, 0);
-        ballShape.calculateLocalInertia(1.0f, ballInertia);
+        ballShape.calculateLocalInertia(2.5f, ballInertia);
         // Composes the ball's construction info of its mass, its motion state, its shape, and its inertia.
-        RigidBodyConstructionInfo ballConstructionInfo = new RigidBodyConstructionInfo(1.0f, ballMotion, ballShape, ballInertia);
-        // Set the restitution, also known as the bounciness or spring, to 0.75. The restitution may range from 0.0
+        RigidBodyConstructionInfo ballConstructionInfo = new RigidBodyConstructionInfo(2.5f, ballMotion, ballShape, ballInertia);
+        // Set the restitution, also known as the bounciness or spring, to 0.5. The restitution may range from 0.0
         // not bouncy) to 1.0 (extremely bouncy).
-        ballConstructionInfo.restitution = 0.75f;
+        ballConstructionInfo.restitution = 0.5f;
         // Initialise 'controlBall', the final variable representing the controlled ball, to a rigid body with the
         // previously assigned construction information.
         controlBall = new RigidBody(ballConstructionInfo);
@@ -165,22 +173,43 @@ public class JBulletDemo {
     }
 
     private static void render() {
+        // Clear the contents of the window.
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // For every physics ball ...
         for (RigidBody body : balls) {
+            // Push the model-view matrix.
             glPushMatrix();
+            // Retrieve the ball's position from the JBullet body object.
             Vector3f ballPosition = body.getWorldTransform(new Transform()).origin;
-            Sphere sphere = new Sphere();
+            // Set the draw style of the sphere drawing object to GLU_SILHOUETTE.
+            // LWJGL JavaDoc: "The legal values are as follows: GLU.FILL: Quadrics are rendered with polygon primitives.
+            // The polygons are drawn in a counterclockwise fashion with respect to their normals (as defined with
+            // glu.quadricOrientation). GLU.LINE: Quadrics are rendered as a set of lines. GLU.SILHOUETTE:
+            // Quadrics are rendered as a set of lines, except that edges separating coplanar faces will not be drawn.
+            // GLU.POINT: Quadrics are rendered as a set of points."
             sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
+            // Translate the model-view to the ball's position.
             glTranslatef(ballPosition.x, ballPosition.y, ballPosition.z);
+            // Draw the controllable ball green and the uncontrollable balls red.
             if (body.equals(controlBall)) {
                 glColor3f(0, 1, 0);
             } else {
                 glColor3f(1, 0, 0);
             }
+            // Draw the sphere.
+            // LWJGL JavaDoc: "draws a sphere of the given radius centered around the origin. The sphere is subdivided
+            // around the z axis into slices and along the z axis into stacks (similar to lines of longitude and
+            // latitude). If the orientation is set to GLU.OUTSIDE (with glu.quadricOrientation), then any normals
+            // generated point away from the center of the sphere. Otherwise, they point toward the center of the sphere.
+            // If texturing is turned on (with glu.quadricTexture), then texture coordinates are generated so that t
+            // ranges from 0.0 at z=-radius to 1.0 at z=radius (t increases linearly along longitudinal lines), and s
+            // ranges from 0.0 at the +y axis, to 0.25 at the +x axis, to 0.5 at the -y axis, to 0.75 at the -x axis,
+            // and back to 1.0 at the +y axis."
             sphere.draw(3, 30, 30);
             glPopMatrix();
         }
         {
+            // Draw the floor.
             glBegin(GL_QUADS);
             glColor4f(0.6f, 0.6f, 0.6f, 1);
             glVertex4f(-50, 0, -50, 1);
@@ -195,32 +224,52 @@ public class JBulletDemo {
     }
 
     private static void logic() {
+        // Reset the model-view matrix.
         glLoadIdentity();
+        // Apply the camera's position and orientation to the model-view matrix.
         camera.applyTranslations();
+        // Runs the JBullet physics simulation for the specified time in seconds.
         dynamicsWorld.stepSimulation(1 / 60.0f);
+        // Create a set of bodies that are to be removed.
         Set<RigidBody> bodiesToBeRemoved = new HashSet<RigidBody>();
+        // For every physics ball ...
         for (RigidBody body : balls) {
+            // Retrieve the ball's position from the JBullet body object.
             Vector3f position = body.getMotionState().getWorldTransform(new Transform()).origin;
+            // If the ball is non-controllable and it is outside the world borders, add it to the set of bodies
+            // that are to be removed.
             if (!body.equals(controlBall) && (position.x < -50 || position.x > 50 || position.z < -50 || position.z > 50)) {
                 bodiesToBeRemoved.add(body);
             }
         }
+        // For every physics ball that is to be removed ...
         for (RigidBody body : bodiesToBeRemoved) {
+            // Remove it from the JBullet world.
             dynamicsWorld.removeRigidBody(body);
+            // Remove it from the list of balls.
             balls.remove(body);
         }
+        // If the attraction between the green ball and the camera is enabled ...
         if (applyForce) {
+            // Retrieve the controllable ball's location.
             Transform controlBallTransform = new Transform();
             controlBall.getMotionState().getWorldTransform(controlBallTransform);
             Vector3f controlBallLocation = controlBallTransform.origin;
             Vector3f cameraPosition = new Vector3f(camera.x(), camera.y(), camera.z());
+            // Calculate the force that is applied to the controllable ball as following:
+            //  force = cameraPosition - controlBallLocation
             Vector3f force = new Vector3f();
             force.sub(cameraPosition, controlBallLocation);
+            // Apply the force to the controllable ball.
             controlBall.applyCentralForce(force);
         }
+        // If a new shape should be created ...
         if (createNewShape) {
+            // Create the collision shape (sphere with radius of 3 metres).
             CollisionShape shape = new SphereShape(3);
-            DefaultMotionState motionState = new DefaultMotionState(new Transform(DEFAULT_BALL_TRANSFORM));
+            // Create the motion state (x and z are the same as the camera's).
+            DefaultMotionState motionState = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(camera.x(), 35, camera.z()), 1.0f)));
+            // Calculate the inertia (resistance to movement) using the ball's mass of 1 kilogram.
             Vector3f inertia = new Vector3f(0, 0, 0);
             shape.calculateLocalInertia(1.0f, inertia);
             RigidBodyConstructionInfo constructionInfo = new RigidBodyConstructionInfo(1, motionState, shape, inertia);
@@ -230,8 +279,14 @@ public class JBulletDemo {
             dynamicsWorld.addRigidBody(rigidBody);
             createNewShape = false;
         }
+        // If the controllable ball's position and orientation should be reset ...
         if (resetControlBall) {
+            // Set the position of the ball to (0, 50, 0).
             controlBall.setCenterOfMassTransform(new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(0, 50, 0), 1.0f)));
+            // Reset the angular velocity (spinning movement) of the ball.
+            controlBall.setAngularVelocity(new Vector3f(0, 0, 0));
+            // Reset the linear velocity (x,y,z movement) of the ball.
+            controlBall.setLinearVelocity(new Vector3f(0, 0, 0));
             resetControlBall = false;
         }
     }
@@ -240,7 +295,7 @@ public class JBulletDemo {
         if (Mouse.isGrabbed()) {
             camera.processMouse(1.0f, 80, -80);
         }
-        camera.processKeyboard(16.0f, 4);
+        camera.processKeyboard(1000.0f / 60.0f, 4);
         if (Mouse.isButtonDown(0) && !Mouse.isGrabbed()) {
             Mouse.setGrabbed(true);
         } else if (Mouse.isButtonDown(1) && Mouse.isGrabbed()) {
@@ -270,6 +325,8 @@ public class JBulletDemo {
     }
 
     private static void setUpMatrices() {
+        camera.setAspectRatio((float) Display.getWidth() / (float) Display.getHeight());
+        camera.setFieldOfView(65);
         camera.applyPerspectiveMatrix();
     }
 
@@ -295,6 +352,7 @@ public class JBulletDemo {
 
     private static void setUpDisplay() {
         try {
+            Display.setVSyncEnabled(true);
             Display.setDisplayMode(new DisplayMode(WINDOW_DIMENSIONS[0], WINDOW_DIMENSIONS[1]));
             Display.setTitle(WINDOW_TITLE);
             Display.create();
@@ -311,6 +369,62 @@ public class JBulletDemo {
         setUpPhysics();
         enterGameLoop();
         cleanUp(false);
+    }
+
+    private static class PhysicsSphere {
+        private final Vector4f colour;
+        private final float radius;
+        private final int slices;
+        private final int stacks;
+        private final RigidBody physicsBody;
+        private final DynamicsWorld physicsWorld;
+        private org.lwjgl.util.glu.Sphere renderSphere;
+
+        PhysicsSphere(Vector4f colour, Vector3f position, DynamicsWorld physicsWorld, float mass, float radius, int slices, int stacks) {
+            this.colour = colour;
+            this.radius = radius;
+            this.slices = slices;
+            this.stacks = stacks;
+            MotionState motion = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), position, 1.0f)));
+            CollisionShape shape = new SphereShape(radius);
+            this.physicsBody = new RigidBody(mass, motion, shape);
+            this.physicsWorld = physicsWorld;
+            this.physicsWorld.addRigidBody(physicsBody);
+            this.renderSphere = new org.lwjgl.util.glu.Sphere();
+        }
+
+        void destroy() {
+            this.physicsWorld.removeRigidBody(this.physicsBody);
+        }
+
+        DynamicsWorld getPhysicsWorld() {
+            return physicsWorld;
+        }
+
+        RigidBody getPhysicsBody() {
+            return physicsBody;
+        }
+
+        Vector3f getPosition() {
+            return physicsBody.getCenterOfMassPosition(new Vector3f());
+        }
+
+        void draw() {
+            glPushMatrix();
+            Vector3f position = getPosition();
+            glTranslatef(position.x, position.y, position.z);
+            glColor4f(colour.x, colour.y, colour.z, colour.w);
+            renderSphere.draw(radius, slices, stacks);
+            glPopMatrix();
+        }
+
+        Vector4f getColour() {
+            return new Vector4f(colour);
+        }
+
+        float getRadius() {
+            return radius;
+        }
     }
 
 }
