@@ -27,12 +27,14 @@
  * either expressed or implied, of the FreeBSD Project.
  */
 
-package future;
+package episode_39;
 
+import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
 import com.bulletphysics.collision.dispatch.CollisionDispatcher;
+import com.bulletphysics.collision.dispatch.CollisionObject;
 import com.bulletphysics.collision.dispatch.DefaultCollisionConfiguration;
 import com.bulletphysics.collision.shapes.CollisionShape;
 import com.bulletphysics.collision.shapes.SphereShape;
@@ -46,6 +48,7 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -55,10 +58,8 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 import utility.EulerCamera;
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Quat4f;
-import javax.vecmath.Vector3f;
-import javax.vecmath.Vector4f;
+import javax.vecmath.*;
+import java.nio.FloatBuffer;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -69,15 +70,16 @@ import static org.lwjgl.opengl.GL11.*;
  * to attract the green control ball. Press 'g' to create additional red balls. Press 'f' to reset the location of the
  * control ball.
  *
+ * Useful reading:
+ * - Broad-Phase and Narrow-Phase Rendering: http://ianqvist.blogspot.nl/2010/07/broad-and-narrow-phase-collision.html
+ * - Bullet User Manual: http://www.google.nl/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCoQFjAA&url=http%3A%2F%2Fbullet.googlecode.com%2Fsvn%2Ftrunk%2FBullet_User_Manual.pdf&ei=9LfKUY3HE4a20QXxhICgDw&usg=AFQjCNH54pT4TcXxDThj_G-7VL1zhk6UAg
+ *
  * @author Oskar Veerhoek
  */
 public class JBulletDemo {
 
     private static final String WINDOW_TITLE = "JBullet Demo";
     private static final int[] WINDOW_DIMENSIONS = {640, 480};
-    /**
-     * T
-     */
     private static final Transform DEFAULT_BALL_TRANSFORM = new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(0, 35, 0), 1.0f));
     /**
      * The container for the JBullet physics world. This represents the collision data and motion data, as well as the
@@ -93,9 +95,9 @@ public class JBulletDemo {
      */
     private static RigidBody controlBall;
     private static EulerCamera camera = new EulerCamera.Builder()
-            .setFieldOfView(60)
+            .setFieldOfView(300)
             .setNearClippingPane(0.3f)
-            .setFarClippingPane(100)
+            .setFarClippingPane(500)
             .setPosition(0, 25, 15)
             .build();
     /**
@@ -122,7 +124,7 @@ public class JBulletDemo {
         BroadphaseInterface broadphase = new DbvtBroadphase();
         CollisionConfiguration collisionConfiguration = new DefaultCollisionConfiguration();
         /**
-         * The object that will accurately find out whether bodies are colliding.
+         * The object that will accurately find out whether, when, how, and where bodies are colliding.
          */
         CollisionDispatcher dispatcher = new CollisionDispatcher(collisionConfiguration);
         /**
@@ -145,9 +147,9 @@ public class JBulletDemo {
         MotionState groundMotionState = new DefaultMotionState(new Transform(new Matrix4f(new Quat4f(0, 0, 0, 1), new Vector3f(0, 0, 0), 1.0f)));
         // Initialise 'groundBodyConstructionInfo' to a value that contains the mass, the motion state, the shape, and the inertia (= resistance to change).
         RigidBodyConstructionInfo groundBodyConstructionInfo = new RigidBodyConstructionInfo(0, groundMotionState, groundShape, new Vector3f(0, 0, 0));
-        // Set the restitution, also known as the bounciness or spring, to 0.75. The restitution may range from 0.0
+        // Set the restitution, also known as the bounciness or spring, to 0.25. The restitution may range from 0.0
         // not bouncy) to 1.0 (extremely bouncy).
-        groundBodyConstructionInfo.restitution = 0.75f;
+        groundBodyConstructionInfo.restitution = 0.25f;
         // Initialise 'groundRigidBody', the final variable representing the ground, to a rigid body with the previously
         // assigned construction information.
         RigidBody groundRigidBody = new RigidBody(groundBodyConstructionInfo);
@@ -163,9 +165,12 @@ public class JBulletDemo {
         // Set the restitution, also known as the bounciness or spring, to 0.5. The restitution may range from 0.0
         // not bouncy) to 1.0 (extremely bouncy).
         ballConstructionInfo.restitution = 0.5f;
+        ballConstructionInfo.angularDamping = 0.95f;
         // Initialise 'controlBall', the final variable representing the controlled ball, to a rigid body with the
         // previously assigned construction information.
         controlBall = new RigidBody(ballConstructionInfo);
+        // Disable 'sleeping' for the controllable ball.
+        controlBall.setActivationState(CollisionObject.DISABLE_DEACTIVATION);
         // Add the control ball to the set of balls (more may be added by pressing 'g').
         balls.add(controlBall);
         // Add the control ball to the JBullet world.
@@ -181,20 +186,21 @@ public class JBulletDemo {
             glPushMatrix();
             // Retrieve the ball's position from the JBullet body object.
             Vector3f ballPosition = body.getWorldTransform(new Transform()).origin;
-            // Set the draw style of the sphere drawing object to GLU_SILHOUETTE.
-            // LWJGL JavaDoc: "The legal values are as follows: GLU.FILL: Quadrics are rendered with polygon primitives.
-            // The polygons are drawn in a counterclockwise fashion with respect to their normals (as defined with
-            // glu.quadricOrientation). GLU.LINE: Quadrics are rendered as a set of lines. GLU.SILHOUETTE:
-            // Quadrics are rendered as a set of lines, except that edges separating coplanar faces will not be drawn.
-            // GLU.POINT: Quadrics are rendered as a set of points."
-            sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
             // Translate the model-view to the ball's position.
             glTranslatef(ballPosition.x, ballPosition.y, ballPosition.z);
             // Draw the controllable ball green and the uncontrollable balls red.
             if (body.equals(controlBall)) {
-                glColor3f(0, 1, 0);
+                glColor4f(0, 1, 0, 1);
+                // Set the draw style of the sphere drawing object to GLU_SILHOUETTE.
+                // LWJGL JavaDoc: "The legal values are as follows: GLU.FILL: Quadrics are rendered with polygon primitives.
+                // The polygons are drawn in a counterclockwise fashion with respect to their normals (as defined with
+                // glu.quadricOrientation). GLU.LINE: Quadrics are rendered as a set of lines. GLU.SILHOUETTE:
+                // Quadrics are rendered as a set of lines, except that edges separating coplanar faces will not be drawn.
+                // GLU.POINT: Quadrics are rendered as a set of points."
+                sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
             } else {
-                glColor3f(1, 0, 0);
+                glColor4f(1, 0, 0, 0.5f);
+                sphere.setDrawStyle(GLU.GLU_FILL);
             }
             // Draw the sphere.
             // LWJGL JavaDoc: "draws a sphere of the given radius centered around the origin. The sphere is subdivided
@@ -213,12 +219,12 @@ public class JBulletDemo {
             glBegin(GL_QUADS);
             glColor4f(0.6f, 0.6f, 0.6f, 1);
             glVertex4f(-50, 0, -50, 1);
-            glColor4f(0.5f, 0.5f, 0.5f, 1);
-            glVertex4f(+50, 0, -50, 1);
-            glColor4f(0.75f, 0.75f, 0.75f, 1);
-            glVertex4f(+50, 0, +50, 1);
             glColor4f(0.85f, 0.85f, 0.85f, 1);
             glVertex4f(-50, 0, +50, 1);
+            glColor4f(0.75f, 0.75f, 0.75f, 1);
+            glVertex4f(+50, 0, +50, 1);
+            glColor4f(0.5f, 0.5f, 0.5f, 1);
+            glVertex4f(+50, 0, -50, 1);
             glEnd();
         }
     }
@@ -260,6 +266,8 @@ public class JBulletDemo {
             //  force = cameraPosition - controlBallLocation
             Vector3f force = new Vector3f();
             force.sub(cameraPosition, controlBallLocation);
+            // Wake the controllable ball if it is sleeping.
+            controlBall.activate(true);
             // Apply the force to the controllable ball.
             controlBall.applyCentralForce(force);
         }
@@ -300,8 +308,7 @@ public class JBulletDemo {
             Mouse.setGrabbed(true);
         } else if (Mouse.isButtonDown(1) && Mouse.isGrabbed()) {
             Mouse.setGrabbed(false);
-        }
-        if (Mouse.isButtonDown(0) && Mouse.isGrabbed()) {
+        } else if (Mouse.isButtonDown(0) && Mouse.isGrabbed()) {
             applyForce = true;
         } else {
             applyForce = false;
@@ -333,6 +340,9 @@ public class JBulletDemo {
     private static void setUpStates() {
         camera.applyOptimalStates();
         glEnable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glEnable(GL_CULL_FACE);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glLineWidth(2);
     }
 
