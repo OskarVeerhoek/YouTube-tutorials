@@ -29,7 +29,6 @@
 
 package episode_39;
 
-import com.bulletphysics.collision.broadphase.AxisSweep3;
 import com.bulletphysics.collision.broadphase.BroadphaseInterface;
 import com.bulletphysics.collision.broadphase.DbvtBroadphase;
 import com.bulletphysics.collision.dispatch.CollisionConfiguration;
@@ -48,7 +47,6 @@ import com.bulletphysics.dynamics.constraintsolver.SequentialImpulseConstraintSo
 import com.bulletphysics.linearmath.DefaultMotionState;
 import com.bulletphysics.linearmath.MotionState;
 import com.bulletphysics.linearmath.Transform;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -58,8 +56,10 @@ import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
 import utility.EulerCamera;
 
-import javax.vecmath.*;
-import java.nio.FloatBuffer;
+import javax.vecmath.Matrix4f;
+import javax.vecmath.Quat4f;
+import javax.vecmath.Vector3f;
+import javax.vecmath.Vector4f;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -69,7 +69,7 @@ import static org.lwjgl.opengl.GL11.*;
  * Simulates 3D physics using the JBullet library. Use WSAD and the mouse to look around. Press the left mouse button
  * to attract the green control ball. Press 'g' to create additional red balls. Press 'f' to reset the location of the
  * control ball.
- *
+ * <p/>
  * Useful reading:
  * - Broad-Phase and Narrow-Phase Rendering: http://ianqvist.blogspot.nl/2010/07/broad-and-narrow-phase-collision.html
  * - Bullet User Manual: http://www.google.nl/url?sa=t&rct=j&q=&esrc=s&source=web&cd=1&cad=rja&ved=0CCoQFjAA&url=http%3A%2F%2Fbullet.googlecode.com%2Fsvn%2Ftrunk%2FBullet_User_Manual.pdf&ei=9LfKUY3HE4a20QXxhICgDw&usg=AFQjCNH54pT4TcXxDThj_G-7VL1zhk6UAg
@@ -189,18 +189,17 @@ public class JBulletDemo {
             // Translate the model-view to the ball's position.
             glTranslatef(ballPosition.x, ballPosition.y, ballPosition.z);
             // Draw the controllable ball green and the uncontrollable balls red.
+            // Set the draw style of the sphere drawing object to GLU_SILHOUETTE.
+            // LWJGL JavaDoc: "The legal values are as follows: GLU.FILL: Quadrics are rendered with polygon primitives.
+            // The polygons are drawn in a counterclockwise fashion with respect to their normals (as defined with
+            // glu.quadricOrientation). GLU.LINE: Quadrics are rendered as a set of lines. GLU.SILHOUETTE:
+            // Quadrics are rendered as a set of lines, except that edges separating coplanar faces will not be drawn.
+            // GLU.POINT: Quadrics are rendered as a set of points."
+            sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
             if (body.equals(controlBall)) {
                 glColor4f(0, 1, 0, 1);
-                // Set the draw style of the sphere drawing object to GLU_SILHOUETTE.
-                // LWJGL JavaDoc: "The legal values are as follows: GLU.FILL: Quadrics are rendered with polygon primitives.
-                // The polygons are drawn in a counterclockwise fashion with respect to their normals (as defined with
-                // glu.quadricOrientation). GLU.LINE: Quadrics are rendered as a set of lines. GLU.SILHOUETTE:
-                // Quadrics are rendered as a set of lines, except that edges separating coplanar faces will not be drawn.
-                // GLU.POINT: Quadrics are rendered as a set of points."
-                sphere.setDrawStyle(GLU.GLU_SILHOUETTE);
             } else {
-                glColor4f(1, 0, 0, 0.5f);
-                sphere.setDrawStyle(GLU.GLU_FILL);
+                glColor4f(1, 0, 0, 1);
             }
             // Draw the sphere.
             // LWJGL JavaDoc: "draws a sphere of the given radius centered around the origin. The sphere is subdivided
@@ -340,9 +339,7 @@ public class JBulletDemo {
     private static void setUpStates() {
         camera.applyOptimalStates();
         glEnable(GL_DEPTH_TEST);
-        glEnable(GL_BLEND);
         glEnable(GL_CULL_FACE);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glLineWidth(2);
     }
 
