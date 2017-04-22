@@ -79,7 +79,7 @@ public class BitmapFonts {
         // Bind the texture object to the GL_TEXTURE_2D target, specifying that it will be a 2D texture.
         glBindTexture(GL_TEXTURE_2D, fontTexture);
         // Use TWL's utility classes to load the png file.
-        PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/images/font.png"));
+        PNGDecoder decoder = new PNGDecoder(BitmapFonts.class.getResourceAsStream("res/images/font.png"));
         ByteBuffer buffer = BufferUtils.createByteBuffer(4 * decoder.getWidth() * decoder.getHeight());
         decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
         buffer.flip();
